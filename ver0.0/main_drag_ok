@@ -1,0 +1,214 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+
+//#region [Main]
+void main () => runApp(RunApp());
+
+class RunApp extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context){
+    return MaterialApp(
+      home: TheApp(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+//#endregion
+
+class TheApp extends StatefulWidget{
+  @override
+  TheAppState createState () => TheAppState();
+}
+
+//#region [Body]
+class TheAppState extends State<TheApp> {
+  
+  double dsWidth = 150.0;
+  double ds2Width = 80.0;
+  double dsHeight = 50;
+  double dsnw = 0;
+  int dummy = 0;
+  //Position
+  Offset pos = Offset(0.0, 0.0);
+  Offset pos2 = Offset(0.0, 80.0);
+  
+  List<TheObject> listWidgets = [];
+  List<TheObject> startWidgets = [];
+
+  TheObject obj0 = TheObject(key: UniqueKey(), color: Colors.amber, objId: 0,);
+  TheObject obj1 = TheObject(key: UniqueKey(), color: Colors.grey, objId: 1,);
+
+  int _clickId = -1;
+
+  @override
+  void initState(){super.initState();
+    startWidgets = [
+    TheObject(key: UniqueKey(), color: Colors.amber, objId: -1,),
+    TheObject(key: UniqueKey(), color: Colors.grey, objId: -1,),
+    ];
+
+    listWidgets = [obj0, obj1];
+    obj0.setCurSize = Size(120, 30);
+    obj1.setCurSize = Size(30, 120);
+  }
+
+  void handleCurPos(Offset os){
+    setState(() {
+      //print(_clickId);
+      /*#4if(_clickId == 0)
+        pos = os;//TODO
+
+      if(_clickId == 1)
+        pos2 = os;//TODO#4*/
+    });
+  }
+  void handleId(int newid){
+    setState(() {
+      _clickId = newid;
+    });
+  }
+  void newSize(){
+    setState(() {
+      /*#4if(_clickId == 0){
+        dsWidth += 10;
+      }
+      if(_clickId == 1){
+        ds2Width += 10;
+      }*/
+     
+      dsnw = dsWidth += 50;
+      listWidgets[0].setCurSize = Size(dsnw, 50);
+
+      /*print('getsize');
+      print(obj0.getCurSize);*/
+      
+      dummy++;
+      
+      //print(obj0.getCurSize);
+    });
+  }
+
+  void minSize(){
+    setState(() {
+      dsWidth -= 10;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context){//#region [ rgba(200, 12, 10, 0.5) ]//#endregion
+  //#region [Body]
+
+    return
+    Scaffold(endDrawer: 
+        Drawer(child: Align(child: IconButton(onPressed: newSize, icon: Icon(Icons.add), alignment: const Alignment(0.0,0.0),))),
+        appBar: 
+        AppBar(title: Text(dummy.toString()), leading: IconButton(onPressed: newSize, icon: Icon(Icons.add),), 
+          actions: [
+            IconButton(onPressed: minSize, icon: Icon(Icons.minimize),),
+          ],), body:  
+        Container(width: 400, height: 800, color: Colors.amberAccent, child: 
+            Stack(children: <Widget>[
+
+                for(int i=0; i<startWidgets.length; i++)
+                    startWidgets[i],
+
+                for(int i=0; i<listWidgets.length; i++)
+                    listWidgets[i],
+
+                
+
+                /*Positioned(left: 150, bottom: 0.0, child: 
+                   DragTarget(
+                     builder: (BuildContext context, List<dynamic> accepted, List<dynamic> rejected) {
+                     return 
+                     Container(width: 400, height: 400, child: 
+                       GestureDetector(//onTap: () => print(MediaQuery.of(context).size.width),
+                       ),
+                      );
+                     },
+                   ),
+                ),*/
+              ]
+            )
+        ),
+    );
+  }
+}
+//#endregion
+
+// ignore: must_be_immutable
+class TheObject extends StatefulWidget{
+  TheObject({Key? key, 
+    //#4required this.initSize, 
+    required this.color, 
+    required this.objId,
+  }) : super(key: key);
+
+  //#4final Size initSize; 
+  final Color color;
+  int objId;
+  Size pSize = const Size(100, 50);
+
+  set setCurId(int id){objId = id;}
+  int get getCurId{return objId;}
+
+  set setCurSize(Size newSize){
+    pSize = newSize;
+  }
+  Size get getCurSize{return pSize;}
+
+  @override
+  TheObjectState createState () => TheObjectState();    
+}
+//#region [Body]
+ class TheObjectState extends State<TheObject> {
+   
+   Offset _position = const Offset(100.0, 110.0);
+   Size _size = const Size(0.0,0.0);
+   Color _color = Colors.blue;
+  
+   @override
+   void initState(){
+     super.initState();
+     _color = widget.color;
+     _size = widget.pSize;
+     //#4_size = widget.initSize;
+   }
+//Position
+  set setObjPos(Offset newPos){
+    _position = newPos;
+  }
+  Offset get getObjPos{
+    return _position;
+  }
+ 
+   @override
+   Widget build(BuildContext context){//#region [ rgba(200, 12, 10, 0.5) ]//#endregion
+//#region [Body]
+
+     return
+     Positioned(left: _position.dx, top: _position.dy, child:
+        Draggable(key: widget.key, data: widget.color, child:
+            Container(width: /*_size.width*/widget.getCurSize.width, height: /*#4_size.height*/widget.getCurSize.height, decoration:
+               BoxDecoration(color: _color, border: Border.all(color: Colors.blue.shade800)),
+            ),
+          onDragEnd: (details) {
+                setState(() {
+                  if(details.offset.dx >= 100){
+                    _position = details.offset - Offset(0.0, 55.0);
+                    /*this.setObjPos = _position;
+                    print(this.getObjPos);*/
+
+                    //widget.setCurId = widget.getCurId;
+                    //widget.vcCurId();
+                    //print(widget.getCurId);
+                  }
+                });
+            },
+          feedback: Container(width: _size.width, height: _size.height, color: widget.color.withOpacity(0.5),),
+        ),
+     );
+   }
+ }//#endregion

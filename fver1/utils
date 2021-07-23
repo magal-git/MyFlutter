@@ -1,0 +1,77 @@
+import 'package:flutter/material.dart';
+import 'package:flutterapp/fmodelview.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get.dart';
+import 'fobjects';
+
+
+FModelView getCurObj(int curid, Map tmap){
+  //Returnera object i lista där key = cur_id
+
+  if(tmap.containsKey(curid)){
+    return tmap[curid];
+  }else{
+    print('no oki');
+  }
+
+  return null!;
+}
+
+Widget showObject(int cid, FModelView fmv){
+  
+    switch (cid){
+      case 101:
+        return 
+          FBuObject(callback2: fmv.mcallback, thisid: fmv.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.lime, marked: fmv.marked,);
+      /*case 102:
+        return 
+        Material(child:
+          SizedBox(child:
+            FTextFObject(callback: fmv.mcallback, thisid: fmv.moid,),
+            width: fmv.fmc.fbWidth.toDouble(), height: fmv.fmc.fbHeight.toDouble(),
+          )
+        );
+       case 103:
+       return
+        FIcBuObject(callback: fmv.mcallback, thisid: fmv.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.amber,
+       );*/
+    }
+
+    return Container(child: Text('Empty'),);
+    
+  }
+
+  Widget createSidePanel(FModelView fmv, int catid){
+    //return Obx(() {
+
+    switch(catid){
+        case 101:
+          return
+          Column(children: [
+              Text(fmv.fmc.fbWidth.toString()),
+              IconButton(onPressed: fmv.fmc.incW, icon: Icon(Icons.add, color: Colors.blue, size: 30,), iconSize: 30,),
+              IconButton(onPressed: fmv.fmc.decW, icon: Icon(Icons.minimize, color: Colors.blue, size: 30,), iconSize: 30,),
+              IconButton(onPressed: fmv.fmc.incCR, icon: Icon(Icons.color_lens_outlined, color: Colors.blue, size: 30,), iconSize: 30,),
+              IconButton(onPressed: fmv.fmc.incH, icon: Icon(Icons.headset, color: Colors.blue, size: 30,), iconSize: 30,),
+          ]);
+        case 102:
+          return
+          Column(children: [
+            Text(fmv.fmc.fbWidth.toString()),
+              IconButton(onPressed: fmv.fmc.incW, icon: Icon(Icons.add, color: Colors.blue, size: 30,), iconSize: 30,),
+              IconButton(onPressed: fmv.fmc.decW, icon: Icon(Icons.minimize, color: Colors.blue, size: 30,), iconSize: 30,),
+              IconButton(onPressed: fmv.fmc.incH, icon: Icon(Icons.headset, color: Colors.blue, size: 30,), iconSize: 30,),
+          ]);
+          case 103:
+          return
+          Column(children: [
+            Text(fmv.fmc.fbWidth.toString()),
+              IconButton(onPressed: fmv.fmc.incW, icon: Icon(Icons.add, color: Colors.blue, size: 30,), iconSize: 30,),
+              IconButton(onPressed: fmv.fmc.decW, icon: Icon(Icons.minimize, color: Colors.blue, size: 30,), iconSize: 30,),
+              IconButton(onPressed: fmv.fmc.incH, icon: Icon(Icons.ac_unit, color: Colors.blue, size: 30,), iconSize: 30,),
+          ]);
+      }
+
+      return Container(child: Text(fmv.fmc.fbWidth.toString()));
+    //});
+  }

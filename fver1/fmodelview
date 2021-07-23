@@ -1,0 +1,73 @@
+import 'package:flutterapp/FBtnObject.dart';
+import 'package:flutterapp/fmodelcontroller.dart';
+import 'package:flutterapp/utils.dart';
+import 'package:get/get.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+//typedef void midCallback(int id);
+typedef void midCallback2(int id, bool m);//!
+
+class FModelView extends StatelessWidget{
+      FModelView({required this.mcallback});
+
+      final midCallback2 mcallback;
+
+  //*Members
+  FModelController fmc = FModelController();
+  //FModelController fmc = Get.put(FModelController());
+  final _position = const Offset(300,300).obs;
+  int catId = 0;
+  bool marked = false;//!
+
+  //*Methods
+  final int moid = Random().nextInt(100);
+  int get getMoid{
+    return moid;
+  }
+
+  set setCatId(var catid){
+    catId = catid;
+    //print('setcatid: $catId');
+    if(catid == 101) {//!TABORT?
+      fmc.fbWidth.value = 150;
+      fmc.fbHeight.value = 30;
+    }else if(catid == 102){
+      fmc.fbWidth.value = 200;
+      fmc.fbHeight.value = 30;
+    }else if(catid == 103){
+      fmc.fbWidth.value = 50;
+      fmc.fbHeight.value = 50;
+    }//!TABORT?
+  }
+
+  Widget makeSidePanel(){
+    return Obx(() =>
+    createSidePanel(this, catId));
+  }
+
+  @override
+  Widget build(BuildContext context){
+    
+    return
+    Obx(() {
+      
+      return 
+      Positioned(left: _position.value.dx, top: _position.value.dy, child:
+        Draggable(child:
+            showObject(catId, this),
+        feedback:
+            showObject(catId, this),
+        onDragEnd: (details){
+          //setState(() {
+            _position.value = details.offset - Offset(0.0, 56.0);
+          //});
+          //_position = details.offset - Offset(0.0, 56.0);
+        },
+        ),
+      );
+
+   });
+  }
+}

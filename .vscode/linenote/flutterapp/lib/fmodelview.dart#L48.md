@@ -1,0 +1,1 @@
+Called in main build. Current FmodelView object is based on the onclick in handleclick; marked = true. All other objects in objmap is set to curcolor.

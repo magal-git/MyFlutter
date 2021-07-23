@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+//#region [Main]
+void main () => runApp(GetMaterialApp(home: Home()));
+
+class Home extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context){
+
+    final MyModel m = Get.put(MyModel());
+
+    return 
+    Scaffold(
+      appBar: AppBar(title: Obx(() => Text('Klick ${m.count}'))),
+      floatingActionButton: FloatingActionButton(onPressed: m.inc),
+      body: 
+      Row(children: [
+        FloatingActionButton(onPressed: m.dec, child: Icon(Icons.minimize),),
+        MyModelView(m),
+      ]
+      ),
+    );
+  }
+}
+
+class MyModel extends GetxController{
+  var count = 150.obs;
+  inc() => count += 10;
+  dec() => count -= 10;
+}
+
+class MyModelView extends StatelessWidget{
+  MyModelView(this.m);
+  
+  MyModel m;
+
+  @override
+  Widget build(BuildContext context){
+    return
+    Obx(() {
+      return 
+      SizedBox(width: m.count.toDouble(), height: 50, child: 
+        Listener(onPointerDown: (event) => print(m.count.toDouble()), child: 
+          Container(/*color: Colors.blueAccent,*/ decoration: BoxDecoration(color: Colors.limeAccent, borderRadius: BorderRadius.all(Radius.circular(10)), border: 
+            Border.all(color: Colors.blue)),
+          
+          )
+        )  
+      );
+    });
+  }
+}
+
+/*
+//Container(width: m.count.toDouble(), height: 50, color: Colors.yellow);
+      SizedBox(width: m.count.toDouble(), height: 50, child:
+        TextButton(onPressed: (){}, child: Text('Klick'), style:  
+          ButtonStyle(backgroundColor: 
+            MaterialStateProperty.all<Color>(Colors.amber)),
+        ),
+      );
+*/
+
+/*
+SizedBox(width: m.count.toDouble(), height: 50, child: 
+        TextField(decoration: InputDecoration(hintText: 'Write', border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black45)))));
+*/
+

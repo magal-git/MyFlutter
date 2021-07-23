@@ -1,0 +1,98 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutterapp/fmodelview.dart';
+import 'package:get/get.dart';
+import '../../utils.dart';
+
+void main () => runApp(GetMaterialApp(home: RunApp()));
+
+//#region [Main]
+class RunApp extends StatelessWidget { @override Widget build(BuildContext context){ return HomePageWidget();}}
+//#endregion
+
+class HomePageWidget extends StatefulWidget {//#region [ rgba(30, 30, 40, 0.2) ]
+  HomePageWidget({Key? key}) : super(key: key);
+
+  @override
+  _HomePageWidgetState createState() => _HomePageWidgetState();
+}//#endregion
+
+
+class _HomePageWidgetState extends State<HomePageWidget> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  
+  //*Members
+   late FModelView fmv;
+
+  List<Widget> objlist = [];
+  List<Widget> stackobj = [];
+  Map objmap = <int, FModelView>{};
+
+  //*Methods
+  int _mid = 0;
+  handleId(int pid, bool m){//!
+    setState(() {
+      _mid = pid;
+      fmv = getCurObj(_mid, objmap);
+      fmv.marked = true;//!
+      print(fmv.marked);
+      //!stackobj.removeAt(stackobj.indexOf(fmv));
+  });
+}
+
+  @override
+  initState(){
+    super.initState();
+    fmv = FModelView(mcallback: handleId);
+  }
+
+  addObject(int catId){
+    setState(() {
+      fmv = FModelView(mcallback: handleId,);
+      fmv.setCatId = catId;
+      _mid = fmv.getMoid;//#Identifies the object
+      stackobj.add(fmv);
+      objmap[_mid] = fmv;
+    });
+  }
+  //*Methods
+  
+  @override
+  Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
+  
+    return Scaffold( key: scaffoldKey,
+      appBar: AppBar( backgroundColor: Colors.lightBlue,),
+      body:
+
+      SafeArea(child: 
+             Stack(children: [
+                  if(stackobj.isNotEmpty)
+                   for(int i=0; i<stackobj.length; i++)
+                    stackobj[i],                 
+            
+                   Align(
+                     alignment: Alignment(-1, 0),
+                     child: Column(children: [
+                              IconButton(onPressed: () => addObject(101), icon: Icon(Icons.add, color: Colors.black, size: 30,), iconSize: 30,),
+                              IconButton(onPressed: () => addObject(102), icon: Icon(Icons.add, color: Colors.black, size: 30,), iconSize: 30,),
+                              IconButton(onPressed: () => addObject(103), icon: Icon(Icons.add, color: Colors.black, size: 30,), iconSize: 30,),
+                     ]),
+                   ),
+                   Align(
+                     alignment: Alignment(1, 0),
+                     child: Column(
+                             mainAxisSize: MainAxisSize.max,
+                             children: [
+                               //SidePanel(fbmvp: fbmv,),
+                               fmv.makeSidePanel(),
+                             ],
+                           ),
+                   )
+              ],),
+      ),
+
+    );
+  }
+}
+
+

@@ -1,0 +1,20 @@
+import 'package:flutter/material.dart';
+
+/*class HelperBtn {
+  HelperBtn({this.btntext = 'HelperButton', this.borderRadius = 0});
+
+String btntext;
+double borderRadius;*/
+
+/*double get getBR{
+  return borderRadius;
+}*/
+
+/*set changeBtnText(String newTxt){
+  btntext = newTxt;
+}
+String get getText{
+  return btntext;
+}*/
+
+//}
