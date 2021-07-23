@@ -20,7 +20,7 @@ FModelView getCurObj(int curid, Map tmap){
 }
 //#region [ rgba(90, 150, 40, 0.2) ]//#endregion
 Widget instanceObject(int cid, FModelView fmv){
-  List<Widget> testlist = [];
+  List<Widget> testlist = [];//!COL
     switch (cid){
       case 101:
         return 

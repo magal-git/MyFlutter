@@ -59,6 +59,24 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
+  //! ADDCHILDTOLIST - in addObject?
+    /*
+  addC(int catId){
+    setState(() {
+      FModelView colrowFmv = getCurObj(_mid, objmap);
+
+      fmv = FModelView(mcallback: handleId,);
+      fmv.setCatId = catId;
+      _mid = fmv.getMoid;//#Identifies the object
+      objmap[_mid] = fmv;
+
+      if(colrowFmv.catId == 104) TODO getCatId
+        colrowFmv.addChild(fmv); TODO addChild
+    });
+  }
+    */
+  //!
+
   _removeObj(){
     setState(() {
       stackobj.removeAt(stackobj.indexOf(fmv));
