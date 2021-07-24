@@ -28,7 +28,7 @@ final int thisid;
     SizedBox(width: bw, height: bh,   child: 
       Material(child: marked ?
         Container(decoration: BoxDecoration(border: Border.all(
-          color: Color.fromRGBO(240, 252, 3, 1),
+          color: Color.fromRGBO(50, 52, 50, 1),
           width: 2,
         ),
         ), child: TextButton(child: Text('- Edit mode -', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: colModel.txtcol),),
@@ -126,33 +126,73 @@ final int thisid;
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
 class FColumnObject extends StatelessWidget {
   FColumnObject({required this.callback, required this.thisid,
-              this.marked = false, required this.objList, 
+              this.marked = false, required this.columnModel, 
             });
 
 
 final idCallback callback;
 bool marked = true;
 final int thisid;
-List<Widget> objList = [];
+ColumnModel columnModel;
+bool checked = true;
 
   @override
   Widget build(BuildContext context){
     return
       GestureDetector(child: marked ?
           Container(width: 100, height: 100, decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
-              Column(children: 
+              Column(mainAxisSize: MainAxisSize.max, children: 
                   [
-                    Text('data'),
-                    for(int i=0; i<objList.length; i++)
-                      objList[i],
+                    Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO
+                    Text(thisid.toString()),
+                    for(int i=0; i<columnModel.childlist.length; i++)
+                      columnModel.childlist[i], 
                   ],
               ),
           ) :
               Column(children: 
                   [
-                    Text('data'),
-                    for(int i=0; i<objList.length; i++)
-                      objList[i],
+                    Text('column: id $thisid'),
+                    for(int i=0; i<columnModel.childlist.length; i++)
+                      columnModel.childlist[i],
+                  ],
+              ),
+        onTap: () => callback(thisid),
+      );
+  }
+}
+//#region [ rgba(30, 30, 40, 0.2) ]//#endregion
+class FRowObject extends StatelessWidget {
+  FRowObject({required this.callback, required this.thisid,
+              this.marked = false, required this.columnModel, 
+            });
+
+
+final idCallback callback;
+bool marked = true;
+final int thisid;
+ColumnModel columnModel;
+bool checked = true;
+
+  @override
+  Widget build(BuildContext context){
+    return
+      GestureDetector(child: marked ?
+          Container(width: 100, height: 100, decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
+              Row(mainAxisSize: MainAxisSize.max, children: 
+                  [
+                    Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO
+                    Text(thisid.toString()),
+                    for(int i=0; i<columnModel.childlist.length; i++)
+                      columnModel.childlist[i], 
+                  ],
+              ),
+          ) :
+              Row(children: 
+                  [
+                    Text('row: id $thisid'),
+                    for(int i=0; i<columnModel.childlist.length; i++)
+                      columnModel.childlist[i],
                   ],
               ),
         onTap: () => callback(thisid),

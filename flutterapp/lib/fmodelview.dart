@@ -30,7 +30,7 @@ class FModelView extends StatelessWidget{
   set setCatId(var catid){
     catId = catid;
     //print('setcatid: $catId');
-    if(catid == 101) {//!TABORT?
+    if(catid == 101) {
       fmc.fbWidth.value = 150;
       fmc.fbHeight.value = 30;
     }else if(catid == 102){
@@ -39,7 +39,7 @@ class FModelView extends StatelessWidget{
     }else if(catid == 103){
       fmc.fbWidth.value = 150;
       fmc.fbHeight.value = 40;
-    }//!TABORT?
+    }
   }
 
   Widget makeSidePanel(){
@@ -48,18 +48,13 @@ class FModelView extends StatelessWidget{
   }
 
   chClickCol(FModelView fmv, int curid, Map tmap){
-    
     tmap.forEach((key, value) {
-      //value.fmc.curColor.value = value.fmc.bufColor.value;
       value.fmc.markFalse();
     });
-      //fmv.fmc.curColor.value = Colors.grey;
         fmv.fmc.markTrue();
   }
-
   chClickVoid(FModelView fmv, Map tmap){
     tmap.forEach((key, value) {
-      //value.fmc.curColor.value = value.fmc.bufColor.value;
       value.fmc.markFalse();
     });
   }

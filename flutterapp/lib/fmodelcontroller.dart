@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp/fmodelview.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,6 +39,16 @@ class FModelController extends GetxController{
   var bradius = 0.obs;
   incBradius() => bradius++;
 
+  //!ADDC
+  final columnModel = ColumnModel().obs;
+
+  addChild(FModelView f){
+    columnModel.update((val) {
+      val!.childlist.add(f);
+    });
+  }
+  //!ADDC
+
   //#COLOR MODEL
   final colModel = ColModel().obs;
 
@@ -69,6 +80,12 @@ class ColModel{
   Color btncol = Colors.amber;
   Color txtcol = Colors.white;
 }
+//!ADDC
+class ColumnModel{
+  List<Widget> childlist = [];
+}
+
+//!
 
 class HelperBtn {
   HelperBtn({this.btntext = 'Button', this.borderRadius = 0, this.elevation = 0});

@@ -36,7 +36,10 @@ Widget instanceObject(int cid, FModelView fmv){
           marked: fmv.fmc.marked.value,);
        case 104://!COL
        return
-          FColumnObject(callback: fmv.mcallback, thisid: fmv.moid, marked: fmv.fmc.marked.value, objList: testlist);
+          FColumnObject(callback: fmv.mcallback, thisid: fmv.moid, marked: fmv.fmc.marked.value, columnModel: fmv.fmc.columnModel.value,);
+       case 105://!ROW
+       return
+          FRowObject(callback: fmv.mcallback, thisid: fmv.moid, marked: fmv.fmc.marked.value, columnModel: fmv.fmc.columnModel.value,);
     }
 
     return Container(child: Text('Empty'),);
@@ -96,12 +99,6 @@ print('in createsidepanel');
               IconButton(onPressed: fmv.fmc.incW, icon: Icon(Icons.add, color: Colors.blue, size: 30,), iconSize: 30,),
               IconButton(onPressed: fmv.fmc.decW, icon: Icon(Icons.minimize, color: Colors.blue, size: 30,), iconSize: 30,),
               IconButton(onPressed: fmv.fmc.incH, icon: Icon(Icons.height, color: Colors.blue, size: 30,), iconSize: 30,),
-          ]);
-          case 104:
-          return
-          Column(children: [
-              IconButton(onPressed: fmv.fmc.incW, icon: Icon(Icons.add, color: Colors.blue, size: 30,), iconSize: 30,),
-              
           ]);
       }
 

@@ -60,8 +60,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
 
   //! ADDCHILDTOLIST - in addObject?
-    /*
-  addC(int catId){
+    
+  addChildObject(int catId){
     setState(() {
       FModelView colrowFmv = getCurObj(_mid, objmap);
 
@@ -70,11 +70,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       _mid = fmv.getMoid;//#Identifies the object
       objmap[_mid] = fmv;
 
-      if(colrowFmv.catId == 104) TODO getCatId
-        colrowFmv.addChild(fmv); TODO addChild
+      //if(colrowFmv.catId == 104) //TODO getCatId
+        colrowFmv.fmc.addChild(fmv); //TODO addChild
     });
   }
-    */
+    
   //!
 
   _removeObj(){
@@ -180,6 +180,36 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       ]
                     ),
                   ),
+
+                  //!TESTADDCHILD
+                  if(fmv.catId == 104)
+                  Card(color: Colors.grey.shade100, child: 
+                  Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 230, height: 45,
+                        child: ListTile(title: Text('row', style: TextStyle(fontSize: 18),),
+                          trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.smart_button_rounded),
+                          onTap: () => addChildObject(105),
+                        ),
+                      ),
+                    ]
+                  )
+                ),//!TESTADDCHILD
+                //!TESTADDCHILD
+                if(fmv.catId == 104)
+                  Card(color: Colors.grey.shade100, child: 
+                  Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 230, height: 45,
+                        child: ListTile(title: Text('textfield', style: TextStyle(fontSize: 18),),
+                          trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.smart_button_rounded),
+                          onTap: () => addChildObject(103),
+                        ),
+                      ),
+                    ]
+                  )
+                ),
+                //!TESTADDCHILD
 
               ]
               ),
