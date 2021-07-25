@@ -11,6 +11,8 @@ class FModelController extends GetxController{
   var fbWidth = 100.obs;
   var fbHeight = 50.obs;
 
+  var caddchildCol = false.obs;
+
   Color prevcol = Colors.white;//!PRV
 
   //#Mark
@@ -47,6 +49,10 @@ class FModelController extends GetxController{
       val!.childlist.add(f);
     });
   }
+  List<Widget> get getChildList{//!TREETEST
+    
+      return columnModel.value.childlist;
+  }
   //!ADDC
 
   //#COLOR MODEL
@@ -81,8 +87,9 @@ class ColModel{
   Color txtcol = Colors.white;
 }
 //!ADDC
-class ColumnModel{
-  List<Widget> childlist = [];
+class ColumnModel{//! WORK with all multiwidgets object?. Change name?
+  //List<Widget> childlist = [];
+  List<FModelView> childlist = [];
 }
 
 //!

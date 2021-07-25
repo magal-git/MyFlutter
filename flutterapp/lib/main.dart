@@ -3,9 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/colorpicker.dart';
 import 'package:flutterapp/fmodelview.dart';
+import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
-import 'package:logger/logger.dart';
 import '../../utils.dart';
 
 void main () => runApp(GetMaterialApp(home: RunApp()));
@@ -23,31 +23,36 @@ class HomePageWidget extends StatefulWidget {//#region [ rgba(30, 30, 40, 0.2) ]
 
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  
+   //bool addchild = false;//!ADDCHILD
   //*Members
    late FModelView fmv;
 
+  Map objmap = <int, FModelView>{};
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   //!was Widget before
   List<FModelView> stackobj = [];
-  Map objmap = <int, FModelView>{};
-  bool marked = false;
 
   //*Methods
   int _mid = 0;
-  handleId(int pid){
-    setState(() {
-      _mid = pid;
-      fmv = getCurObj(_mid, objmap);
-      marked = true;
-  });
-}
 
   @override
   initState(){
     super.initState();
     fmv = FModelView(mcallback: handleId);
   }
+
+  handleId(int pid){
+    setState(() {
+      print('id = $pid');
+      _mid = pid;
+      fmv = getCurObj(_mid, objmap);
+      
+      if(fmv.catId == 104){//!ADDCHILD
+        fmv.fmc.caddchildCol.value = true;
+        //addchild = true;
+      }
+  });
+}
 
   addObject(int catId){
     setState(() {
@@ -56,10 +61,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       _mid = fmv.getMoid;//#Identifies the object
       stackobj.add(fmv);
       objmap[_mid] = fmv;
+
+      if(fmv.catId == 104){//!ADDCHILD
+        fmv.fmc.caddchildCol.value = true;
+        //addchild = true;
+      }
     });
   }
 
-  //! ADDCHILDTOLIST - in addObject?
+  //! ADDCHILDTOLIST
     
   addChildObject(int catId){
     setState(() {
@@ -70,12 +80,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       _mid = fmv.getMoid;//#Identifies the object
       objmap[_mid] = fmv;
 
-      //if(colrowFmv.catId == 104) //TODO getCatId
-        colrowFmv.fmc.addChild(fmv); //TODO addChild
+      colrowFmv.fmc.addChild(fmv);
+      fmv.fmc.caddchildCol.value = false;//!ADDCHILD
+      //addchild = false;
+      
     });
   }
-    
-  //!
+
+  //! ADDCHILDTOLIST
 
   _removeObj(){
     setState(() {
@@ -83,13 +95,70 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
-  _showTree(){//!TREETEST
-    if(stackobj.isNotEmpty){
-        for(int i=0; i<objmap.length; i++){
-          FModelView f = stackobj[i];
+  _showTree(List<FModelView> alist){//!TREETEST
+  List<FModelView> childlist = [];
+  List<FModelView> isChild = [];
+  List<FModelView> hasnoChildren = [];
+  List<FModelView> isParent = [];
+
+    
+    if(alist.isNotEmpty){
+
+       for(int i=0; i<alist.length; i++){
+         //func(alist)
+         if(alist[i].catId == 104){
+            childlist = alist[i].fmc.columnModel.value.childlist;
+            if(childlist.isNotEmpty){
+              //print(alist[i]) columnB >, columnC > columnD >
+              //func(childlist)
+            }else{
+              //print(childlist) columnA
+            }
+         }else {
+              //print(childlist) iconbutton2,textfield2, iconbutton, textfield ,image
+          }
         }
+
+       
+        for(int p=0; p<childlist.length; p++){
+          print('MID: ' + childlist[p].getMoid.toString());
+        }
+
     }
   }//!TREETEST
+//isParent[ columnB ]
+//isChild[ columnC, icon2, text2 ]
+//hasnoChildren[ columnA. icon, text ]
+  /*
+  columnA
+  columnB
+    > columnC
+      > iconbutton2
+      > textfield2
+      > columnD
+        > image 
+  iconbutton
+  textfield
+
+  */
+
+
+  selFunc(int id){
+    if (fmv.fmc.caddchildCol.value){
+      addChildObject(id);
+    }else{
+      addObject(id);
+    }
+  }
+
+  unselect(Map tmap){
+  
+    tmap.forEach((key, value) {
+        value.fmc.markFalse();
+    });
+    fmv.fmc.caddchildCol.value = false;
+  }
+
   //*Methods
   
   @override
@@ -98,132 +167,45 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   
     fmv.chClickCol(fmv, _mid, objmap);//!Revisite
 
-
     return 
-    Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj,), appBar: 
-        AppBar( backgroundColor: 
-          Colors.lightBlue, leading: 
-          FloatingActionButton(onPressed: () => fmv.chClickVoid(fmv, objmap),),),//!Revisite2
-    body:
-        SafeArea(child:
-          Stack(children: [
-            Container(color: Colors.grey, width: 240,),
-                    if(stackobj.isNotEmpty)
-                    for(int i=0; i<stackobj.length; i++)
-                        stackobj[i],    
-                      
-            Align(alignment: const Alignment(-1, 0), child: 
-              Column(children: //!SingleChildScrollView here
-              [
+    GestureDetector(onTap: () => unselect(objmap),//?CLICKVOID TODO
 
-                //!UDEV
-                //!
-                Card(color: Colors.grey.shade100, child: 
-                  Column(children: [
-                const SizedBox(width: 230, height: 32, child: 
-                        ListTile(tileColor: Colors.grey, title: 
-                          Center(child: Text('Standard Widgets', style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w800),)),
-                        ),
-                      ),
-                    ]
-                  )
-                ),
-                //!
-                Card(color: Colors.grey.shade100, child: 
-                  Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 230, height: 45,
-                        child: ListTile(title: Text('Textbutton', style: TextStyle(fontSize: 18),),
-                          trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.smart_button_rounded),
-                          onTap: () => addObject(101),
-                        ),
-                      ),
-                    ]
-                  )
-                ),
-                Card(color: Colors.grey.shade100, child: 
-                  Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 230, height: 45,
-                        child: ListTile(title: Text('Iconbutton',style: TextStyle(fontSize: 18)),
-                          trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.info),
-                          onTap: () => addObject(102),
-                        ),
-                      ),
-                    ]
-                  )
-                ),
-                Card(color: Colors.grey.shade100, child: 
-                  Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                    children: 
-                    [
-                      SizedBox(width: 230, height: 45,
-                        child: ListTile(title: Text('Textfield',style: TextStyle(fontSize: 18)),
-                          trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.text_fields),
-                          onTap: () => addObject(103),
-                        ),
-                      ),
-                    ]
-                  )
-                ),
-                //!UDEV
-                //Card(color: Colors.grey.shade100, child: 
-                  Container(color:  Colors.lightGreen, width: 230, height: 30, child: 
-                    Row(mainAxisSize: MainAxisSize.min, children: 
-                      [
-                          Icon(Icons.view_column, size: 20,),
-                          SizedBox(width: 50,),
-                          Text('Column',style: TextStyle(fontSize: 16)),
-                          SizedBox(width: 50,),
-                          IconButton(icon: Icon(Icons.add), color: Colors.black, iconSize: 20,
-                            onPressed: () => addObject(104),),
-                      ]
-                    ),
-                  ),
+      child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj,), appBar: 
+          AppBar( backgroundColor: 
+            Colors.lightBlue, //leading: 
+            //FloatingActionButton(onPressed: () => fmv.chClickVoid(/*fmv,*/ objmap),),//!Revisite2
+          ),
+      body:
+          SafeArea(child:
+            Stack(children: [
+              Container(color: Colors.grey, width: 240,),
+                      if(stackobj.isNotEmpty)
+                      for(int i=0; i<stackobj.length; i++)
+                          stackobj[i],    
+                        
 
-                  //!TESTADDCHILD
-                  if(fmv.catId == 104)
-                  Card(color: Colors.grey.shade100, child: 
-                  Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 230, height: 45,
-                        child: ListTile(title: Text('row', style: TextStyle(fontSize: 18),),
-                          trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.smart_button_rounded),
-                          onTap: () => addChildObject(105),
-                        ),
-                      ),
-                    ]
-                  )
-                ),//!TESTADDCHILD
-                //!TESTADDCHILD
-                if(fmv.catId == 104)
-                  Card(color: Colors.grey.shade100, child: 
-                  Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 230, height: 45,
-                        child: ListTile(title: Text('textfield', style: TextStyle(fontSize: 18),),
-                          trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.smart_button_rounded),
-                          onTap: () => addChildObject(103),
-                        ),
-                      ),
-                    ]
-                  )
-                ),
-                //!TESTADDCHILD
+                  //!UDEV PUT IN SEP WIDGET?
+                  //#10123
+                  
+                  StartObjectPanel(fmodelview: fmv, addobject: selFunc),
 
-              ]
-              ),
-            ),
-                 Align(alignment: Alignment(1, 0), child: 
-                   Column( mainAxisSize: MainAxisSize.max, children: 
-                        [
-                          fmv.makeSidePanel(),
-                          GFButton(onPressed: _showTree),//!TREETEST
-                        ],
-                   ),
-                 )
-             ],),
-        ),
+                  //#10123
+                  //!PUT IN SEP WIDGET
+
+                
+                   Align(alignment: Alignment(1, 0), child: 
+                     Column( mainAxisSize: MainAxisSize.max, children: 
+                          [
+                            fmv.makeSidePanel(),
+                            GFButton(onPressed: _showTree(stackobj)),//!TREETEST
+                          ],
+                     ),
+                   )
+               ],),
+          ),
+          
+          drawer: Container(width: 150, child: Drawer(child: Text('im a drawer'),)),
+      ),
     );
   }
 }

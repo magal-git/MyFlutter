@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/border/gf_border.dart';
+import 'package:getwidget/getwidget.dart';
 import 'fmodelcontroller.dart';
 
 typedef void idCallback(int id);
@@ -26,12 +28,12 @@ final int thisid;
     
     return 
     SizedBox(width: bw, height: bh,   child: 
-      Material(child: marked ?
+      Material(child: marked ? 
         Container(decoration: BoxDecoration(border: Border.all(
           color: Color.fromRGBO(50, 52, 50, 1),
           width: 2,
         ),
-        ), child: TextButton(child: Text('- Edit mode -', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: colModel.txtcol),),
+        ), child: TextButton(child: Text('- Edit mode -', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: colModel.txtcol),),
           onPressed: () => callback(thisid),
         )
         ) :
@@ -140,7 +142,7 @@ bool checked = true;
   Widget build(BuildContext context){
     return
       GestureDetector(child: marked ?
-          Container(width: 100, height: 100, decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
+          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
               Column(mainAxisSize: MainAxisSize.max, children: 
                   [
                     Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO

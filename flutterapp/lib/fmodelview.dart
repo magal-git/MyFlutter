@@ -14,6 +14,7 @@ class FModelView extends StatelessWidget{
   int catId = 0;
   //*Members
   FModelController fmc = FModelController();
+  //bool addchild = false;
 
   //*Constructer member
   final midCallback mcallback;
@@ -53,11 +54,18 @@ class FModelView extends StatelessWidget{
     });
         fmv.fmc.markTrue();
   }
-  chClickVoid(FModelView fmv, Map tmap){
+  /*chClickVoid(/*FModelView fmv,*/ Map tmap){
     tmap.forEach((key, value) {
       value.fmc.markFalse();
     });
-  }
+    
+    fmc.caddchild.value = false;
+    
+  }*/
+
+  /*bool get getAddchild{
+    return addchild;
+  }*/
 
   @override
   Widget build(BuildContext context){
