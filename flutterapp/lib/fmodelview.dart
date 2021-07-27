@@ -11,6 +11,21 @@ typedef void midCallback(int id);
 class FModelView extends StatelessWidget{
       FModelView({required this.mcallback});
 
+  //!TREEVIEW PROPS
+  bool haveChildren(){
+    return fmc.columnModel.value.childlist.isNotEmpty;
+  }
+  List<FModelView> childlist(){
+    return fmc.columnModel.value.childlist;
+  }
+  bool isparent = false;
+  bool ischild = false;
+  bool ischildandparent = false;
+  int level = 0;
+  //!TREEVIEW PROPS
+
+
+
   int catId = 0;
   //*Members
   FModelController fmc = FModelController();

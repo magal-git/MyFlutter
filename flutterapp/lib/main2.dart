@@ -6,7 +6,7 @@ import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
-import '../../utils.dart';
+import '../../../../utils.dart';
 
 
 void main () => runApp(GetMaterialApp(home: RunApp()));
@@ -96,50 +96,58 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
-//!TreeViewLevels
-  _showTree(List<FModelView> alist, int lev){
-  List<FModelView> coalist = [];
-        
-          for(int i=0; i<alist.length; i++){
-            if(!alist[i].haveChildren()){
-              print('temp*****' + alist[i].getMoid.toString());
-            }
-          }
-        
-          for (var element in alist) {
-            if(element.haveChildren()){
-              coalist.add(element);
-            }
-          }
-        
-        coalist.forEach((element) {
-          if(element.haveChildren()){
-            element.isparent = true;
-            print('Is parent: ' + element.getMoid.toString() + ':' + element.level.toString());
-            _runIt(element.childlist(), element.level);
-          }else{
-              int clev = lev + 1;
-              print('is sing-child wp: ' + element.getMoid.toString() + ':' + clev.toString());
-          }
-        });
-  }
+int depth = 0;
+  _showTree(List<FModelView> alist){//!TREETEST
+  List<FModelView> childlist = [];
+  
+    if(alist.isNotEmpty){
+       for(int i=0; i<alist.length; i++){
 
-  _runIt(List<FModelView> cl, int curlev){
+         if(alist[i].catId != 104 || (alist[i].catId == 104 && alist[i].fmc.columnModel.value.childlist.isEmpty)){
+           print(depth.toString() + ':' + alist[i].getMoid.toString());
+         }else{
+           print(depth.toString() + ':' + alist[i].getMoid.toString());
+           childlist = alist[i].fmc.columnModel.value.childlist;
+           depth++;
+           _showTree(childlist);
+         }
 
-    cl.forEach((element) {
-      if(element.haveChildren()){
-        int plev = curlev + 1;
-        print('Is parent2: ' + element.getMoid.toString() + ':' + plev.toString());
-        //_showTree(element.childlist(), false, plev);
-        _runIt(element.childlist(), plev);
-      }else{
-        element.ischild = true;
-        int chlev = curlev + 1;
-        print('is singwid-child wp2: ' + element.getMoid.toString() + ':' + chlev.toString());
-      }
-    }); 
-  }
-//!TreeViewLevels
+//func(alist)//!ITER
+         if(alist[i].catId == 104){//?isMultiWidget
+            childlist = alist[i].fmc.columnModel.value.childlist;
+            if(childlist.isNotEmpty){
+              print(depth.toString() + ':' + alist[i].getMoid.toString()); //(2)columnB, (3)columnC, (6)columnD
+              depth++;
+  _showTree(childlist);//!ITER
+
+            }else{//?isMultiWidget_WithNoChild
+              print(depth.toString() + ':' + alist[i].getMoid.toString()); //(1)columnA, (8)columnE
+            }
+         }else {//?isSingleWidget
+              print(depth.toString() + ':' + alist[i].getMoid.toString()); //(4)iconbutton2,> (5)textfield2, (7)image, (9)iconbutton, (10)textfield
+          }
+        }
+    }
+  }//!TREETEST
+
+
+//isParent[ columnB ]
+//isChild[ columnC, icon2, text2 ]
+//hasnoChildren[ columnA. icon, text ]
+  /*
+  columnA
+  columnB
+    > columnC
+      > iconbutton2
+      > columnD
+        > image
+        > columnE 
+    > textfield2
+  iconbutton
+  textfield
+
+  */
+
 
   selFunc(int id){
     if (fmv.fmc.caddchildCol.value){
@@ -195,7 +203,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                      Column( mainAxisSize: MainAxisSize.max, children: 
                           [
                             fmv.makeSidePanel(),
-                            GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
+                            GFButton(onPressed: () => _showTree(stackobj)),//!TREETEST
                           ],
                      ),
                    )

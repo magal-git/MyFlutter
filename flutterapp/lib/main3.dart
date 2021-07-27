@@ -6,7 +6,7 @@ import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
-import '../../utils.dart';
+import '../../../../utils.dart';
 
 
 void main () => runApp(GetMaterialApp(home: RunApp()));
@@ -96,50 +96,78 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
-//!TreeViewLevels
-  _showTree(List<FModelView> alist, int lev){
-  List<FModelView> coalist = [];
-        
-          for(int i=0; i<alist.length; i++){
-            if(!alist[i].haveChildren()){
-              print('temp*****' + alist[i].getMoid.toString());
-            }
-          }
-        
-          for (var element in alist) {
-            if(element.haveChildren()){
-              coalist.add(element);
-            }
-          }
-        
-        coalist.forEach((element) {
-          if(element.haveChildren()){
-            element.isparent = true;
-            print('Is parent: ' + element.getMoid.toString() + ':' + element.level.toString());
-            _runIt(element.childlist(), element.level);
-          }else{
-              int clev = lev + 1;
-              print('is sing-child wp: ' + element.getMoid.toString() + ':' + clev.toString());
-          }
-        });
-  }
+int depth = 0;
 
-  _runIt(List<FModelView> cl, int curlev){
+  _showTree(List<FModelView> alist){//!TREETEST
+  List<FModelView> childlist = [];
+  
+    /*if(alist.isNotEmpty){
+       for(int i=0; i<alist.length; i++){
 
-    cl.forEach((element) {
-      if(element.haveChildren()){
-        int plev = curlev + 1;
-        print('Is parent2: ' + element.getMoid.toString() + ':' + plev.toString());
-        //_showTree(element.childlist(), false, plev);
-        _runIt(element.childlist(), plev);
+           print(depth.toString() + ':' + alist[i].getMoid.toString());
+           
+            if(alist[i].fmc.columnModel.value.childlist.isNotEmpty){
+              childlist = alist[i].fmc.columnModel.value.childlist;
+              depth++;
+
+              for(int t=0; t<childlist.length; t++) {
+                print(depth.toString() + ':childlist ' + childlist[t].getMoid.toString());
+              }
+           }
+          //_checkIt(childlist);
+          
+        }
+        //_checkIt(childlist);
+    }
+    objmap.forEach((key, value) {
+      FModelView f = value;
+      print('$key'+ ':' +f.catId.toString());
+    });*/
+
+    alist.forEach((element) {
+
+      
+      if(element.fmc.columnModel.value.childlist.isEmpty){
+            print(element.getMoid);
       }else{
-        element.ischild = true;
-        int chlev = curlev + 1;
-        print('is singwid-child wp2: ' + element.getMoid.toString() + ':' + chlev.toString());
+            print(element.getMoid);
+            _showTree(element.fmc.columnModel.value.childlist);
       }
-    }); 
+    
+    });//!TREETEST
+
   }
-//!TreeViewLevels
+
+
+ _checkIt(List<FModelView> cl){
+   List<FModelView> chchildlist = [];
+
+    for(int r=0; r<cl.length; r++){
+      if(cl[r].fmc.columnModel.value.childlist.isNotEmpty){
+          chchildlist = cl[r].fmc.columnModel.value.childlist;
+          depth++;
+
+          for(int t=0; t<chchildlist.length; t++) {
+            print(depth.toString() + ':ch_childlist ' + chchildlist[t].getMoid.toString());
+          }
+      }
+      //_checkIt(chchildlist);
+    }
+ }
+
+  /*
+  columnA
+  columnB
+    > textfield2
+    > columnC
+      > iconbutton2
+      > columnD
+        > image
+        > columnE 
+  iconbutton
+  textfield
+  */
+
 
   selFunc(int id){
     if (fmv.fmc.caddchildCol.value){
@@ -195,7 +223,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                      Column( mainAxisSize: MainAxisSize.max, children: 
                           [
                             fmv.makeSidePanel(),
-                            GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
+                            GFButton(onPressed: () => _showTree(stackobj)),//!TREETEST
                           ],
                      ),
                    )
