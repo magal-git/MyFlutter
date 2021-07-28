@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +104,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         
           for(int i=0; i<alist.length; i++){
             if(!alist[i].haveChildren()){
-              print('temp*****' + alist[i].getMoid.toString());
+              print(alist[i].getMoid.toString());
             }
           }
         
@@ -115,11 +117,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         coalist.forEach((element) {
           if(element.haveChildren()){
             element.isparent = true;
-            print('Is parent: ' + element.getMoid.toString() + ':' + element.level.toString());
+            print(element.getMoid.toString() + ':' + element.level.toString());
             _runIt(element.childlist(), element.level);
           }else{
               int clev = lev + 1;
-              print('is sing-child wp: ' + element.getMoid.toString() + ':' + clev.toString());
+              String space = getPrintOut(clev);
+              print(space + element.getMoid.toString() + ':' + clev.toString());
           }
         });
   }
@@ -129,17 +132,31 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     cl.forEach((element) {
       if(element.haveChildren()){
         int plev = curlev + 1;
-        print('Is parent2: ' + element.getMoid.toString() + ':' + plev.toString());
+        String space = getPrintOut(plev);
+        print(space + element.getMoid.toString() + ':' + plev.toString());
         //_showTree(element.childlist(), false, plev);
         _runIt(element.childlist(), plev);
       }else{
         element.ischild = true;
         int chlev = curlev + 1;
-        print('is singwid-child wp2: ' + element.getMoid.toString() + ':' + chlev.toString());
+        String space = getPrintOut(chlev);
+        print(space + element.getMoid.toString() + ':' + chlev.toString());
       }
     }); 
   }
 //!TreeViewLevels
+
+String getPrintOut(int t){
+  switch (t) {
+    case 1:
+      return ' |--';
+    case 2:
+    return '   |--';
+      break;
+    default:
+    return '';
+  }
+}
 
   selFunc(int id){
     if (fmv.fmc.caddchildCol.value){
