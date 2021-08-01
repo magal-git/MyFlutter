@@ -19,23 +19,25 @@ class FModelView extends StatelessWidget{
     return fmc.columnModel.value.childlist;
   }
   bool isparent = false;
-  bool ischild = false;
-  bool ischildandparent = false;
+  //bool ischild = false;
+  //bool ischildandparent = false;
+  bool isMultiChild() => catId == 104;//!Change 104 to all MCW
   int level = 0;
   //!TREEVIEW PROPS
-
 
 
   int catId = 0;
   //*Members
   FModelController fmc = FModelController();
   //bool addchild = false;
+  int type = 0; //1=Expansion; 2=Tile; 3=Expansion_inside; 4=Solo
+  List<Widget> twList = [];
 
   //*Constructer member
   final midCallback mcallback;
 
   //*Methods
-  final int moid = Random().nextInt(100);
+  final int moid = Random().nextInt(1000);
 
   final _position = const Offset(300,300).obs;
 

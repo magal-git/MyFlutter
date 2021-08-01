@@ -11,7 +11,7 @@ class FModelController extends GetxController{
   var fbWidth = 100.obs;
   var fbHeight = 50.obs;
 
-  var caddchildCol = false.obs;
+  var caddchildCol = false.obs;//!Set color to object if column is selected (in main)
 
   Color prevcol = Colors.white;//!PRV
 
@@ -90,6 +90,7 @@ class ColModel{
 class ColumnModel{//! WORK with all multiwidgets object?. Change name?
   //List<Widget> childlist = [];
   List<FModelView> childlist = [];
+  List<String> celtype = [];
 }
 
 //!

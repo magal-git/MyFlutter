@@ -37,7 +37,7 @@ final int thisid;
           onPressed: () => callback(thisid),
         )
         ) :
-        TextButton(child: Text(hlpb.btntext, style: TextStyle(fontSize: 12, color: colModel.txtcol),),
+        TextButton(child: Text(hlpb.btntext +': id ' + thisid.toString(), style: TextStyle(fontSize: 12, color: colModel.txtcol),),
           onPressed: () => callback(thisid),
         ),
         color: colModel.btncol, /*col,*/

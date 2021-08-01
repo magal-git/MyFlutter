@@ -67,77 +67,77 @@
                     ),
 
 #10123
-addChildObject(101) : addObject(101),
-
-for(int i=0; i<objmap.length; i++){
-          FModelView f = stackobj[i];
-        }
-
-
-*****************
-void print( const int depth = 0 ) const
-	{
-		for ( int i = 0 ; i < depth ; ++i )
-		{
-			if ( i != depth-1 ) std::cout << "    ";
-			else std::cout << "|-- ";
-		}
-		std::cout << this->t << std::endl;
-		for ( uint i = 0 ; i < this->children.size() ; ++i )
-		{
-			this->children.at(i).print( depth+1 );
-		}
-	}
-
-private:
-	T t;
-	std::vector< lstdTreeNode > children;
 
 
 
 
-else{//?isMultiWidget_WithNoChild
-              //print(depth.toString() + ':' + alist[i].getMoid.toString()); //(1)columnA, (8)columnE
-            }
-
-else {//?isSingleWidget
-    print(depth.toString() + ':' + alist[i].getMoid.toString()); //(4)iconbutton2,> (5)textfield2, (7)image, (9)iconbutton, (10)textfield
-}
-***********************
-int depth = 0;
-  _showTree(List<FModelView> alist){//!TREETEST
-  List<FModelView> childlist = [];
-  
-    if(alist.isNotEmpty){
-       for(int i=0; i<alist.length; i++){
-
-         if(alist[i].catId != 104 || (alist[i].catId == 104 && alist[i].fmc.columnModel.value.childlist.isEmpty)){
-           print(depth.toString() + ':' + alist[i].getMoid.toString());
-         }else{
-           print(depth.toString() + ':' + alist[i].getMoid.toString());
-           childlist = alist[i].fmc.columnModel.value.childlist;
-           depth++;
-           _showTree(childlist);
-         }
-
-        }
-    }
-  }//!TREETEST
-
-  alist.forEach((element) {
-  
+List<String> eltype = [];
+//!TreeViewLevels
+ Widget _showTree(List<FModelView> alist, int lev){
+    List<FModelView> coalist = [];
         
-        if(element.fmc.columnModel.value.childlist.isEmpty){
-              print(element.getMoid);
+          for(int i=0; i<alist.length; i++){
+            if(!alist[i].haveChildren()){
+              print(alist[i].getMoid.toString());
+              //eltype.add('SoloMC');
+              fmv.fmc.columnModel.value.celtype.add('Solo');//!
+            }
+          }
+        
+          for (var element in alist) {
+            if(element.haveChildren()){
+              coalist.add(element);
+            }
+          }
+        
+        coalist.forEach((element) {
+          if(element.haveChildren()){
+            element.isparent = true;
+            print(element.getMoid.toString() + ':(Expansion)' + element.level.toString());
+            //eltype.add('Expansion');
+            fmv.fmc.columnModel.value.celtype.add('Expansion');//!
+            print(element.childlist().length);
+            _runIt(element.childlist(), element.level);
+          }
+        });
+
+    //!Fill model list with the new value. Copy them to a new list and send. 
+    //!Clear out the model list, so it not updates with the old values
+    if(eltype.isNotEmpty){
+      eltype.removeRange(0, eltype.length);
+    }
+    for(var items in fmv.fmc.columnModel.value.celtype){
+      eltype.add(items);
+    }
+    fmv.fmc.columnModel.value.celtype.removeRange(0, fmv.fmc.columnModel.value.celtype.length);
+    return FTreeView(eltype);
+    //!
+  }
+
+ _runIt(List<FModelView> cl, int curlev){
+
+    cl.forEach((element) {
+      if(element.haveChildren()){
+        int plev = curlev + 1;
+        String space = getPrintOut(plev);
+        print(space + element.getMoid.toString() + ':(Expansion_inside)' + plev.toString());
+        //eltype.add('Expansion_inside');
+        fmv.fmc.columnModel.value.celtype.add('Expansion_inside');//!
+        //_showTree(element.childlist(), false, plev);
+        _runIt(element.childlist(), plev);
+      }else{
+        int chlev = curlev + 1;
+        String space = getPrintOut(chlev);
+        if(element.isMultiChild()){
+          print(space + element.getMoid.toString() + ':(Expansion_inside)' + chlev.toString());//!EmptyMC
+          //eltype.add('EmptyMC');
+          fmv.fmc.columnModel.value.celtype.add('Expansion_inside');//!EmptyMC
         }else{
-              print(element.getMoid);
-              _showTree(element.fmc.columnModel.value.childlist);
+          print(space + element.getMoid.toString() + ':(Tile)' + chlev.toString());
+          //eltype.add('Tile');
+          fmv.fmc.columnModel.value.celtype.add('Tile');//!
         }
-      
-      });
-
-
-
-
-
-      
+      }
+    });
+  }
+//!TreeViewLevels
