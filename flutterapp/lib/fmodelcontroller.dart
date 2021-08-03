@@ -1,34 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 
 class FModelController extends GetxController{
-  var positionX = 300.0.obs;
-  var positionY = 300.0.obs;
+  //#ELV
 
-  var fbWidth = 100.obs;
-  var fbHeight = 50.obs;
+  var bradius = 0.obs;
 
   var caddchildCol = false.obs;//!Set color to object if column is selected (in main)
+  //!ADDC
 
-  Color prevcol = Colors.white;//!PRV
+  //#COLOR MODEL
+  final colModel = ColModel().obs;
 
-  //#Mark
-  var marked = false.obs;
-
-  markTrue() => marked.value = true;
-  markFalse() => marked.value = false;
+  var fbHeight = 50.obs;
+  var fbWidth = 100.obs;
   //#
 
   //#Helper
   var hpb = HelperBtn().obs;
 
+  //#Mark
+  var marked = false.obs;
+
+  //!ADDC
+  final objectModel = ObjectModel().obs;
+
+
+  var positionX = 300.0.obs;
+  var positionY = 300.0.obs;
+  Color prevcol = Colors.white;//!PRV
+
+  markTrue() => marked.value = true;
+
+  markFalse() => marked.value = false;
+
   chText(String txt) {
      hpb.value = HelperBtn(btntext: txt);
   }
+
   //#
+
+ //*ObjectModel methods
+  incSpacing(){
+    objectModel.update((val) {
+      val!.spacing++;
+    });
+  }
+  decSpacing(){
+    objectModel.update((val) {
+      val!.spacing--;
+    });
+  }
+  
+ //*ObjectModel methods
 
   //#ELV
   chElevation(){
@@ -36,70 +62,62 @@ class FModelController extends GetxController{
       val!.elevation +=2;
     });
   }
-  //#ELV
 
-  var bradius = 0.obs;
   incBradius() => bradius++;
 
-  //!ADDC
-  final columnModel = ColumnModel().obs;
-
   addChild(FModelView f){
-    columnModel.update((val) {
+    objectModel.update((val) {
       val!.childlist.add(f);
     });
   }
-  List<Widget> get getChildList{//!TREETEST
-    
-      return columnModel.value.childlist;
-  }
-  //!ADDC
 
-  //#COLOR MODEL
-  final colModel = ColModel().obs;
+  List<Widget> get getChildList{//!TREETEST
+      return objectModel.value.childlist;
+  }
 
   chCol(Color c) {
      colModel.update((val) { 
        val!.btncol = c;
      });
   }
+
   chTextCol(Color tc){
     colModel.update((val) {
       val!.txtcol = tc;
     });
   }
+
   Color get getCurCol{//!PRV
       prevcol = colModel.value.btncol;
     return prevcol;
   }
+
   //#COLOR MODEL
 
   incW() => fbWidth += 2;
+
   decW() => fbWidth -= 2;
 
   incH() => fbHeight += 2;
+
   decH() => fbHeight -= 2;
-  
 }
 
 class ColModel{
   Color btncol = Colors.amber;
   Color txtcol = Colors.white;
 }
-//!ADDC
-class ColumnModel{//! WORK with all multiwidgets object?. Change name?
-  //List<Widget> childlist = [];
-  List<FModelView> childlist = [];
-  List<String> celtype = [];
-}
 
-//!
+class ObjectModel{
+  String catName = '';
+  List<FModelView> childlist = [];
+  double spacing = 4.0;
+}
 
 class HelperBtn {
   HelperBtn({this.btntext = 'Button', this.borderRadius = 0, this.elevation = 0});
 
-  String btntext;
   double borderRadius;
-
+  String btntext;
   double elevation;
 }

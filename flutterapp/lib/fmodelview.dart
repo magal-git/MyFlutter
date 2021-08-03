@@ -1,3 +1,4 @@
+import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fmodelcontroller.dart';
 import 'package:flutterapp/utils.dart';
 import 'package:get/get.dart';
@@ -13,15 +14,21 @@ class FModelView extends StatelessWidget{
 
   //!TREEVIEW PROPS
   bool haveChildren(){
-    return fmc.columnModel.value.childlist.isNotEmpty;
+    return fmc.objectModel.value.childlist.isNotEmpty;
   }
   List<FModelView> childlist(){
-    return fmc.columnModel.value.childlist;
+    return fmc.objectModel.value.childlist;
   }
   bool isparent = false;
-  //bool ischild = false;
-  //bool ischildandparent = false;
-  bool isMultiChild() => catId == 104;//!Change 104 to all MCW
+  
+  bool isMultiWidget() {
+    //List<int> mwlist = [104,105];//!Change 104/105 to all MCW-TODO
+    if(mwCatIds.contains(catId)){
+      return true;
+    }
+    return false;
+  }
+
   int level = 0;
   //!TREEVIEW PROPS
 
@@ -47,14 +54,14 @@ class FModelView extends StatelessWidget{
 
   set setCatId(var catid){
     catId = catid;
-    //print('setcatid: $catId');
-    if(catid == 101) {
+    print('in fmv setcatid '+ catId.toString());
+    if(catid == fBUTTON) {
       fmc.fbWidth.value = 150;
       fmc.fbHeight.value = 30;
-    }else if(catid == 102){
+    }else if(catid == fICBUTTON){
       fmc.fbWidth.value = 60;
       fmc.fbHeight.value = 60;
-    }else if(catid == 103){
+    }else if(catid == fTEXTFIELD){
       fmc.fbWidth.value = 150;
       fmc.fbHeight.value = 40;
     }
@@ -65,24 +72,12 @@ class FModelView extends StatelessWidget{
     createSidePanel(this, catId));
   }
 
-  chClickCol(FModelView fmv, int curid, Map tmap){
+  markSelObj(FModelView fmv, Map tmap){
     tmap.forEach((key, value) {
-      value.fmc.markFalse();
+      value.fmc.markFalse();//?Unmark all objects
     });
-        fmv.fmc.markTrue();
+        fmv.fmc.markTrue();//?Now mark the selected one
   }
-  /*chClickVoid(/*FModelView fmv,*/ Map tmap){
-    tmap.forEach((key, value) {
-      value.fmc.markFalse();
-    });
-    
-    fmc.caddchild.value = false;
-    
-  }*/
-
-  /*bool get getAddchild{
-    return addchild;
-  }*/
 
   @override
   Widget build(BuildContext context){
@@ -98,7 +93,7 @@ class FModelView extends StatelessWidget{
         feedback:
             instanceObject(catId, this),
         onDragEnd: (details){
-            _position.value = details.offset - Offset(0.0, 56.0);
+            _position.value = details.offset - const Offset(0.0, 56.0);
         },
         ),
       );

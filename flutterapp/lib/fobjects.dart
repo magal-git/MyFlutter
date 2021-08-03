@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/border/gf_border.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:get/get.dart';
 import 'fmodelcontroller.dart';
 
 typedef void idCallback(int id);
+
+class FDummy extends StatelessWidget{
+    FDummy({required this.callback});
+    final idCallback callback;
+    @override
+  Widget build(BuildContext context){
+    return SizedBox.shrink();
+    }
+}
 
 //#region [ rgba(90, 150, 40, 0.2) ]//#endregion
 class FBuObject extends StatelessWidget {
   FBuObject({required this.callback, required this.thisid,
              required this.bw, required this.bh, required this.colModel, /*this.col = Colors.green,*/
-             this.marked = false, required this.hlpb, this.borderradius = 0.0,
+             this.marked = false, required this.hlpb, this.borderradius = 0.0, required this.objectModel,
             });
 
 double bw, bh;
@@ -17,14 +25,20 @@ double borderradius;
 final idCallback callback;
 //Color col;
 ColModel colModel;
+ObjectModel objectModel;
 
 HelperBtn hlpb;
 bool marked = true;
 final int thisid;
 
+Widget createT(){//!TEST decodeToJson
+  return Text(hlpb.btntext, style: TextStyle(fontSize: 12, color: colModel.txtcol),);
+}
+
   @override
   Widget build(BuildContext context){
     print('in fobjects');
+    objectModel.catName = 'Button';
     
     return 
     SizedBox(width: bw, height: bh,   child: 
@@ -33,11 +47,11 @@ final int thisid;
           color: Color.fromRGBO(50, 52, 50, 1),
           width: 2,
         ),
-        ), child: TextButton(child: Text('- Edit mode -', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: colModel.txtcol),),
+        ), child: TextButton(child: Text(hlpb.btntext +': id ' + thisid.toString(), style: TextStyle(fontSize: 12, color: colModel.txtcol),),
           onPressed: () => callback(thisid),
         )
         ) :
-        TextButton(child: Text(hlpb.btntext +': id ' + thisid.toString(), style: TextStyle(fontSize: 12, color: colModel.txtcol),),
+        TextButton(child: createT(),//Text(hlpb.btntext, style: TextStyle(fontSize: 12, color: colModel.txtcol),),
           onPressed: () => callback(thisid),
         ),
         color: colModel.btncol, /*col,*/
@@ -51,7 +65,7 @@ final int thisid;
 class FIcBuObject extends StatelessWidget {
   FIcBuObject({required this.callback, required this.thisid,
               required this.bw, required this.bh, this.col = Colors.green,
-              this.marked = false
+              this.marked = false, required this.objectModel
             });
 
 double bw, bh;
@@ -59,9 +73,12 @@ final idCallback callback;
 Color col;
 bool marked = true;//!Marked
 final int thisid;
+ObjectModel objectModel;
 
   @override
   Widget build(BuildContext context){
+    objectModel.catName = 'IconButton';
+
     return 
     SizedBox(width: bw, height: bh,   child: 
       Material(child: marked ?
@@ -85,7 +102,7 @@ final int thisid;
 class FTextFObject extends StatelessWidget {
   FTextFObject({required this.callback, required this.thisid,
               required this.bw, required this.bh, this.col = Colors.green,
-              this.marked = false//!Marked
+              this.marked = false, required this.objectModel
             });
 
 double bw, bh;
@@ -93,9 +110,12 @@ final idCallback callback;
 Color col;
 bool marked = true;//!Marked
 final int thisid;
+ObjectModel objectModel;
 
   @override
   Widget build(BuildContext context){
+    objectModel.catName = 'Textfield';
+
     return
       SizedBox(width: bw, height: bh,   child: 
         Material(child: marked ?
@@ -128,35 +148,39 @@ final int thisid;
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
 class FColumnObject extends StatelessWidget {
   FColumnObject({required this.callback, required this.thisid,
-              this.marked = false, required this.columnModel, 
+              this.marked = false, required this.objectModel,
             });
 
 
 final idCallback callback;
 bool marked = true;
 final int thisid;
-ColumnModel columnModel;
+ObjectModel objectModel;
 bool checked = true;
+
 
   @override
   Widget build(BuildContext context){
+    objectModel.catName = 'Column';
+    
     return
       GestureDetector(child: marked ?
-          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
-              Column(mainAxisSize: MainAxisSize.max, children: 
+          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(50, 52, 50, 1), width: 3,),), child: 
+              //Column(mainAxisSize: MainAxisSize.max, children:
+              Wrap( direction: Axis.vertical, spacing: objectModel.spacing, children://!Column 
                   [
-                    Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO
-                    Text(thisid.toString()),
-                    for(int i=0; i<columnModel.childlist.length; i++)
-                      columnModel.childlist[i], 
+                    //Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO
+                    Text(objectModel.catName + ' id: $thisid'),
+                    for(int i=0; i<objectModel.childlist.length; i++)
+                      objectModel.childlist[i], 
                   ],
               ),
           ) :
-              Column(children: 
+              Wrap( direction: Axis.vertical, spacing: objectModel.spacing, children://!Column 
                   [
-                    Text('column: id $thisid'),
-                    for(int i=0; i<columnModel.childlist.length; i++)
-                      columnModel.childlist[i],
+                    Text(objectModel.catName + ' id: $thisid'),
+                    for(int i=0; i<objectModel.childlist.length; i++)
+                      objectModel.childlist[i],
                   ],
               ),
         onTap: () => callback(thisid),
@@ -166,35 +190,39 @@ bool checked = true;
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
 class FRowObject extends StatelessWidget {
   FRowObject({required this.callback, required this.thisid,
-              this.marked = false, required this.columnModel, 
+              this.marked = false, required this.objectModel, 
             });
 
 
 final idCallback callback;
 bool marked = true;
 final int thisid;
-ColumnModel columnModel;
+ObjectModel objectModel;
 bool checked = true;
 
   @override
   Widget build(BuildContext context){
+    objectModel.catName = "Row";
+
     return
       GestureDetector(child: marked ?
-          Container(width: 100, height: 100, decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
-              Row(mainAxisSize: MainAxisSize.max, children: 
+          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
+              //Row(mainAxisSize: MainAxisSize.max, children:
+              Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
                   [
-                    Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO
-                    Text(thisid.toString()),
-                    for(int i=0; i<columnModel.childlist.length; i++)
-                      columnModel.childlist[i], 
+                    //Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO
+                    Text(objectModel.catName + ' id: $thisid'),
+                    for(int i=0; i<objectModel.childlist.length; i++)
+                      objectModel.childlist[i], 
                   ],
               ),
           ) :
-              Row(children: 
+              //Row(children: 
+              Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
                   [
-                    Text('row: id $thisid'),
-                    for(int i=0; i<columnModel.childlist.length; i++)
-                      columnModel.childlist[i],
+                    Text(objectModel.catName + ' id: $thisid'),
+                    for(int i=0; i<objectModel.childlist.length; i++)
+                      objectModel.childlist[i],
                   ],
               ),
         onTap: () => callback(thisid),

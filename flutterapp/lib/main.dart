@@ -1,15 +1,12 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterapp/colorpicker.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:flutterapp/ftreeviewpanel.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
-import '../../utils.dart';
+//import '../../utils.dart';
+import 'package:flutterapp/utils.dart'; 
 
 
 void main () => runApp(GetMaterialApp(home: RunApp()));
@@ -18,7 +15,7 @@ void main () => runApp(GetMaterialApp(home: RunApp()));
 class RunApp extends StatelessWidget { @override Widget build(BuildContext context){ return HomePageWidget();}}
 //#endregion
 
-class HomePageWidget extends StatefulWidget {//#region [ rgba(30, 30, 40, 0.2) ]
+class HomePageWidget extends StatefulWidget {//#region [ rgba(70, 70, 80, 0.1) ]
   HomePageWidget({Key? key}) : super(key: key);
 
   @override
@@ -52,11 +49,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       _mid = pid;
       fmv = getCurObj(_mid, objmap);
       
-      if(fmv.catId == 104){//!ADDCHILD
+      if(fmv.isMultiWidget()){//!ADDCHILD
         fmv.fmc.caddchildCol.value = true;
         //addchild = false;
       }
-      fmv.chClickCol(fmv, _mid, objmap);//!Revisite
+      fmv.markSelObj(fmv, objmap);//!Revisite
   });
 }
 
@@ -68,11 +65,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       stackobj.add(fmv);
       objmap[_mid] = fmv;
 
-      if(fmv.catId == 104){//!ADDCHILD
+      if(fmv.isMultiWidget()){//!ADDCHILD
         fmv.fmc.caddchildCol.value = true;
-        //addchild = true;
       }
+      fmv.markSelObj(fmv, objmap);
     });
+    
   }
 
   //! ADDCHILDTOLIST
@@ -86,10 +84,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       _mid = fmv.getMoid;//#Identifies the object
       objmap[_mid] = fmv;
 
-      colrowFmv.fmc.addChild(fmv);
+      colrowFmv.fmc.addChild(fmv);//!?????
       fmv.fmc.caddchildCol.value = false;//!ADDCHILD
       //addchild = false;
-      
+    fmv.markSelObj(fmv, objmap);
     });
   }
 
@@ -109,14 +107,13 @@ List<FModelView> fmvList = [];
         
           for(int i=0; i<alist.length; i++){
             if(!alist[i].haveChildren()){
-              print(alist[i].getMoid.toString());
-              //eltype.add('SoloMC');
-              //fmv.fmc.columnModel.value.celtype.add('Solo');//!
-              alist[i].type = 4;
-              fmvList.add(alist[i]);
+              print(alist[i].getMoid.toString());//!Tabort
+              if(alist[i].catId != 0){//!Dummy in FObject with catid 0. Its a dummy for when one select object 
+                alist[i].type = 4;
+                fmvList.add(alist[i]);
+              }
             }
           }
-        
           for (var element in alist) {
             if(element.haveChildren()){
               coalist.add(element);
@@ -126,9 +123,7 @@ List<FModelView> fmvList = [];
         coalist.forEach((element) {
           if(element.haveChildren()){
             element.isparent = true;
-            print(element.getMoid.toString() + ':(Expansion)' + element.level.toString());
-            //eltype.add('Expansion');
-            //fmv.fmc.columnModel.value.celtype.add('Expansion');//!
+            print(element.getMoid.toString() + ':(Expansion)' + element.level.toString());//!Tabort
             element.type = 1;
             fmvList.add(element);
             _runIt(element.childlist(), element.level);
@@ -145,7 +140,6 @@ List<FModelView> fmvList = [];
     }
     fmvList.removeRange(0, fmvList.length);
     return FTreeView(eltemp);
-    //!
   }
 
  _runIt(List<FModelView> cl, int curlev){
@@ -153,27 +147,20 @@ List<FModelView> fmvList = [];
     cl.forEach((element) {
       if(element.haveChildren()){
         int plev = curlev + 1;
-        String space = getPrintOut(plev);
-        print(space + element.getMoid.toString() + ':(Expansion_inside)' + plev.toString());
-        //eltype.add('Expansion_inside');
-        //fmv.fmc.columnModel.value.celtype.add('Expansion_inside');//!
+        String space = getPrintOut(plev);//!Tabort
+        print(space + element.getMoid.toString() + ':(Expansion_inside)' + plev.toString());//!Tabort
         element.type = 3;
         fmvList.add(element);
-        //_showTree(element.childlist(), false, plev);
         _runIt(element.childlist(), plev);
       }else{//!The same?
         int chlev = curlev + 1;
-        String space = getPrintOut(chlev);
-        if(element.isMultiChild()){
-          print(space + element.getMoid.toString() + ':(Expansion_inside)' + chlev.toString());//!EmptyMC
-          //eltype.add('EmptyMC');
-          //fmv.fmc.columnModel.value.celtype.add('Expansion_inside');//!EmptyMC
+        String space = getPrintOut(chlev);//!Tabort
+        if(/*element.fmc.objectModel.value.isMultiWidget*/element.isMultiWidget()){//!Even if element has no children? Check it!
+          print(space + element.getMoid.toString() + ':(Expansion_inside)' + chlev.toString());//!Tabort
           element.type = 3;
           fmvList.add(element);
         }else{
-          print(space + element.getMoid.toString() + ':(Tile)' + chlev.toString());
-          //eltype.add('Tile');
-          //fmv.fmc.columnModel.value.celtype.add('Tile');//!
+          print(space + element.getMoid.toString() + ':(Tile)' + chlev.toString());//!Tabort
           element.type = 2;
           fmvList.add(element);
         }
@@ -182,7 +169,7 @@ List<FModelView> fmvList = [];
   }
 //!TreeViewLevels
 
-String getPrintOut(int t){
+String getPrintOut(int t){//!TABORT
   switch (t) {
     case 1:
       return ' |--';
@@ -194,7 +181,7 @@ String getPrintOut(int t){
     default:
     return '';
   }
-}
+}//!TABORT
 
   selFunc(int id){
     if (fmv.fmc.caddchildCol.value){
@@ -218,16 +205,18 @@ String getPrintOut(int t){
     });
   }
   //*Methods
-  
+
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
   print('in build');
   
-    //fmv.chClickCol(fmv, _mid, objmap);//!Revisite
-    
 
     return 
-    GestureDetector(onTap: () => unselect(objmap),//?CLICKVOID TODO
+    //GestureDetector(onTap: () => unselect(objmap),//?CLICKVOID TODO
+    GestureDetector(onTap: () {
+      unselect(objmap);
+      addObject(0);
+    },
 
       child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj,), appBar: 
           AppBar( backgroundColor: 
@@ -237,7 +226,7 @@ String getPrintOut(int t){
       body:
           SafeArea(child:
             Stack(children: [
-              Container(color: Colors.grey, width: 240,),
+              Container(color: Colors.grey.shade400, width: 240,),
                       if(stackobj.isNotEmpty)
                       for(int i=0; i<stackobj.length; i++)
                           stackobj[i],    
