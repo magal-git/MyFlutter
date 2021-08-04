@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,8 @@ import 'package:get/get.dart';
 
 class FModelController extends GetxController{
   //#ELV
+
+  final int moid = Random().nextInt(1000);
 
   var bradius = 0.obs;
 
@@ -27,9 +30,16 @@ class FModelController extends GetxController{
   //!ADDC
   final objectModel = ObjectModel().obs;
 
-
   var positionX = 300.0.obs;
   var positionY = 300.0.obs;
+
+  //! 1109
+  setPosition(Offset o){
+    positionX.value = o.dx;
+    positionY.value = o.dy;
+  }
+  //! 1109
+
   Color prevcol = Colors.white;//!PRV
 
   markTrue() => marked.value = true;

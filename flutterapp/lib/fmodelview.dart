@@ -12,15 +12,32 @@ typedef void midCallback(int id);
 class FModelView extends StatelessWidget{
       FModelView({required this.mcallback});
 
+
+  //*Members
+  FModelController fmc = FModelController();
+  bool isparent = false;
+  int level = 0;
+  int catId = 0;
+
+  List<Widget> twList = [];
+  int type = 0; //1=Expansion; 2=Tile; 3=Expansion_inside; 4=Solo
+
+  final _position = const Offset(300,300).obs;
+
+  //*Constructer member
+  final midCallback mcallback;
+
+  //*Methods
+
   //!TREEVIEW PROPS
   bool haveChildren(){
     return fmc.objectModel.value.childlist.isNotEmpty;
   }
+
   List<FModelView> childlist(){
     return fmc.objectModel.value.childlist;
   }
-  bool isparent = false;
-  
+
   bool isMultiWidget() {
     //List<int> mwlist = [104,105];//!Change 104/105 to all MCW-TODO
     if(mwCatIds.contains(catId)){
@@ -28,34 +45,16 @@ class FModelView extends StatelessWidget{
     }
     return false;
   }
-
-  int level = 0;
   //!TREEVIEW PROPS
 
-
-  int catId = 0;
-  //*Members
-  FModelController fmc = FModelController();
-  //bool addchild = false;
-  int type = 0; //1=Expansion; 2=Tile; 3=Expansion_inside; 4=Solo
-  List<Widget> twList = [];
-
-  //*Constructer member
-  final midCallback mcallback;
-
-  //*Methods
-  final int moid = Random().nextInt(1000);
-
-  final _position = const Offset(300,300).obs;
-
   int get getMoid{
-    return moid;
+    return fmc.moid;
   }
 
   set setCatId(var catid){
     catId = catid;
-    print('in fmv setcatid '+ catId.toString());
-    if(catid == fBUTTON) {
+
+    /*if(catid == fBUTTON) {//! Use or not use?
       fmc.fbWidth.value = 150;
       fmc.fbHeight.value = 30;
     }else if(catid == fICBUTTON){
@@ -64,7 +63,7 @@ class FModelView extends StatelessWidget{
     }else if(catid == fTEXTFIELD){
       fmc.fbWidth.value = 150;
       fmc.fbHeight.value = 40;
-    }
+    }*/
   }
 
   Widget makeSidePanel(){
@@ -87,13 +86,18 @@ class FModelView extends StatelessWidget{
     Obx(() {
       
       return 
-      Positioned(left: _position.value.dx, top: _position.value.dy, child:
+      //Positioned(left: _position.value.dx, top: _position.value.dy, child://! 1109
+      Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child:
         Draggable(child:
             instanceObject(catId, this),
         feedback:
             instanceObject(catId, this),
         onDragEnd: (details){
-            _position.value = details.offset - const Offset(0.0, 56.0);
+            //_position.value = details.offset - const Offset(0.0, 56.0);//! 1109
+            fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
+            fmc.positionY.value = details.offset.dy;
+            Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
+            fmc.setPosition(of);//! 1109
         },
         ),
       );

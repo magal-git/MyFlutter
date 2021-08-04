@@ -24,7 +24,7 @@ class HomePageWidget extends StatefulWidget {//#region [ rgba(70, 70, 80, 0.1) ]
 
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-   //bool addchild = true;//!ADDCHILD
+   
   //*Members
    late FModelView fmv;
    int _mid = 0;
@@ -32,11 +32,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   Map objmap = <int, FModelView>{};
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  //!was Widget before
   List<FModelView> stackobj = [];
 
   //*Methods
-  
   @override
   initState(){
     super.initState();
@@ -50,7 +48,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       fmv = getCurObj(_mid, objmap);
       
       if(fmv.isMultiWidget()){//!ADDCHILD
-        fmv.fmc.caddchildCol.value = true;
+        fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is selected
         //addchild = false;
       }
       fmv.markSelObj(fmv, objmap);//!Revisite
@@ -60,44 +58,43 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   addObject(int catId){
     setState(() {
       fmv = FModelView(mcallback: handleId,);
+      print('in addobject');
       fmv.setCatId = catId;
       _mid = fmv.getMoid;//#Identifies the object
       stackobj.add(fmv);
       objmap[_mid] = fmv;
 
       if(fmv.isMultiWidget()){//!ADDCHILD
-        fmv.fmc.caddchildCol.value = true;
+        fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
       }
       fmv.markSelObj(fmv, objmap);
     });
-    
   }
-
-  //! ADDCHILDTOLIST
-    
-  addChildObject(int catId){
-    setState(() {
-      FModelView colrowFmv = getCurObj(_mid, objmap);
-
-      fmv = FModelView(mcallback: handleId,);
-      fmv.setCatId = catId;
-      _mid = fmv.getMoid;//#Identifies the object
-      objmap[_mid] = fmv;
-
-      colrowFmv.fmc.addChild(fmv);//!?????
-      fmv.fmc.caddchildCol.value = false;//!ADDCHILD
-      //addchild = false;
-    fmv.markSelObj(fmv, objmap);
-    });
-  }
-
-  //! ADDCHILDTOLIST
 
   _removeObj(){
     setState(() {
       stackobj.removeAt(stackobj.indexOf(fmv));
     });
   }
+
+  //! ADDCHILDTOLIST
+  addChildObject(int catId){
+    setState(() {
+      FModelView theParentFmv = getCurObj(_mid, objmap);
+
+      fmv = FModelView(mcallback: handleId,);
+      fmv.setCatId = catId;
+      _mid = fmv.getMoid;//#Identifies the object
+      objmap[_mid] = fmv;
+
+      theParentFmv.fmc.addChild(fmv);//! Add fobject to parent(fmv)children list
+      fmv.fmc.caddchildCol.value = false;//!Set color to object if column/Row is added
+      //addchild = false;
+    fmv.markSelObj(fmv, objmap);
+    });
+  }
+  //! ADDCHILDTOLIST
+
 
 List<FModelView> eltemp = [];
 List<FModelView> fmvList = [];
@@ -108,7 +105,7 @@ List<FModelView> fmvList = [];
           for(int i=0; i<alist.length; i++){
             if(!alist[i].haveChildren()){
               print(alist[i].getMoid.toString());//!Tabort
-              if(alist[i].catId != 0){//!Dummy in FObject with catid 0. Its a dummy for when one select object 
+              if(alist[i].catId != 0){//!Dummy in FObject with catid 0. Its a dummy for when one unselect object 
                 alist[i].type = 4;
                 fmvList.add(alist[i]);
               }
@@ -205,11 +202,41 @@ String getPrintOut(int t){//!TABORT
     });
   }
   //*Methods
+//! 1109
+  func1109(){
+    
+      //Serizlize persistent model
+      print(fmv.fmc.positionX);
+      print(fmv.fmc.hpb.value.btntext);
+      print(fmv.fmc.getCurCol);
+      print(fmv.fmc.bradius);
+      print(fmv.fmc.hpb.value.elevation);
+
+      
+  }
+
+  addserObj(int ci){
+    setState(() {
+      FModelView smv = FModelView(mcallback: handleId,);
+      smv.fmc.positionX.value = 200.0;
+      smv.fmc.hpb.value.btntext = 'Serialize';
+      smv.fmc.bradius.value = 12;
+      smv.setCatId = ci;
+      _mid = smv.getMoid;
+      stackobj.add(smv);
+      objmap[_mid] = smv;
+
+      smv.markSelObj(fmv, objmap);
+    });
+
+  }
+//!1109
 
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
   print('in build');
   
+  //addserObj(101);
 
     return 
     //GestureDetector(onTap: () => unselect(objmap),//?CLICKVOID TODO
@@ -248,7 +275,7 @@ String getPrintOut(int t){//!TABORT
                      Column( mainAxisSize: MainAxisSize.max, children: 
                           [
                             fmv.makeSidePanel(),
-                            GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
+                            GFButton(onPressed: () => func1109() /*_showTree(stackobj, 0)*/),//!TREETEST
                           ],
                      ),
                    )

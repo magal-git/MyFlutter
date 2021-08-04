@@ -28,22 +28,22 @@ Widget instanceObject(int cid, FModelView fmv){
           FDummy(callback: fmv.mcallback,);
       case fBUTTON:
         return 
-          FBuObject(callback: fmv.mcallback, thisid: fmv.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), colModel: fmv.fmc.colModel.value, 
+          FBuObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), colModel: fmv.fmc.colModel.value, 
           marked: fmv.fmc.marked.value, hlpb: fmv.fmc.hpb.value, borderradius: fmv.fmc.bradius.toDouble(), objectModel: fmv.fmc.objectModel.value,);
       case fICBUTTON:
         return
-          FIcBuObject(callback: fmv.mcallback, thisid: fmv.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.amber,
+          FIcBuObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.amber,
           marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
        case fTEXTFIELD:
        return
-          FTextFObject(callback: fmv.mcallback, thisid: fmv.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.white,
+          FTextFObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.white,
           marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
        case fCOLUMN://!COL
        return
-          FColumnObject(callback: fmv.mcallback, thisid: fmv.moid, marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
+          FColumnObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
        case fROW://!ROW
        return
-          FRowObject(callback: fmv.mcallback, thisid: fmv.moid, marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
+          FRowObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
     }
 
     return Container(child: Text('Empty'),);
