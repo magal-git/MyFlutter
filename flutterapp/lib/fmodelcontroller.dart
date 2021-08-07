@@ -5,9 +5,8 @@ import 'package:get/get.dart';
 
 
 class FModelController extends GetxController{
-  //#ELV
 
-  final int moid = Random().nextInt(1000);
+  /*final*/ int moid = Random().nextInt(1000);
 
   var bradius = 0.obs;
 

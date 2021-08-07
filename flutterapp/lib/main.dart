@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:flutterapp/ftreeviewpanel.dart';
+import 'package:flutterapp/serializer.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 //import '../../utils.dart';
 import 'package:flutterapp/utils.dart'; 
 
+//!NOTES
+//! 1109 = Serialazing
+//!
 
 void main () => runApp(GetMaterialApp(home: RunApp()));
 
@@ -55,10 +59,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   });
 }
 
-  addObject(int catId){
+  addObject(int catId){//!TODO add fmv.type and
     setState(() {
       fmv = FModelView(mcallback: handleId,);
       print('in addobject');
+      
       fmv.setCatId = catId;
       _mid = fmv.getMoid;//#Identifies the object
       stackobj.add(fmv);
@@ -71,13 +76,31 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
-  _removeObj(){
+  void _removeObj(){
     setState(() {
       stackobj.removeAt(stackobj.indexOf(fmv));
     });
   }
 
-  //! ADDCHILDTOLIST
+  //!
+  //! with addSerObject and addSerChildObject there is no instanciazion
+  addSerObject(FModelView szFmv){//!Received from serializer // 
+    setState(() {
+      
+        szFmv.setCatId = 101;//TODO set this in serializer
+        print('*addinserobject-btn*' + szFmv.getMoid.toString());
+        _mid = szFmv.getMoid;//#Identifies the object
+        stackobj.add(szFmv);
+        objmap[_mid] = szFmv;
+
+        if(szFmv.isMultiWidget()){//!ADDCHILD
+          szFmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
+        }
+        szFmv.markSelObj(szFmv, objmap);
+
+    });
+  }
+
   addChildObject(int catId){
     setState(() {
       FModelView theParentFmv = getCurObj(_mid, objmap);
@@ -87,14 +110,65 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       _mid = fmv.getMoid;//#Identifies the object
       objmap[_mid] = fmv;
 
+      //! 1109 *****************************************************************
+      fmv.parentId = theParentFmv.getMoid;
+      //! (child)fmv.isCacheChild = true; ????
+      //! 1109 *****************************************************************
+
       theParentFmv.fmc.addChild(fmv);//! Add fobject to parent(fmv)children list
-      fmv.fmc.caddchildCol.value = false;//!Set color to object if column/Row is added
+      fmv.fmc.caddchildCol.value = false;//!Set color to false if column/Row is added
       //addchild = false;
     fmv.markSelObj(fmv, objmap);
     });
   }
-  //! ADDCHILDTOLIST
+  //!
 
+  //? OBS TEST
+  addSerChildObject(FModelView child){
+    setState(() {
+
+      _mid = child.getMoid;//#Identifies the object
+      objmap[_mid] = child;
+
+      FModelView parent = getCurObj(child.parentId, objmap);// get the parent
+      parent.fmc.addChild(child);
+      child.fmc.caddchildCol.value = false;//!Set color to false if column/Row is added
+
+    child.markSelObj(child, objmap);//! Do we need this??
+    });
+  }
+  //? OBS TEST
+
+//! 1109 ***********************************************************************
+    //! SaveButton(onPressed: writeToAPI(objmap))
+    //! writeToAPI(objmap){}
+    //! 
+    //! OnStartUp:
+    //! checkForChacedObjects(objmap)
+    //!   readFromAPI();
+
+//! 1109 ***********************************************************************
+
+//!checkForCachedObjects
+int gogo = 0;
+getcache() async {
+  gogo++;
+  Serializer sz = Serializer(callback: handleId);
+  await sz.readData().then((value) {
+    for(var obj in value){
+      if(obj.type == 4 || obj.type == 1){
+        addSerObject(obj);
+      }
+    }
+      for(var obj in value){
+      if(obj.type == 2 || obj.type == 3){
+        addSerChildObject(obj);
+      }
+    }
+  });
+}
+
+//! 1109 ***********************************************************************
 
 List<FModelView> eltemp = [];
 List<FModelView> fmvList = [];
@@ -119,11 +193,11 @@ List<FModelView> fmvList = [];
         
         coalist.forEach((element) {
           if(element.haveChildren()){
-            element.isparent = true;
+            //element.isparent = true;
             print(element.getMoid.toString() + ':(Expansion)' + element.level.toString());//!Tabort
             element.type = 1;
             fmvList.add(element);
-            _runIt(element.childlist(), element.level);
+            _runIt(element.childlist(), /*element.level*/0);
           }
         });
 
@@ -202,47 +276,22 @@ String getPrintOut(int t){//!TABORT
     });
   }
   //*Methods
-//! 1109
-  func1109(){
-    
-      //Serizlize persistent model
-      print(fmv.fmc.positionX);
-      print(fmv.fmc.hpb.value.btntext);
-      print(fmv.fmc.getCurCol);
-      print(fmv.fmc.bradius);
-      print(fmv.fmc.hpb.value.elevation);
-
-      
-  }
-
-  addserObj(int ci){
-    setState(() {
-      FModelView smv = FModelView(mcallback: handleId,);
-      smv.fmc.positionX.value = 200.0;
-      smv.fmc.hpb.value.btntext = 'Serialize';
-      smv.fmc.bradius.value = 12;
-      smv.setCatId = ci;
-      _mid = smv.getMoid;
-      stackobj.add(smv);
-      objmap[_mid] = smv;
-
-      smv.markSelObj(fmv, objmap);
-    });
-
-  }
-//!1109
 
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
   print('in build');
-  
-  //addserObj(101);
+
+//!1109
+//if(gogo<1) getcache();
+
+//sz.writeToAPI(objmap);
+//!1109
 
     return 
-    //GestureDetector(onTap: () => unselect(objmap),//?CLICKVOID TODO
+    //GestureDetector(onTap: () => unselect(objmap),
     GestureDetector(onTap: () {
       unselect(objmap);
-      addObject(0);
+      addObject(0);//! new object every time?? Check it!
     },
 
       child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj,), appBar: 
@@ -258,6 +307,7 @@ String getPrintOut(int t){//!TABORT
                       for(int i=0; i<stackobj.length; i++)
                           stackobj[i],    
                       
+
 
                   //!UDEV PUT IN SEP WIDGET?
                   //#10123
@@ -275,7 +325,7 @@ String getPrintOut(int t){//!TABORT
                      Column( mainAxisSize: MainAxisSize.max, children: 
                           [
                             fmv.makeSidePanel(),
-                            GFButton(onPressed: () => func1109() /*_showTree(stackobj, 0)*/),//!TREETEST
+                            GFButton(onPressed: () => /*func1109()*/ _showTree(stackobj, 0)),//!TREETEST
                           ],
                      ),
                    )

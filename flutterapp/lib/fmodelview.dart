@@ -15,9 +15,14 @@ class FModelView extends StatelessWidget{
 
   //*Members
   FModelController fmc = FModelController();
-  bool isparent = false;
+  //bool isparent = false;
   int level = 0;
   int catId = 0;
+  int parentId = 0;
+  //! 1109
+  //! setParent()
+  //! getParent()
+  //! 1109
 
   List<Widget> twList = [];
   int type = 0; //1=Expansion; 2=Tile; 3=Expansion_inside; 4=Solo
@@ -50,6 +55,11 @@ class FModelView extends StatelessWidget{
   int get getMoid{
     return fmc.moid;
   }
+  //!1109
+  set setMoid(int id){
+    fmc.moid = id;
+  }
+  //!1109
 
   set setCatId(var catid){
     catId = catid;
@@ -86,18 +96,21 @@ class FModelView extends StatelessWidget{
     Obx(() {
       
       return 
-      //Positioned(left: _position.value.dx, top: _position.value.dy, child://! 1109
-      Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child:
+      //Positioned(left: _position.value.dx, top: _position.value.dy, child:
+      Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109
         Draggable(child:
             instanceObject(catId, this),
         feedback:
             instanceObject(catId, this),
         onDragEnd: (details){
-            //_position.value = details.offset - const Offset(0.0, 56.0);//! 1109
+            //_position.value = details.offset - const Offset(0.0, 56.0);
+
+            //! 1109 ***********************************************************
             fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
-            fmc.positionY.value = details.offset.dy;
+            fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
             Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
-            fmc.setPosition(of);//! 1109
+            fmc.setPosition(of);
+            //! 1109 ***********************************************************
         },
         ),
       );
