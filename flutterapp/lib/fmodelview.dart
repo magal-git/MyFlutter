@@ -1,5 +1,6 @@
 import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fmodelcontroller.dart';
+import 'package:flutterapp/fobjects.dart';
 import 'package:flutterapp/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +25,7 @@ class FModelView extends StatelessWidget{
   //! getParent()
   //! 1109
 
-  List<Widget> twList = [];
+  List<Widget> twList = [];//! in treeviewpanel this is the link to each fmodelview 
   int type = 0; //1=Expansion; 2=Tile; 3=Expansion_inside; 4=Solo
 
   final _position = const Offset(300,300).obs;
@@ -91,6 +92,12 @@ class FModelView extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     print('in instanceobject');
+    
+    FBuObject fbu = FBuObject(callback: this.mcallback, thisid: this.getMoid,//!1200
+             bw: fmc.fbWidth.toDouble(), bh: fmc.fbHeight.toDouble(), colModel: fmc.colModel.value,
+             marked: fmc.marked.value, hlpb: fmc.hpb.value, borderradius: 0.0, objectModel: fmc.objectModel.value,
+            );
+            
 
     return
     Obx(() {

@@ -109,3 +109,11 @@
     });
 
   }
+
+
+
+  widget_with_codeview: ^2.0.0-nullsafe
+  plugin_platform_interface: ^2.0.1
+
+  assets:
+    - expl.dart

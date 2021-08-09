@@ -38,6 +38,10 @@ class Serializer {
       FModelView tmpf = FModelView(mcallback: callback);
       tmpf.setMoid = int.parse(rec.getField('moid')!.value.toString());
       tmpf.fmc.fbWidth.value = int.parse(rec.getField('width')!.value.toString());
+      tmpf.parentId = int.parse(rec.getField('parent')!.value.toString());
+      tmpf.type = int.parse(rec.getField('type')!.value.toString());
+      tmpf.catId = int.parse(rec.getField('catid')!.value.toString());
+      
       fmlist.add(tmpf);
        /*var v = rec.getField('parent')!.value;
        

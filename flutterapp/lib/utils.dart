@@ -52,7 +52,6 @@ Widget instanceObject(int cid, FModelView fmv){
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
 Widget createSidePanel(FModelView fmv, int catid){
 
-
       //#(€4)This occures everytime button text change, must have!
       //! Can it be somewhere else?
       String newtext = fmv.fmc.hpb.value.btntext;
@@ -126,3 +125,35 @@ print('in createsidepanel');
       return Container(child: Text(fmv.fmc.fbWidth.toString()));
   }
   //#region [ rgba(90, 150, 40, 0.2) ]//#endregion
+
+
+
+FDummytest instanceFObject(int cid, FModelView fmv){
+  
+    switch (cid){
+      case 0:
+        return 
+          FDummy(callback: fmv.mcallback,);
+      case fBUTTON:
+        return 
+          FBuObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), colModel: fmv.fmc.colModel.value, 
+          marked: fmv.fmc.marked.value, hlpb: fmv.fmc.hpb.value, borderradius: fmv.fmc.bradius.toDouble(), objectModel: fmv.fmc.objectModel.value,);
+      case fICBUTTON:
+        return
+          FIcBuObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.amber,
+          marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
+       case fTEXTFIELD:
+       return
+          FTextFObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.white,
+          marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
+       case fCOLUMN://!COL
+       return
+          FColumnObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
+       case fROW://!ROW
+       return
+          FRowObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
+    }
+
+    return FDummy(callback: fmv.mcallback);//Container(child: Text('Empty'),);
+    
+  }

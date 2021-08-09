@@ -1,5 +1,8 @@
 //import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutterapp/fcodegen.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:flutterapp/ftreeviewpanel.dart';
@@ -7,10 +10,11 @@ import 'package:flutterapp/serializer.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 //import '../../utils.dart';
-import 'package:flutterapp/utils.dart'; 
+import 'package:flutterapp/utils.dart';
+
 
 //!NOTES
-//! 1109 = Serialazing
+//! 1109 = Serializer
 //!
 
 void main () => runApp(GetMaterialApp(home: RunApp()));
@@ -87,7 +91,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   addSerObject(FModelView szFmv){//!Received from serializer // 
     setState(() {
       
-        szFmv.setCatId = 101;//TODO set this in serializer
+        //szFmv.setCatId = 101;//TODO set this in serializer
         print('*addinserobject-btn*' + szFmv.getMoid.toString());
         _mid = szFmv.getMoid;//#Identifies the object
         stackobj.add(szFmv);
@@ -238,7 +242,7 @@ List<FModelView> fmvList = [];
       }
     });
   }
-//!TreeViewLevels
+//!TreeViewLevels***************************************************************
 
 String getPrintOut(int t){//!TABORT
   switch (t) {
@@ -276,6 +280,7 @@ String getPrintOut(int t){//!TABORT
     });
   }
   //*Methods
+Codegen cgen = Codegen();
 
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
@@ -283,7 +288,6 @@ String getPrintOut(int t){//!TABORT
 
 //!1109
 //if(gogo<1) getcache();
-
 //sz.writeToAPI(objmap);
 //!1109
 
@@ -312,7 +316,8 @@ String getPrintOut(int t){//!TABORT
                   //!UDEV PUT IN SEP WIDGET?
                   //#10123
                   if(_tree)//!TODO Revisit
-                  _showTree(stackobj, 0),
+                  //_showTree(stackobj, 0),
+                  cgen.codeTree(stackobj, 0),
                   Visibility(visible: !_tree, child:
                     StartObjectPanel(fmodelview: fmv, addobject: selFunc),
                   ),
@@ -325,10 +330,10 @@ String getPrintOut(int t){//!TABORT
                      Column( mainAxisSize: MainAxisSize.max, children: 
                           [
                             fmv.makeSidePanel(),
-                            GFButton(onPressed: () => /*func1109()*/ _showTree(stackobj, 0)),//!TREETEST
+                            GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
                           ],
                      ),
-                   )
+                   ),
                ],),
           ),
           

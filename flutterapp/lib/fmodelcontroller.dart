@@ -17,7 +17,7 @@ class FModelController extends GetxController{
   final colModel = ColModel().obs;
 
   var fbHeight = 50.obs;
-  var fbWidth = 100.obs;
+  var fbWidth = 300.obs;
   //#
 
   //#Helper

@@ -5,21 +5,34 @@ import 'fmodelcontroller.dart';
 
 typedef void idCallback(int id);
 
-class FDummy extends StatelessWidget{
+class FDummy extends StatelessWidget implements FDummytest{
     FDummy({required this.callback});
     final idCallback callback;
+    Widget codeit(){return SizedBox.shrink();}
     @override
   Widget build(BuildContext context){
     return SizedBox.shrink();
     }
 }
 
+abstract class FDummytest extends StatelessWidget{
+    FDummytest(/*{required this.callback}*/);
+    //final idCallback callback;
+    Widget codeit();
+
+  @override
+  Widget build(BuildContext context){
+    return SizedBox.shrink();
+    }
+}
+
 //#region [ rgba(90, 150, 40, 0.2) ]//#endregion
-class FBuObject extends StatelessWidget {
+class FBuObject extends StatelessWidget implements FDummytest {
   FBuObject({required this.callback, required this.thisid,
              required this.bw, required this.bh, required this.colModel, /*this.col = Colors.green,*/
              this.marked = false, required this.hlpb, this.borderradius = 0.0, required this.objectModel,
             });
+            
 
 double bw, bh;
 double borderradius;
@@ -32,9 +45,18 @@ HelperBtn hlpb;
 bool marked = true;
 final int thisid;
 
-Widget createT(){//!TEST decodeToJson
-  return Text(hlpb.btntext, style: TextStyle(fontSize: 12, color: colModel.txtcol),);
+@override
+Widget codeit(){//!1200
+  String bt = hlpb.btntext;
+  Color cm = colModel.txtcol;
+  RichText rt = RichText(text: TextSpan(children: [
+    TextSpan(text: 'TextButton', style: TextStyle(color: Colors.red)),
+    TextSpan(text: '(child: Text($bt, \n style: TextStyle(fontSize: 12, color: $cm),))')
+  ]));
+  return rt;
+  //return Container(width: 800, height: 800, child: rt);
 }
+
 
   @override
   Widget build(BuildContext context){
@@ -45,16 +67,16 @@ Widget createT(){//!TEST decodeToJson
     SizedBox(width: bw, height: bh,   child: 
       Material(child: marked ? 
         Container(decoration: BoxDecoration(border: Border.all(
-          color: Color.fromRGBO(50, 52, 50, 1),
+          color: const Color.fromRGBO(50, 52, 50, 1),
           width: 2,
         ),
         ), child: TextButton(child: Text(hlpb.btntext +': id ' + thisid.toString(), style: TextStyle(fontSize: 12, color: colModel.txtcol),),
           onPressed: () => callback(thisid),
         )
         ) :
-        TextButton(child: createT(),//Text(hlpb.btntext, style: TextStyle(fontSize: 12, color: colModel.txtcol),),
+        TextButton(child: Text(hlpb.btntext, style: TextStyle(fontSize: 12, color: colModel.txtcol),),
           onPressed: () => callback(thisid),
-        ),
+        ), /*codeit(),*/
         color: colModel.btncol, /*col,*/
         borderRadius: BorderRadius.circular(borderradius),
         elevation: hlpb.elevation,
@@ -63,7 +85,7 @@ Widget createT(){//!TEST decodeToJson
   }
 }
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
-class FIcBuObject extends StatelessWidget {
+class FIcBuObject extends StatelessWidget implements FDummytest {
   FIcBuObject({required this.callback, required this.thisid,
               required this.bw, required this.bh, this.col = Colors.green,
               this.marked = false, required this.objectModel
@@ -75,6 +97,9 @@ Color col;
 bool marked = true;//!Marked
 final int thisid;
 ObjectModel objectModel;
+
+@override
+Widget codeit(){return Text('This is a iconbutton');}
 
   @override
   Widget build(BuildContext context){
@@ -100,7 +125,7 @@ ObjectModel objectModel;
   }
 }
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
-class FTextFObject extends StatelessWidget {
+class FTextFObject extends StatelessWidget implements FDummytest {
   FTextFObject({required this.callback, required this.thisid,
               required this.bw, required this.bh, this.col = Colors.green,
               this.marked = false, required this.objectModel
@@ -112,6 +137,8 @@ Color col;
 bool marked = true;//!Marked
 final int thisid;
 ObjectModel objectModel;
+
+Widget codeit(){return SizedBox.shrink();}
 
   @override
   Widget build(BuildContext context){
@@ -126,7 +153,7 @@ ObjectModel objectModel;
           ),
           ), child: 
               TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter text'
                 ),
@@ -134,7 +161,7 @@ ObjectModel objectModel;
               ),
           ) :
               TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter text'
                 ),
@@ -147,7 +174,7 @@ ObjectModel objectModel;
 }
 
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
-class FColumnObject extends StatelessWidget {
+class FColumnObject extends StatelessWidget implements FDummytest {
   FColumnObject({required this.callback, required this.thisid,
               this.marked = false, required this.objectModel,
             });
@@ -159,6 +186,8 @@ final int thisid;
 ObjectModel objectModel;
 bool checked = true;
 
+@override
+Widget codeit(){return SizedBox.shrink();}
 
   @override
   Widget build(BuildContext context){
@@ -189,7 +218,7 @@ bool checked = true;
   }
 }
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
-class FRowObject extends StatelessWidget {
+class FRowObject extends StatelessWidget implements FDummytest {
   FRowObject({required this.callback, required this.thisid,
               this.marked = false, required this.objectModel, 
             });
@@ -200,6 +229,10 @@ bool marked = true;
 final int thisid;
 ObjectModel objectModel;
 bool checked = true;
+
+  Rect rect = const Offset(1.0, 2.0) & const Size(3.0, 4.0);//!1200
+
+Widget codeit(){return SizedBox.shrink();}
 
   @override
   Widget build(BuildContext context){
@@ -221,6 +254,7 @@ bool checked = true;
               //Row(children: 
               Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
                   [
+                    Container(child: CustomPaint(painter: OpenPainter(),),),//!1200
                     Text(objectModel.catName + ' id: $thisid'),
                     for(int i=0; i<objectModel.childlist.length; i++)
                       objectModel.childlist[i],
@@ -229,4 +263,18 @@ bool checked = true;
         onTap: () => callback(thisid),
       );
   }
+}
+
+class OpenPainter extends CustomPainter {//!1200
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint1 = Paint()
+      ..color = Color(0xff638965)
+      ..style = PaintingStyle.stroke;
+    //a rectangle
+    canvas.drawRect(Offset(0, 0) & Size(200, 100), paint1);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
