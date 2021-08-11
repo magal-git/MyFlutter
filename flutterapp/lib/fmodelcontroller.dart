@@ -6,15 +6,15 @@ import 'package:get/get.dart';
 
 class FModelController extends GetxController{
 
-  /*final*/ int moid = Random().nextInt(1000);
 
+  /*final*/ int moid = Random().nextInt(1000)+1;
   var bradius = 0.obs;
-
   var caddchildCol = false.obs;//!Set color to object if column is selected (in main)
   //!ADDC
 
   //#COLOR MODEL
   final colModel = ColModel().obs;
+
 
   var fbHeight = 50.obs;
   var fbWidth = 300.obs;

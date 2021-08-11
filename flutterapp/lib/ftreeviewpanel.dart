@@ -15,7 +15,7 @@ class FTreeView extends StatelessWidget {
   Widget _tree(int a){
     for(int p=a; p<fmvlist.length; p++){
 
-        fmvlist[p].twList.removeRange(0, fmvlist[p].twList.length);//?Clean list every render to avoid duplicates
+        fmvlist[p].twList.removeRange(0, fmvlist[p].twList.length);//&Clean list every render to avoid duplicates
 
         if(fmvlist[p].type == 1 && !donelist.contains(fmvlist[p].getMoid)){
           donelist.add(fmvlist[p].getMoid);
@@ -24,7 +24,7 @@ class FTreeView extends StatelessWidget {
               for(int r=0; r<fmvlist[p].twList.length; r++)
                 fmvlist[p].twList[r],
          ]);
-        }else{//?if(fmvlist[p].type == 4 (Solo) Have no children
+        }else{//&if(fmvlist[p].type == 4 (Solo) Have no children
           if(!donelist.contains(fmvlist[p].getMoid)) {
             return SizedBox(height: 30, child: Card(child: Text(fmvlist[p].fmc.objectModel.value.catName +':'+ fmvlist[p].getMoid.toString())));
           }

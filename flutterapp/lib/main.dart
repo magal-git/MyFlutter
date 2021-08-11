@@ -60,6 +60,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         //addchild = false;
       }
       fmv.markSelObj(fmv, objmap);//!Revisite
+      //_tree = false;//#ffbb //?Think its ok here. Go from codepanel to startpanel when click on obj  #ffbb
   });
 }
 
@@ -123,11 +124,20 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       fmv.fmc.caddchildCol.value = false;//!Set color to false if column/Row is added
       //addchild = false;
     fmv.markSelObj(fmv, objmap);
+
+    //&#445588 //&This is a comment #445588
+    for(var child in theParentFmv.childlist()){
+      if(child.getMoid == theParentFmv.childlist().last.getMoid){
+        child.isLast = true;
+      }else{
+        child.isLast = false;
+      }
+    }
     });
   }
   //!
 
-  //? OBS TEST
+  //& OBS TEST
   addSerChildObject(FModelView child){
     setState(() {
 
@@ -141,7 +151,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     child.markSelObj(child, objmap);//! Do we need this??
     });
   }
-  //? OBS TEST
+  //& OBS TEST
 
 //! 1109 ***********************************************************************
     //! SaveButton(onPressed: writeToAPI(objmap))

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapp/constants.dart';
+import 'package:flutterapp/fcodetextformater.dart';
+import 'package:flutterapp/fmodelview.dart';
 import 'package:get/get.dart';
 import 'fmodelcontroller.dart';
 
@@ -8,7 +10,7 @@ typedef void idCallback(int id);
 class FDummy extends StatelessWidget implements FDummytest{
     FDummy({required this.callback});
     final idCallback callback;
-    Widget codeit(){return SizedBox.shrink();}
+    Widget codeit(FModelView fmv){return SizedBox.shrink();}
     @override
   Widget build(BuildContext context){
     return SizedBox.shrink();
@@ -18,7 +20,7 @@ class FDummy extends StatelessWidget implements FDummytest{
 abstract class FDummytest extends StatelessWidget{
     FDummytest(/*{required this.callback}*/);
     //final idCallback callback;
-    Widget codeit();
+    Widget codeit(FModelView fmv);
 
   @override
   Widget build(BuildContext context){
@@ -46,15 +48,9 @@ bool marked = true;
 final int thisid;
 
 @override
-Widget codeit(){//!1200
-  String bt = hlpb.btntext;
-  Color cm = colModel.txtcol;
-  RichText rt = RichText(text: TextSpan(children: [
-    TextSpan(text: 'TextButton', style: TextStyle(color: Colors.red)),
-    TextSpan(text: '(child: Text($bt, \n style: TextStyle(fontSize: 12, color: $cm),))')
-  ]));
-  return rt;
-  //return Container(width: 800, height: 800, child: rt);
+Widget codeit(FModelView fmv){//!1200
+
+  return FCodeTextFormater(fmv: fmv, objcp: ObjectCodeProps.fbutton(btnText: hlpb.btntext, btnTextColor: colModel.txtcol, borderradius: borderradius),);
 }
 
 
@@ -99,7 +95,9 @@ final int thisid;
 ObjectModel objectModel;
 
 @override
-Widget codeit(){return Text('This is a iconbutton');}
+Widget codeit(FModelView fmv){
+  return Text('This is a iconbutton code \n ]');
+}
 
   @override
   Widget build(BuildContext context){
@@ -138,7 +136,7 @@ bool marked = true;//!Marked
 final int thisid;
 ObjectModel objectModel;
 
-Widget codeit(){return SizedBox.shrink();}
+Widget codeit(FModelView fmv){return SizedBox.shrink();}
 
   @override
   Widget build(BuildContext context){
@@ -187,7 +185,11 @@ ObjectModel objectModel;
 bool checked = true;
 
 @override
-Widget codeit(){return SizedBox.shrink();}
+Widget codeit(FModelView fmv){
+
+  return FCodeTextFormater(fmv: fmv, objcp: ObjectCodeProps.fcolumn(spacing: objectModel.spacing));
+  
+}
 
   @override
   Widget build(BuildContext context){
@@ -232,7 +234,7 @@ bool checked = true;
 
   Rect rect = const Offset(1.0, 2.0) & const Size(3.0, 4.0);//!1200
 
-Widget codeit(){return SizedBox.shrink();}
+Widget codeit(FModelView fmv){return SizedBox.shrink();}
 
   @override
   Widget build(BuildContext context){
@@ -277,4 +279,15 @@ class OpenPainter extends CustomPainter {//!1200
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
+}
+
+class ObjectCodeProps{
+      ObjectCodeProps.fbutton({required this.btnText, required this.btnTextColor, required this.borderradius}) : spacing = 0.0;
+      ObjectCodeProps.fcolumn({required this.spacing}) : btnText = '', btnTextColor = Colors.transparent, borderradius = 0.0;
+
+  String btnText;
+  Color btnTextColor;
+  double borderradius;
+
+  double spacing;
 }

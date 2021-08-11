@@ -20,6 +20,8 @@ class FModelView extends StatelessWidget{
   int level = 0;
   int catId = 0;
   int parentId = 0;
+
+  bool isLast = false;//* set in main.addObject. Check in FCodeview if its the last child in the childrens list. If so then add ']' tag in FCodeTextFormater.
   //! 1109
   //! setParent()
   //! getParent()
@@ -84,9 +86,9 @@ class FModelView extends StatelessWidget{
 
   markSelObj(FModelView fmv, Map tmap){
     tmap.forEach((key, value) {
-      value.fmc.markFalse();//?Unmark all objects
+      value.fmc.markFalse();//&Unmark all objects
     });
-        fmv.fmc.markTrue();//?Now mark the selected one
+        fmv.fmc.markTrue();//&Now mark the selected one
   }
 
   @override

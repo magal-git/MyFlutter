@@ -17,35 +17,46 @@ class FCodeView extends StatelessWidget {
 
   Widget _tree(int a){
     for(int p=a; p<fmvlist.length; p++){
-print('in codeview');
-        fmvlist[p].twList.removeRange(0, fmvlist[p].twList.length);//?Clean list every render to avoid duplicates
+print('in codeview');//// Tabort
+        fmvlist[p].twList.removeRange(0, fmvlist[p].twList.length);//&Clean list every render to avoid duplicates
 
         if(fmvlist[p].type == 1 && !donelist.contains(fmvlist[p].getMoid)){
           donelist.add(fmvlist[p].getMoid);
-          return ExpansionTile(backgroundColor: Colors.yellow,title: Text('Expansion: ' + fmvlist[p].getMoid.toString()),children: [
+          FDummytest exp = instanceFObject(fmvlist[p].catId, fmvlist[p]);//!1200 //&#445588 //&FDummy #445588
+          return Column( children: [exp.codeit(fmvlist[p]),
               funcCL(fmvlist[p], fmvlist[p].childlist()),
               for(int r=0; r<fmvlist[p].twList.length; r++)
                 fmvlist[p].twList[r],
+
+            Row(
+              children: [
+                SizedBox(width: 15,),
+                Text(']', style: TextStyle(fontSize: 10),),
+              ],
+            ),
          ]);
-        }else{//?if(fmvlist[p].type == 4 (Solo) Have no children
+        }else{//&if(fmvlist[p].type == 4 (Solo) Have no children
           if(!donelist.contains(fmvlist[p].getMoid)) {
-            return SizedBox(height: 30, child: Card(child: Text(fmvlist[p].fmc.objectModel.value.catName +':'+ fmvlist[p].getMoid.toString())));
+            FDummytest solo = instanceFObject(fmvlist[p].catId, fmvlist[p]);//&#445588 //&This is a comment #445588
+            return Column(children: [solo.codeit(fmvlist[p])],);
+            //SizedBox(height: 30, child: Card(child: Text(fmvlist[p].fmc.objectModel.value.catName +':'+ fmvlist[p].getMoid.toString() + fmvlist[p].type.toString())));
           }
         }
     }
-    return SizedBox.shrink();//!Have no children
+    return Text('');//SizedBox.shrink();//!Have no children
   }
   funcCL(FModelView fv, List<FModelView> list){//! Enter this func only if multichild object in _tree func above
     for(var obj in list){
       if(obj.type == 2){
-        print('type: ' + obj.type.toString());
+        print('level: ' + obj.level.toString());//// Tabort
         donelist.add(obj.getMoid);
-        FDummytest fbo = instanceFObject(obj.catId, obj);
-        fv.twList.add(ListTile(title: fbo.codeit() /*Text('Tile: ' + obj.getMoid.toString())*/));
+        FDummytest fbo = instanceFObject(obj.catId, obj);//!1200//&#445588 //&FDummy #445588
+        fv.twList.add(Column(children: [fbo.codeit(obj)],));
       }
       if(obj.type == 3){
         donelist.add(obj.getMoid);
-        fv.twList.add(ExpansionTile(backgroundColor: Colors.blueGrey.shade200, title: Text('Expansion_inside: ' + obj.getMoid.toString()),children: [
+        FDummytest expin = instanceFObject(obj.catId, obj);
+        fv.twList.add(Column(children: [expin.codeit(obj),       //&#445588 //&This is a comment #445588
            funcCL(obj, obj.childlist()),
            for(int r=0; r<obj.twList.length; r++)
                obj.twList[r],
@@ -59,7 +70,7 @@ print('in codeview');
   Widget build(BuildContext context) {
   
     return 
-    Container(width: 230, child:
+    Container(width: 330, child:
       Column(children: [
         for(int y=0; y<fmvlist.length; y++)
           _tree(y)

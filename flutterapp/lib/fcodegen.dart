@@ -21,7 +21,7 @@ List<FModelView> fmvList = [];
         
           for(int i=0; i<alist.length; i++){
             if(!alist[i].haveChildren()){
-              if(alist[i].catId != 0){//!Dummy in FObject with catid 0. Its a dummy for when one unselect object 
+              if(alist[i].catId != 0){//Dummy in FObject with catid 0. Its a dummy for when one unselect object 
                 alist[i].type = 4;
                 fmvList.add(alist[i]);
               }
@@ -60,15 +60,18 @@ List<FModelView> fmvList = [];
       if(element.haveChildren()){
         int plev = curlev + 1;
         element.type = 3;
+        element.level = plev;
         fmvList.add(element);
         _runIt(element.childlist(), plev);
       }else{//!The same?
         int chlev = curlev + 1;
         if(/*element.fmc.objectModel.value.isMultiWidget*/element.isMultiWidget()){//!Even if element has no children? Check it!
           element.type = 3;
+          element.level = chlev;
           fmvList.add(element);
         }else{
           element.type = 2;
+          element.level = chlev;//&#445588 //&Codegen #445588
           fmvList.add(element);
         }
       }
