@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fcodegen.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
@@ -57,10 +58,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       
       if(fmv.isMultiWidget()){//!ADDCHILD
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is selected
-        //addchild = false;
       }
       fmv.markSelObj(fmv, objmap);//!Revisite
-      //_tree = false;//#ffbb //?Think its ok here. Go from codepanel to startpanel when click on obj  #ffbb
+      //_tree = false;//#ffbb //?Think its ok here. Go from codepanelview to startpanelview when click on obj  #ffbb
   });
 }
 
@@ -83,7 +83,22 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   void _removeObj(){
     setState(() {
-      stackobj.removeAt(stackobj.indexOf(fmv));
+
+      if(fmv.parentId > 0){
+        fmv = getCurObj(fmv.getMoid, objmap);
+        FModelView parent = getCurObj(fmv.parentId, objmap);
+        int pos = stackobj.indexOf(parent);
+        for(var child in stackobj[pos].childlist()){
+          if(child.getMoid == fmv.getMoid){
+            objmap.remove(child.getMoid);
+            stackobj[pos].childlist().remove(child);
+            parent.fmc.removeChild(child);
+          }
+        }
+      }//else{
+        stackobj.removeAt(stackobj.indexOf(fmv));
+      //}
+
     });
   }
 
@@ -121,11 +136,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       //! 1109 *****************************************************************
 
       theParentFmv.fmc.addChild(fmv);//! Add fobject to parent(fmv)children list
-      fmv.fmc.caddchildCol.value = false;//!Set color to false if column/Row is added
-      //addchild = false;
+      
+      //fmv.catId == fBUTTON ? fmv.fmc.caddchildCol.value = false : fmv.fmc.caddchildCol.value = true;
+      fmv.isMultiWidget() ? fmv.fmc.caddchildCol.value = true : fmv.fmc.caddchildCol.value = false;
+      
     fmv.markSelObj(fmv, objmap);
 
-    //&#445588 //&This is a comment #445588
+    //&#445588 //&This is a comment #445588//We dont need this anymore?Remove?
     for(var child in theParentFmv.childlist()){
       if(child.getMoid == theParentFmv.childlist().last.getMoid){
         child.isLast = true;
@@ -282,11 +299,12 @@ String getPrintOut(int t){//!TABORT
         value.fmc.markFalse();
     });
     fmv.fmc.caddchildCol.value = false;
+    //_tree = false;
   }
 
   _viewTree(){
     setState(() {
-      _tree = !_tree;
+      _tree = !_tree;//#ffbb
     });
   }
   //*Methods
@@ -308,45 +326,43 @@ Codegen cgen = Codegen();
       addObject(0);//! new object every time?? Check it!
     },
 
-      child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj,), appBar: 
+      child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj, child: Text('FLoat') ), appBar: 
           AppBar( backgroundColor: 
             Colors.lightBlue, leading: 
             FloatingActionButton(onPressed: () => _viewTree()),
           ),
       body:
           SafeArea(child:
-            Stack(children: [
-              Container(color: Colors.grey.shade400, width: 240,),
-                      if(stackobj.isNotEmpty)
-                      for(int i=0; i<stackobj.length; i++)
-                          stackobj[i],    
-                      
+              Stack(children: [
+                Container(color: Colors.grey.shade400, width: 240,),
+                        if(stackobj.isNotEmpty)
+                        for(int i=0; i<stackobj.length; i++)
+                            stackobj[i],    
+                        
 
+                    //!UDEV PUT IN SEP WIDGET?
+                    //#10123
+                    if(_tree)//!TODO Revisit
+                    //_showTree(stackobj, 0),
+                    cgen.codeTree(stackobj, 0),
+                    Visibility(visible: !_tree, child:
+                      StartObjectPanel(fmodelview: fmv, addobject: selFunc),
+                    ),
 
-                  //!UDEV PUT IN SEP WIDGET?
-                  //#10123
-                  if(_tree)//!TODO Revisit
-                  //_showTree(stackobj, 0),
-                  cgen.codeTree(stackobj, 0),
-                  Visibility(visible: !_tree, child:
-                    StartObjectPanel(fmodelview: fmv, addobject: selFunc),
-                  ),
+                    //#10123
+                    //!PUT IN SEP WIDGET
 
-                  //#10123
-                  //!PUT IN SEP WIDGET
-
-                
-                   Align(alignment: Alignment(1, 0), child: 
-                     Column( mainAxisSize: MainAxisSize.max, children: 
-                          [
-                            fmv.makeSidePanel(),
-                            GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
-                          ],
+                  
+                     Align(alignment: Alignment(1, 0), child: 
+                       Column( mainAxisSize: MainAxisSize.max, children: 
+                            [
+                              fmv.makeSidePanel(),
+                              GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
+                            ],
+                       ),
                      ),
-                   ),
-               ],),
-          ),
-          
+                 ],),
+            ),
           drawer: Container(width: 150, child: Drawer(child: Text('im a drawer'),)),
       ),
     );

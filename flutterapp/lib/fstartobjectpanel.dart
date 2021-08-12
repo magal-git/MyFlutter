@@ -18,9 +18,10 @@ FModelView fmodelview;
 
     return
     Align(alignment: const Alignment(-1, 0), child: 
-      Column(children: //!SingleChildScrollView here
+      Column(children: //!SingleChildScrollView here?
         [
               Card(color: Colors.grey.shade100, child: 
+                // ignore: prefer_const_literals_to_create_immutables
                 Column(children: [
               const SizedBox(width: 230, height: 32, child: 
                       ListTile(tileColor: Colors.grey, title: 
@@ -33,45 +34,48 @@ FModelView fmodelview;
               ),
               //!
               //Obx(() => Text(fmodelview.fmc.caddchild.toString())),
-Obx((){return
-              Card(color: fmodelview.fmc.caddchildCol.value ? Colors.amber : Colors.grey.shade100, child: //!ADDCHILD
-                Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 230, height: 45,
-                      child: ListTile(title: Text('Textbutton', style: TextStyle(fontSize: 18),),
-                        trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.smart_button_rounded),
+/*Obx((){return*/ //!Obx is here beacuse caddchildCol.value. Do it for all objects? or remove!
+              //Card(color: fmodelview.fmc.caddchildCol.value ? Colors.amber : Colors.grey.shade100, child: //!ADDCHILD
+                //Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+                  //children: [
+                    SizedBox(width: 230, height: 26,
+                      child: ListTile(title: const Text('Textbutton', style: TextStyle(fontSize: 14),),
+                        //trailing: const Icon(Icons.add, color: Colors.black, size: 24,), leading: Icon(Icons.smart_button_rounded),
+                        trailing: Icon(Icons.add, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 20,), leading: Icon(Icons.smart_button_rounded, size: 16),
                         onTap: () => addobject(fBUTTON),//!ADDCHILD
                       ),
                     ),
-                  ]
-                )
-              );
-}),
-              Card(color: Colors.grey.shade100, child: 
-                Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 230, height: 45,
-                      child: ListTile(title: Text('Iconbutton',style: TextStyle(fontSize: 18)),
-                        trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.info),
+                  //]
+                //)
+              //);
+//}),
+              //Card(color: Colors.grey.shade100, child: 
+                //Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+                  //children: [
+                    SizedBox(width: 230, height: 26,
+                      child: ListTile(title: const Text('Iconbutton',style: TextStyle(fontSize: 14)),
+                        //trailing: const Icon(Icons.add, color: Colors.black, size: 24,), leading: Icon(Icons.info),
+                        trailing: Icon(Icons.add, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 20,), leading: Icon(Icons.info, size: 16),
                         onTap: () => addobject(fICBUTTON),
                       ),
                     ),
-                  ]
-                )
-              ),
-              Card(color: Colors.grey.shade100, child: 
-                Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
-                  children: 
-                  [
-                    SizedBox(width: 230, height: 45,
-                      child: ListTile(title: Text('Textfield',style: TextStyle(fontSize: 18)),
-                        trailing: Icon(Icons.add, color: Colors.black, size: 30,), leading: Icon(Icons.text_fields),
+                  //]
+                //),
+              //),
+              //Card(color: Colors.grey.shade100, child: 
+               //Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+                  //children: 
+                  //[
+                    SizedBox(width: 230, height: 26,
+                      child: ListTile(title: const Text('Textfield',style: TextStyle(fontSize: 14)),
+                        //trailing: const Icon(Icons.add, color: Colors.black, size: 20,), leading: Icon(Icons.text_fields, size: 16),
+                        trailing: Icon(Icons.add, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 20,), leading: Icon(Icons.text_fields, size: 16),
                         onTap: () => addobject(fTEXTFIELD),
                       ),
                     ),
-                  ]
-                )
-              ),
+                  //]
+                //)
+              //),
               //!UDEV
               //Card(color: Colors.grey.shade100, child:
               //!COLUMN

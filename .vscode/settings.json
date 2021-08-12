@@ -1,2 +1,23 @@
 {
+    "files.exclude": {
+        "flutterapp/.flutter-plugins-dependencies": true,
+        "flutterapp/.gitignore": true,
+        "flutterapp/.metadata": true,
+        "flutterapp/.packages": true,
+        "flutterapp/flutterapp.iml": true,
+        "flutterapp/pubspec.lock": true,
+        "flutterapp/README.md": true,
+        "flutterapp/analysis_options.yaml": true,
+        "flutterapp/.flutter-plugins": true,
+        "flutterapp/.dart_tool": true,
+        "flutterapp/.idea": true,
+        "ver0.0": true,
+        "ver1.1": true,
+        "colors": true,
+        "flutterapp/android": true,
+        "flutterapp/build": true,
+        "flutterapp/fonts": true,
+        "flutterapp/ios": true
+    },
+    "workspace.isHidden": true
 }

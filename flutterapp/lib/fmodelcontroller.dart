@@ -79,6 +79,13 @@ class FModelController extends GetxController{
       val!.childlist.add(f);
     });
   }
+  //!TEST
+  removeChild(FModelView ch){
+    objectModel.update((val) {
+      val!.childlist.remove(ch);
+    });
+  }
+  //!TEST
 
   List<Widget> get getChildList{//!TREETEST
       return objectModel.value.childlist;

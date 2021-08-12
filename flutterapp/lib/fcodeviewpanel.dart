@@ -29,9 +29,10 @@ print('in codeview');//// Tabort
                 fmvlist[p].twList[r],
 
             Row(
+              // ignore: prefer_const_literals_to_create_immutables
               children: [
-                SizedBox(width: 15,),
-                Text(']', style: TextStyle(fontSize: 10),),
+                const SizedBox(width: 15,),
+                const Text(']', style: TextStyle(fontSize: 10),),
               ],
             ),
          ]);
@@ -55,11 +56,19 @@ print('in codeview');//// Tabort
       }
       if(obj.type == 3){
         donelist.add(obj.getMoid);
+        int endtag = obj.level;
+        endtag++;//&#445588 endtag(]) should always be 1 more den starttag([) for type 3
         FDummytest expin = instanceFObject(obj.catId, obj);
         fv.twList.add(Column(children: [expin.codeit(obj),       //&#445588 //&This is a comment #445588
            funcCL(obj, obj.childlist()),
            for(int r=0; r<obj.twList.length; r++)
                obj.twList[r],
+               
+          //Row(children: [SizedBox(width: obj.level*35,), Text(']', style: TextStyle(fontSize: 10)),],)
+          Row(children: [
+            Container(width: 300, padding: EdgeInsets.only(left: endtag*15), child: const Text(']', style: TextStyle(fontSize: 10)))
+          ]),
+
          ]));
       }
     }
@@ -70,7 +79,7 @@ print('in codeview');//// Tabort
   Widget build(BuildContext context) {
   
     return 
-    Container(width: 330, child:
+    Container(width: 320, child:
       Column(children: [
         for(int y=0; y<fmvlist.length; y++)
           _tree(y)
