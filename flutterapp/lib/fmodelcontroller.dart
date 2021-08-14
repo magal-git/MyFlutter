@@ -17,7 +17,7 @@ class FModelController extends GetxController{
 
 
   var fbHeight = 50.obs;
-  var fbWidth = 300.obs;
+  var fbWidth = 180.obs;
   //#
 
   //#Helper

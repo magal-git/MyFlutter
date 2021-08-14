@@ -38,10 +38,10 @@ FModelView fmodelview;
               //Card(color: fmodelview.fmc.caddchildCol.value ? Colors.amber : Colors.grey.shade100, child: //!ADDCHILD
                 //Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
                   //children: [
-                    SizedBox(width: 230, height: 26,
+                    SizedBox(width: 230, height: 30,
                       child: ListTile(title: const Text('Textbutton', style: TextStyle(fontSize: 14),),
                         //trailing: const Icon(Icons.add, color: Colors.black, size: 24,), leading: Icon(Icons.smart_button_rounded),
-                        trailing: Icon(Icons.add, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 20,), leading: Icon(Icons.smart_button_rounded, size: 16),
+                        trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.smart_button_rounded, size: 16, color: Colors.blue),
                         onTap: () => addobject(fBUTTON),//!ADDCHILD
                       ),
                     ),
@@ -52,10 +52,10 @@ FModelView fmodelview;
               //Card(color: Colors.grey.shade100, child: 
                 //Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
                   //children: [
-                    SizedBox(width: 230, height: 26,
+                    SizedBox(width: 230, height: 30,
                       child: ListTile(title: const Text('Iconbutton',style: TextStyle(fontSize: 14)),
                         //trailing: const Icon(Icons.add, color: Colors.black, size: 24,), leading: Icon(Icons.info),
-                        trailing: Icon(Icons.add, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 20,), leading: Icon(Icons.info, size: 16),
+                        trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.info, size: 16, color: Colors.blue),
                         onTap: () => addobject(fICBUTTON),
                       ),
                     ),
@@ -66,44 +66,29 @@ FModelView fmodelview;
                //Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
                   //children: 
                   //[
-                    SizedBox(width: 230, height: 26,
+                    SizedBox(width: 230, height: 30,
                       child: ListTile(title: const Text('Textfield',style: TextStyle(fontSize: 14)),
-                        //trailing: const Icon(Icons.add, color: Colors.black, size: 20,), leading: Icon(Icons.text_fields, size: 16),
-                        trailing: Icon(Icons.add, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 20,), leading: Icon(Icons.text_fields, size: 16),
+                        //trailing: const Icon(Icons.add, color: Colors.black, size: 18,), leading: Icon(Icons.text_fields, size: 16),
+                        trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.text_fields, size: 16, color: Colors.blue),
                         onTap: () => addobject(fTEXTFIELD),
                       ),
                     ),
                   //]
                 //)
               //),
+                    SizedBox(width: 230, height: 30,
+                            child: ListTile(title: const Text('Column []',style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                              trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.view_column, size: 16, color: Colors.blue),
+                              onTap: () => addobject(fCOLUMN),
+                            ),
+                    ),
+                    SizedBox(width: 230, height: 30,
+                      child: ListTile(title: const Text('Row []',style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                        trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.view_column, size: 16, color: Colors.blue),
+                        onTap: () => addobject(fROW),
+                      ),
+                    ),
               //!UDEV
-              //Card(color: Colors.grey.shade100, child:
-              //!COLUMN
-                Container(color:  Colors.lightGreen, width: 230, height: 30, child: 
-                  Row(mainAxisSize: MainAxisSize.min, children: 
-                    [
-                        Icon(Icons.view_column, size: 20,),
-                        SizedBox(width: 50,),
-                        Text('Column',style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 50,),
-                        IconButton(icon: Icon(Icons.add), color: Colors.black, iconSize: 20,
-                          onPressed: () => addobject(fCOLUMN),),
-                    ]
-                  ),
-                ),
-                //!ROW
-                Container(color:  Colors.lightGreen, width: 230, height: 30, child: 
-                  Row(mainAxisSize: MainAxisSize.min, children: 
-                    [
-                        Icon(Icons.view_column, size: 20,),
-                        SizedBox(width: 50,),
-                        Text('Row',style: TextStyle(fontSize: 16)),
-                        SizedBox(width: 50,),
-                        IconButton(icon: Icon(Icons.add), color: Colors.black, iconSize: 20,
-                          onPressed: () => addobject(fROW),),
-                    ]
-                  ),
-                ),
          ]
       ),
     );

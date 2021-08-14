@@ -66,7 +66,7 @@ print('in codeview');//// Tabort
                
           //Row(children: [SizedBox(width: obj.level*35,), Text(']', style: TextStyle(fontSize: 10)),],)
           Row(children: [
-            Container(width: 300, padding: EdgeInsets.only(left: endtag*15), child: const Text(']', style: TextStyle(fontSize: 10)))
+            obj.haveChildren() ? Container(width: 300, padding: EdgeInsets.only(left: endtag*14), child: Text(']', style: TextStyle(fontSize: 10))) : Container()
           ]),
 
          ]));

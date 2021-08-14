@@ -31,8 +31,8 @@ class FCodeTextFormater extends StatelessWidget {
         ]);
       }else{
         return Column(children: [
-          FTexter.formit(fmv.parentId > 0 ? 'Column_(' : 'Column('  ,' children:', ' [] ),\n', fmv.parentId > 0 ? fmv.level*25 : fmv.level*15, Colors.black, Colors.green, Colors.black),
-          FTexter.formit(fmv.isLast ? ']' : '', '', '', fmv.level*12, Colors.black, Colors.black, Colors.black),
+          FTexter.formit(fmv.parentId > 0 ? 'Column_(' : 'Column('  ,' children:', ' [] ),', fmv.parentId > 0 ? fmv.level*15 : fmv.level*15, Colors.black, Colors.green, Colors.black),
+          //FTexter.formit(fmv.isLast ? ']' : '', '', '', fmv.level*12, Colors.black, Colors.black, Colors.black),
         ]);
       }
     }

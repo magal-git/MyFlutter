@@ -1,9 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fcodegen.dart';
 import 'package:flutterapp/fmodelview.dart';
-import 'package:flutterapp/fobjects.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:flutterapp/ftreeviewpanel.dart';
 import 'package:flutterapp/serializer.dart';
@@ -49,16 +47,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   handleId(int pid){
     setState(() {
-      
+      print('id = $pid');
       _mid = pid;
       fmv = getCurObj(_mid, objmap);
+  print('ParentiD ' + fmv.parentId.toString()); 
       if(fmv.isMultiWidget()){//!ADDCHILD
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is selected
       }
       fmv.markSelObj(fmv, objmap);//!Revisite
       //_tree = false;//#ffbb //?Think its ok here. Go from codepanelview to startpanelview when click on obj  #ffbb
-
-      //#599 createStartComponentButton(int cmid);
   });
 }
 
@@ -150,13 +147,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     fmv.markSelObj(fmv, objmap);
 
     //&#445588 //&This is a comment #445588//We dont need this anymore?Remove?
-    /*for(var child in theParentFmv.childlist()){
+    for(var child in theParentFmv.childlist()){
       if(child.getMoid == theParentFmv.childlist().last.getMoid){
         child.isLast = true;
       }else{
         child.isLast = false;
       }
-    }*/
+    }
     });
   }
   //!
@@ -192,13 +189,13 @@ int gogo = 0;
 getcache() async {
   gogo++;
   Serializer sz = Serializer(callback: handleId);
-  await sz.readData().then((value) {//!serializer reads in all objects
-    for(var obj in value){//!now seperate them by their types. Is the obj a solo(4) or a parent(1), 
+  await sz.readData().then((value) {
+    for(var obj in value){
       if(obj.type == 4 || obj.type == 1){
         addSerObject(obj);
       }
     }
-      for(var obj in value){//!or a single child with a parent(2) or a multichild(3) with a parent
+      for(var obj in value){
       if(obj.type == 2 || obj.type == 3){
         addSerChildObject(obj);
       }
@@ -344,7 +341,7 @@ Codegen cgen = Codegen();
                 Container(color: Colors.grey.shade400, width: 240,),
                         if(stackobj.isNotEmpty)
                         for(int i=0; i<stackobj.length; i++)
-                          stackobj[i],
+                            stackobj[i],    
                         
 
                     //!UDEV PUT IN SEP WIDGET?

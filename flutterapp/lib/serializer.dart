@@ -31,9 +31,6 @@ class Serializer {
     var records = await airtable.getAllRecords(table);
     //var test = await airtable.createRecord(record, AirtableRecord(fields: [AirtableRecordField(fieldName: 'moid', value: 500)]));
 
-    
-    //print('*1tmpf*' + tmpf.getMoid.toString());
-
     for(var rec in records){
       FModelView tmpf = FModelView(mcallback: callback);
       tmpf.setMoid = int.parse(rec.getField('moid')!.value.toString());

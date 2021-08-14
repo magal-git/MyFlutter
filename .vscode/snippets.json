@@ -1,1 +1,1 @@
-{"id":1,"parentId":-1,"label":"snippets","lastId":7,"children":[]}
+{"id":1,"parentId":-1,"label":"snippets","lastId":9,"children":[{"id":8,"parentId":1,"label":"hover_alert","value":"//!#554433 Hover AlertDialog\n    AlertDialog alert = AlertDialog(title: Text('data'), content: Text('content'));\n    showDialog(context: context, builder: (context) => alert);\n    //!#554433\n//MouseRegion(child: instanceObject(catId, this), onHover: (e) => _rect(context) ),//!#554433","children":[],"resolveSyntax":true},{"id":9,"parentId":1,"label":"#599","value":"//#599","children":[]}]}

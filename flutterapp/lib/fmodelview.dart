@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fmodelcontroller.dart';
 import 'package:flutterapp/fobjects.dart';
@@ -21,7 +22,7 @@ class FModelView extends StatelessWidget{
   int catId = 0;
   int parentId = 0;
 
-  bool isLast = false;//* set in main.addObject. Check in FCodeview if its the last child in the childrens list. If so then add ']' tag in FCodeTextFormater.
+  //bool isLast = false;//!Tabort?
   //! 1109
   //! setParent()
   //! getParent()
@@ -91,21 +92,22 @@ class FModelView extends StatelessWidget{
         fmv.fmc.markTrue();//&Now mark the selected one
   }
 
+
   @override
   Widget build(BuildContext context){
     print('in instanceobject');
     
-    FBuObject fbu = FBuObject(callback: this.mcallback, thisid: this.getMoid,//!1200
+    /*FBuObject fbu = FBuObject(callback: this.mcallback, thisid: this.getMoid,//!1200
              bw: fmc.fbWidth.toDouble(), bh: fmc.fbHeight.toDouble(), colModel: fmc.colModel.value,
              marked: fmc.marked.value, hlpb: fmc.hpb.value, borderradius: 0.0, objectModel: fmc.objectModel.value,
-            );
+            );*///!Do we need this or was it just a test? TABORT?
             
 
     return
     Obx(() {
       
       return 
-      //Positioned(left: _position.value.dx, top: _position.value.dy, child:
+      //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginal
       Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109
         Draggable(child:
             instanceObject(catId, this),
@@ -121,6 +123,7 @@ class FModelView extends StatelessWidget{
             fmc.setPosition(of);
             //! 1109 ***********************************************************
         },
+        
         ),
       );
 
