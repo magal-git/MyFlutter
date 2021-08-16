@@ -21,7 +21,6 @@ class Serializer {
     for(var key in objmap.keys){
       FModelView objf = objmap[key];
       var test = await airtable.createRecord(table, AirtableRecord(fields: [AirtableRecordField(fieldName: 'moid', value: objf.getMoid)]));
-      print(test);
     }
   }
 
@@ -29,6 +28,7 @@ class Serializer {
     print('in readdata');
     var airtable = Airtable(apiKey: apikey, projectBase: base);
     var records = await airtable.getAllRecords(table);
+    //var rec = await airtable.getRecord(table, 'recVqX3XPTailZYmm');
     //var test = await airtable.createRecord(record, AirtableRecord(fields: [AirtableRecordField(fieldName: 'moid', value: 500)]));
 
     for(var rec in records){

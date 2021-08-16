@@ -14,31 +14,22 @@ typedef void midCallback(int id);
 class FModelView extends StatelessWidget{
       FModelView({required this.mcallback});
 
+//*Constructer member
+  final midCallback mcallback;
 
   //*Members
   FModelController fmc = FModelController();
-  //bool isparent = false;
-  int level = 0;
-  int catId = 0;
-  int parentId = 0;
 
-  //bool isLast = false;//!Tabort?
-  //! 1109
-  //! setParent()
-  //! getParent()
-  //! 1109
+  int catId = 0;
+  int level = 0;
+  int parentId = 0;
+  String name = '';//#599
 
   List<Widget> twList = [];//! in treeviewpanel this is the link to each fmodelview 
   int type = 0; //1=Expansion; 2=Tile; 3=Expansion_inside; 4=Solo
-
   final _position = const Offset(300,300).obs;
 
-  //*Constructer member
-  final midCallback mcallback;
-
   //*Methods
-
-  //!TREEVIEW PROPS
   bool haveChildren(){
     return fmc.objectModel.value.childlist.isNotEmpty;
   }
@@ -54,16 +45,14 @@ class FModelView extends StatelessWidget{
     }
     return false;
   }
-  //!TREEVIEW PROPS
 
   int get getMoid{
     return fmc.moid;
   }
-  //!1109
+
   set setMoid(int id){
     fmc.moid = id;
   }
-  //!1109
 
   set setCatId(var catid){
     catId = catid;
@@ -92,16 +81,9 @@ class FModelView extends StatelessWidget{
         fmv.fmc.markTrue();//&Now mark the selected one
   }
 
-
   @override
   Widget build(BuildContext context){
     print('in instanceobject');
-    
-    /*FBuObject fbu = FBuObject(callback: this.mcallback, thisid: this.getMoid,//!1200
-             bw: fmc.fbWidth.toDouble(), bh: fmc.fbHeight.toDouble(), colModel: fmc.colModel.value,
-             marked: fmc.marked.value, hlpb: fmc.hpb.value, borderradius: 0.0, objectModel: fmc.objectModel.value,
-            );*///!Do we need this or was it just a test? TABORT?
-            
 
     return
     Obx(() {
@@ -109,22 +91,24 @@ class FModelView extends StatelessWidget{
       return 
       //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginal
       Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109
-        Draggable(child:
-            instanceObject(catId, this),
-        feedback:
-            instanceObject(catId, this),
-        onDragEnd: (details){
-            //_position.value = details.offset - const Offset(0.0, 56.0);
+        MouseRegion(onEnter: (e) => /*print(this.getMoid)*/{},//#734
+          child: Draggable(child:
+              instanceObject(catId, this),
+          feedback:
+              instanceObject(catId, this),
+          onDragEnd: (details){
+              //_position.value = details.offset - const Offset(0.0, 56.0);
 
-            //! 1109 ***********************************************************
-            fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
-            fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
-            Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
-            fmc.setPosition(of);
-            //! 1109 ***********************************************************
-        },
-        
-        ),
+              //! 1109 ***********************************************************
+              fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
+              fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
+              Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
+              fmc.setPosition(of);
+              //! 1109 ***********************************************************
+          },
+          
+          ),
+        ),//#734
       );
 
    });

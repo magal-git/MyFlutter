@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fcodegen.dart';
+import 'package:flutterapp/fcomponent.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fobjects.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
@@ -13,7 +14,9 @@ import 'package:flutterapp/utils.dart';
 
 //!NOTES
 //! 1109 = Serializer
-//!
+//! 599  = Component
+//! 734  = onEnter
+//! 778  = Painter 
 
 void main () => runApp(GetMaterialApp(home: RunApp()));
 
@@ -30,15 +33,38 @@ class HomePageWidget extends StatefulWidget {//#region [ rgba(70, 70, 80, 0.1) ]
 
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-   
+  //*Methods
+Codegen cgen = Codegen();
+
+//! 1109 ***********************************************************************
+
+List<FModelView> eltemp = [];
+
   //*Members
    late FModelView fmv;
-   int _mid = 0;
-   bool _tree = false;
+
+List<FModelView> fmvList = [];
+  //& OBS TEST
+
+//! 1109 ***********************************************************************
+    //! SaveButton(onPressed: writeToAPI(objmap))
+    //! writeToAPI(objmap){}
+    //! 
+    //! OnStartUp:
+    //! checkForChacedObjects(objmap)
+    //!   readFromAPI();
+
+//! 1109 ***********************************************************************
+
+//!checkForCachedObjects
+int gogo = 0;
 
   Map objmap = <int, FModelView>{};
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<FModelView> stackobj = [];
+
+   int _mid = 0;
+   bool _tree = false;
 
   //*Methods
   @override
@@ -52,17 +78,48 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       
       _mid = pid;
       fmv = getCurObj(_mid, objmap);
+      
       if(fmv.isMultiWidget()){//!ADDCHILD
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is selected
       }
       fmv.markSelObj(fmv, objmap);//!Revisite
       //_tree = false;//#ffbb //?Think its ok here. Go from codepanelview to startpanelview when click on obj  #ffbb
+    });
+  }
 
-      //#599 createStartComponentButton(int cmid);
-  });
-}
+  //#599
+  handleComp(FModelView fobj){
 
-  addObject(int catId){//!TODO add fmv.type and
+    //FModelView fobj = FModelView(mcallback: handleId);
+  
+    setState(() {
+
+    /*for(var obj in vall){ 
+      if(obj.parentId == 0){
+        for(int i=0; i<vall.length; i++){
+          if(vall[i].parentId == obj.getMoid){
+            obj.fmc.addChild(vall[i]);
+          }
+        }
+        fobj = obj;
+      }
+    }*/
+     
+        if(fobj.type == 4 || fobj.type == 1){
+          addSerCompObject(fobj);//!<-use this or make new func?
+        }
+        
+        /*for(var child in fobj.childlist()){//!if havechild 
+          if(child.type == 2 || child.type == 3){
+            addSerChildObject(child);//!<-use this or make new func?
+          }
+        }*/
+    });
+  }
+  //#599
+
+//&All add...Object func = render the object to the screen
+  addObject(int catId){
     setState(() {
       fmv = FModelView(mcallback: handleId,);
       print('in addobject');
@@ -72,7 +129,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       stackobj.add(fmv);
       objmap[_mid] = fmv;
 
-      if(fmv.isMultiWidget()){//!ADDCHILD
+      if(fmv.isMultiWidget()){
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
       }
       fmv.markSelObj(fmv, objmap);
@@ -129,6 +186,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
+  //#599
+  addSerCompObject(FModelView cFmv){
+    setState(() {
+    
+        _mid = cFmv.getMoid;//#Identifies the object
+        stackobj.add(cFmv);
+        
+stackobj.forEach((element) {//#599
+  print(element.getMoid);
+});
+        if(cFmv.isMultiWidget()){
+          cFmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
+        }
+        cFmv.markSelObj(cFmv, objmap);
+
+    });
+  }
+  //#599
+
   addChildObject(int catId){
     setState(() {
       FModelView theParentFmv = getCurObj(_mid, objmap);
@@ -159,6 +235,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     }*/
     });
   }
+
   //!
 
   //& OBS TEST
@@ -169,26 +246,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       objmap[_mid] = child;
 
       FModelView parent = getCurObj(child.parentId, objmap);// get the parent
-      parent.fmc.addChild(child);
+      parent.fmc.addChild(child);//!Look into this, maybe if we put it in addSerObject we dont need this func??
       child.fmc.caddchildCol.value = false;//!Set color to false if column/Row is added
 
     child.markSelObj(child, objmap);//! Do we need this??
     });
   }
-  //& OBS TEST
 
-//! 1109 ***********************************************************************
-    //! SaveButton(onPressed: writeToAPI(objmap))
-    //! writeToAPI(objmap){}
-    //! 
-    //! OnStartUp:
-    //! checkForChacedObjects(objmap)
-    //!   readFromAPI();
-
-//! 1109 ***********************************************************************
-
-//!checkForCachedObjects
-int gogo = 0;
 getcache() async {
   gogo++;
   Serializer sz = Serializer(callback: handleId);
@@ -206,10 +270,6 @@ getcache() async {
   });
 }
 
-//! 1109 ***********************************************************************
-
-List<FModelView> eltemp = [];
-List<FModelView> fmvList = [];
 //!TreeViewLevels
  Widget _showTree(List<FModelView> alist, int lev){
     List<FModelView> coalist = [];
@@ -276,6 +336,7 @@ List<FModelView> fmvList = [];
       }
     });
   }
+
 //!TreeViewLevels***************************************************************
 
 String getPrintOut(int t){//!TABORT
@@ -314,16 +375,59 @@ String getPrintOut(int t){//!TABORT
       _tree = !_tree;//#ffbb
     });
   }
-  //*Methods
-Codegen cgen = Codegen();
+
+//#599
+  List<FModelView> vall = [];
+  List<FModelView> comp = [];
+  int gotest = 0;
+  bool done = false;
+
+  getCcache() {//!Set at startup
+    FComponent fc = FComponent(callback: handleId,);
+    gotest++;
+    fc.readComponentData().then((val){
+      setState(() {
+        vall.addAll(val);
+        done = true;
+      });
+    });
+  }
+
+  Widget createComp(){
+    for(var obj in vall){ 
+      if(obj.parentId == 0){//!get the components top object
+        for(int i=0; i<vall.length; i++){//!if it has child iterate and add them to the childlist
+          if(vall[i].parentId == obj.getMoid){
+            obj.fmc.addChild(vall[i]);
+            objmap[vall[i].getMoid] = vall[i];//!put the children in objmap
+          }
+        }
+        comp.add(obj);
+        objmap[obj.getMoid] = obj;//! put the component itself in objmap
+      }
+    }
+
+    if(vall.isNotEmpty) vall.removeRange(0, vall.length);
+
+  return//!TODO return TextButtons for multiple components
+    Column(children: [
+      TextButton(onPressed: () { handleComp(comp[0]); handleId(comp[0].getMoid);}, child: Text(comp[0].name)),
+    ],);
+  }
+//#599
 
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
   print('in build');
 
+
+  //#599
+if(gotest<1) getCcache();
+
 //!1109
 //if(gogo<1) getcache();
 //sz.writeToAPI(objmap);
+
 //!1109
 
     return 
@@ -367,6 +471,11 @@ Codegen cgen = Codegen();
                               GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
                             ],
                        ),
+                     ),
+                     
+                     Align(alignment: Alignment(0,0), child:
+                      //FComponent(callback: handleId, compcallback: handleComp),
+                        done ? createComp() : const CircularProgressIndicator(),
                      ),
                  ],),
             ),

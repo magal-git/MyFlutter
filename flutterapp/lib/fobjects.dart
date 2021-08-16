@@ -246,7 +246,6 @@ Widget codeit(FModelView fmv){return SizedBox.shrink();}
               //Row(mainAxisSize: MainAxisSize.max, children:
               Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
                   [
-                    Container(child: CustomPaint(painter: OpenPainter(),),),//!1200
                     Text(objectModel.catName + ' id: $thisid'),
                     for(int i=0; i<objectModel.childlist.length; i++)
                       objectModel.childlist[i], 
@@ -254,15 +253,13 @@ Widget codeit(FModelView fmv){return SizedBox.shrink();}
               ),
           ) :
               //Row(children: 
-              MouseRegion(onHover: (e) => callback(thisid),//!#554433
-                child: Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
+                Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
                     [
                       Text(objectModel.catName + ' id: $thisid'),
                       for(int i=0; i<objectModel.childlist.length; i++)
                         objectModel.childlist[i],
                     ],
                 ),
-              ),
         onTap: () => callback(thisid),
       );
   }
@@ -273,11 +270,12 @@ class OpenPainter extends CustomPainter {//!1200
   @override
   void paint(Canvas canvas, Size size) {
     var paint1 = Paint()
-      ..color = Color(0xff638965)
+      ..color = Color(0xff337575)
       ..style = PaintingStyle.stroke;
+      paint1.strokeWidth = 4;
     //a rectangle
-    canvas.drawRect(Offset(0, -40) & Size(300, 100), paint1);
-    //canvas.drawLine(Offset(100, 100), Offset(200,200), paint1);
+    //canvas.drawRect(Offset(0, -40) & Size(300, 100), paint1);
+    canvas.drawLine(Offset(120, 0), Offset(120,900), paint1);
   }
  
   @override

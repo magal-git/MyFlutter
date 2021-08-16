@@ -4,6 +4,8 @@ import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:get/get.dart';
 
+import 'fobjects.dart';
+
 typedef void midCallbac(int id);
 
 class StartObjectPanel extends StatelessWidget{
@@ -20,6 +22,7 @@ FModelView fmodelview;
     Align(alignment: const Alignment(-1, 0), child: 
       Column(children: //!SingleChildScrollView here?
         [
+            CustomPaint(painter: OpenPainter(),),//#778
               Card(color: Colors.grey.shade100, child: 
                 // ignore: prefer_const_literals_to_create_immutables
                 Column(children: [
@@ -77,13 +80,13 @@ FModelView fmodelview;
                 //)
               //),
                     SizedBox(width: 230, height: 30,
-                            child: ListTile(title: const Text('Column []',style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            child: ListTile(title: const Text('Column [ ]',style: TextStyle(fontSize: 14,)),
                               trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.view_column, size: 16, color: Colors.blue),
                               onTap: () => addobject(fCOLUMN),
                             ),
                     ),
                     SizedBox(width: 230, height: 30,
-                      child: ListTile(title: const Text('Row []',style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      child: ListTile(title: const Text('Row [ ]',style: TextStyle(fontSize: 14)),
                         trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.view_column, size: 16, color: Colors.blue),
                         onTap: () => addobject(fROW),
                       ),
