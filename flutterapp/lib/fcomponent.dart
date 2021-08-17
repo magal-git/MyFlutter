@@ -5,17 +5,19 @@ import 'fmodelview.dart';
 
 typedef void idCallback(int id);
 
-class FComponent {
+class FComponent {//!Change name? FCompnentSerializer?
       FComponent({required this.callback});
 
   final idCallback callback;
   
-  List<FModelView> fmComponentlist = [];
-  List<Widget> startcomp = [];
-
   final apikey = 'keyBNkvqtAmKUSvfy';
   final base = 'appfVzPdfG0Rt9OgN';
   final table = 'comptable';
+
+  List<FModelView> fmComponentlist = [];
+  List<FModelView> compList = [];
+  List<FModelView> topCompList = [];
+
 
   saveComponent(FModelView fmv){
   //sz.writeToAPI(objmap);
@@ -25,7 +27,7 @@ class FComponent {
   Future<List<FModelView>> readComponentData() async {
     
     var airtable = Airtable(apiKey: apikey, projectBase: base);
-    var records = await airtable.getAllRecords(table);
+    var records = await airtable.getAllRecords(table);//!records means all records, not only top components but also its children
 
     for(var rec in records){
       FModelView tmpf = FModelView(mcallback: callback);
@@ -41,5 +43,24 @@ class FComponent {
     
     return fmComponentlist;
   }
+
+  /*addToCompList(List<FModelView> fl){
+    /*compList.addAll(fl);
+
+    for(var obj in compList){ 
+      if(obj.parentId == 0){//!get the components top object
+        for(int i=0; i<compList.length; i++){//!if it has child iterate and add them to the childlist
+          if(compList[i].parentId == obj.getMoid){
+            obj.fmc.addChild(compList[i]);
+          }
+        }*/
+        for(var comp in fl){
+          topCompList.add(comp);//!Only top components inkl. their children in here.
+        }
+      //}
+   // }
+
+
+  }*/
 
 }

@@ -20,7 +20,7 @@ FModelView getCurObj(int curid, Map tmap){
   return null!;
 }
 //#region [ rgba(90, 150, 40, 0.2) ]//#endregion
-Widget instanceObject(int cid, FModelView fmv){
+Widget instanceObject(int cid, FModelView fmv){//!Refactor. Put in FModelView?
   
     switch (cid){
       case 0:
