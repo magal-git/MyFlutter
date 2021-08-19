@@ -83,7 +83,7 @@ class FModelView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    print('in instanceobject');
+    print('8*8 instanceobject' + catId.toString());
 
     return
     Obx(() {
@@ -91,9 +91,10 @@ class FModelView extends StatelessWidget{
       return 
       //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginal
       Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109
-        MouseRegion(onEnter: (e) => /*print(this.getMoid)*/{},//#734
+        MouseRegion(onEnter: (e) => /*print(this.getMoid)*/{} ,//#734
           child: Draggable(child:
               instanceObject(catId, this),
+              //Container(color: Colors.yellow,),
           feedback:
               instanceObject(catId, this),
           onDragEnd: (details){

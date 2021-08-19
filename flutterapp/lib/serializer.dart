@@ -1,3 +1,5 @@
+import 'package:flutterapp/fobjrebuilder.dart';
+
 import 'fmodelview.dart';
 import 'package:dart_airtable/dart_airtable.dart';
 
@@ -12,17 +14,20 @@ class Serializer {
 
   final idCallback callback;
   List<FModelView> fmlist = [];
+  List<FModelView> rebuildlist = [];
+  FObjRebuilder fobr = FObjRebuilder();
+
   //DB records
   //moid, position, color, width, height, catId, text, borderradius, elevation, parent
 
-  writeToAPI(Map objmap) async {//! check isCacheChild???
+  /*writeToAPI(Map objmap) async {//! check isCacheChild???
   var airtable = Airtable(apiKey: apikey, projectBase: base);
 
     for(var key in objmap.keys){
       FModelView objf = objmap[key];
       var test = await airtable.createRecord(table, AirtableRecord(fields: [AirtableRecordField(fieldName: 'moid', value: objf.getMoid)]));
     }
-  }
+  }*/
 
   Future<List<FModelView>> readData() async {
     print('in readdata');
@@ -38,21 +43,14 @@ class Serializer {
       tmpf.parentId = int.parse(rec.getField('parent')!.value.toString());
       tmpf.type = int.parse(rec.getField('type')!.value.toString());
       tmpf.catId = int.parse(rec.getField('catid')!.value.toString());
-      
-      fmlist.add(tmpf);
-       /*var v = rec.getField('parent')!.value;
-       
-       if(int.parse(v.toString()) == 210) {
-         print('inparse');
-         var m = rec.getField('moid')!.value;
-         tmpf.setMoid = int.parse(m.toString());
-         tmpf.fmc.fbWidth.value = int.parse(rec.getField('width')!.value.toString());
 
-         print('Readad' + tmpf.getMoid.toString());
-       }*/
+
+      fmlist.add(tmpf);
     }
 
-    return fmlist;
+    rebuildlist = fobr.reBuildWithChildren(fmlist);
+
+    return rebuildlist;
   }
 
 }

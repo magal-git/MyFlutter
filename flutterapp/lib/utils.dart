@@ -64,7 +64,7 @@ print('in createsidepanel');
     switch(catid){
         case 0:
         return
-        SizedBox.shrink();
+        const SizedBox.shrink();
         case fBUTTON:
           return
           Column(children: [
@@ -122,6 +122,7 @@ print('in createsidepanel');
           ]);
       }
 
+      // ignore: avoid_unnecessary_containers
       return Container(child: Text(fmv.fmc.fbWidth.toString()));
   }
   //#region [ rgba(90, 150, 40, 0.2) ]//#endregion

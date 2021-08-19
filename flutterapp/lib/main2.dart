@@ -1,15 +1,20 @@
+import 'dart:math';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fcodegen.dart';
 import 'package:flutterapp/fcomponent.dart';
 import 'package:flutterapp/fmodelview.dart';
+import 'package:flutterapp/fobjects.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:flutterapp/ftreeviewpanel.dart';
 import 'package:flutterapp/serializer.dart';
-import 'package:get/get.dart'
+import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:flutterapp/utils.dart';
 
-import '../../fserialtreegen.dart';
+import 'fserialtreegen.dart';
 
 //!NOTES
 //! 1109 = Serializer
@@ -17,7 +22,7 @@ import '../../fserialtreegen.dart';
 //! 734  = onEnter
 //! 778  = Painter 
 
-void main () => runApp(GetMaterialApp(home: RunApp()));
+void main () => runApp(RunApp());
 
 //#region [Main]
 class RunApp extends StatelessWidget { @override Widget build(BuildContext context){ return HomePageWidget();}}
@@ -37,8 +42,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   List<FModelView> comp = [];
   bool done = false;
 
-  List<FModelView> eltemp = [];
-  List<FModelView> fmvList = [];
+List<FModelView> eltemp = [];
+List<FModelView> fmvList = [];
 
   //*Members
   late FModelView fmv;
@@ -48,7 +53,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   int gogo = 0;
   int gotest = 0;
   Map objmap = <int, FModelView>{};
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  //final scaffoldKey = GlobalKey<ScaffoldState>();
   List<FModelView> stackobj = [];
 
   List<FModelView> vall = [];//#599
@@ -63,7 +68,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     super.initState();
     fmv = FModelView(mcallback: handleId);
     fc = FComponent(callback: handleId,);
-    sztrgen = FSerializeTreeGen(addSerObjectmap);//#ff5
+    sztrgen = FSerializeTreeGen();
   }
 
   handleId(int pid){
@@ -76,11 +81,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is selected
       }
       fmv.markSelObj(fmv, objmap);//!Revisite
-      //_tree = false;//?Think its ok here. Go from codepanelview to startpanelview when click on obj  #ffbb
+      //_tree = false;//#ffbb //?Think its ok here. Go from codepanelview to startpanelview when click on obj  #ffbb
     });
   }
 
-  //#599//#599//#599//#599//#599//#599//#599//#599//#599//#599 TODO TODO TODO
+  //#599//#599//#599//#599//#599//#599//#599//#599//#599//#599
   handleComp(FModelView fobj){
 
     setState(() {
@@ -192,7 +197,7 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
     ],);
   }
 
-//END //#599//#599//#599//#599//#599//#599//#599//#599//#599//#599 TODO TODO TODO
+//END //#599//#599//#599//#599//#599//#599//#599//#599//#599//#599
 
   addToStack(FModelView f){
     if(stackobj.isEmpty) stackobj.add(f);
@@ -202,11 +207,11 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
     }
   }
 
-  addToObjmap(FModelView fv){
-    if(objmap.isEmpty) objmap[_mid] = fv;
+  addToObjmap(FModelView of){
+    if(objmap.isEmpty) objmap[_mid] = of;
 
-    if(!objmap.containsValue(fv) && fv.catId != 0){
-      objmap[_mid] = fv;
+    if(!objmap.containsValue(of) && of.catId != 0){
+      objmap[_mid] = of;
     }
   }
 
@@ -223,7 +228,7 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
       addToStack(fmv);//?TEMP Seems to work. Prevents duplicate in the stackobj + FDummy obj (0)
       //objmap[_mid] = fmv;
       addToObjmap(fmv);//?TEMP Seems to work. Prevents duplicate in the objmap + FDummy obj (0). 
-      //?For now addToObjmap is only needed in here(addObject) to prevent duplicate fv FDummy(0)
+      //?For now addToObjmap is only needed in here(addObject) to prevent duplicate of FDummy(0)
 
       if(fmv.isMultiWidget()){
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
@@ -233,6 +238,7 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
     });
   }
 
+  //!
   addChildObject(int catId){
     setState(() {
       FModelView theParentFmv = getCurObj(_mid, objmap);
@@ -286,42 +292,27 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
     });
   }
 
-  //#ff5
-  addSerObjectmap(FModelView fv){
-    if(objmap.isEmpty) objmap[fv.getMoid] = fv;
-
-    if(!objmap.containsValue(fv) && fv.catId != 0){
-      objmap[fv.getMoid] = fv;
-    }
-  }
-  //#ff5
-
   //! with addSerObject and addSerChildObject there is no instanciazion
   addSerObject(FModelView szFmv){//!Received from serializer // 
     setState(() {
-
+      
+        //szFmv.setCatId = 101;//TODO set this in serializer
+        print('*addinserobject-btn*' + szFmv.getMoid.toString());
         _mid = szFmv.getMoid;//#Identifies the object
 
         //stackobj.add(szFmv);//!?TEMP
         addToStack(szFmv);
-        //objmap[_mid] = szFmv;
-        addToObjmap(szFmv);//!add type 4 and type 1
 
-      if(szFmv.type == 1){//#ff5
-        for(var child in szFmv.childlist()){
-          //print('thechildt' + child.getMoid.toString());
-          addSerObjectmap(child);//!add type 2 and type 3 (d.v.s. the children)
-        }
-      }
+        objmap[_mid] = szFmv;
 
         if(szFmv.isMultiWidget()){//!ADDCHILD
           szFmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
         }
-        //szFmv.markSelObj(szFmv, objmap);//!TEST it
+        szFmv.markSelObj(szFmv, objmap);
 
     });
   }
-  /*addSerChildObject(FModelView child){//#F00 TABORT
+  addSerChildObject(FModelView child){
 
     setState(() {
 
@@ -334,20 +325,15 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
 
     child.markSelObj(child, objmap);//! Do we need this??
     });
-  }*/
+  }
 
-List<FModelView> prontlist = [];
 getcache() async {
-  gogo++;//! To reviset
+  gogo++;//! To revisted
   Serializer sz = Serializer(callback: handleId);
   await sz.readData().then((value) {//!serializer reads in all objects
     
     setState(() {
-     prontlist = sztrgen.serializeTree(value, 0);
-     for(var obj in prontlist) {
-       addSerObject(obj);
-     }
-     //szvall.addAll(value);//!old
+     szvall.addAll(value);
     });
 
   });
@@ -446,6 +432,7 @@ String getPrintOut(int t){//!TABORT
   }
 
   unselect(Map tmap){
+  
     tmap.forEach((key, value) {
         value.fmc.markFalse();
     });
@@ -464,62 +451,67 @@ String getPrintOut(int t){//!TABORT
   print('in build');
 
 
-  //#599 TODO TODO TODO
+  //#599
 //if(gotest<1) getCcache();
 
 //!1109
-if(gogo<1) getcache();
+//if(gogo<1) getcache();
 //sz.writeToAPI(objmap);
 //!1109
 
-    return
+    return 
     //GestureDetector(onTap: () => unselect(objmap),
     GestureDetector(onTap: () {
       unselect(objmap);
       addObject(0);
     },
 
-      child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj, child: Text('Del') ), appBar: 
-          AppBar( backgroundColor: 
-            Colors.lightBlue, leading: 
-            FloatingActionButton(onPressed: () => _viewTree(), child: Text('Tree')),
-          ),
-      body:
-          SafeArea(child:
-              Stack(children: [
-                Container(color: Colors.grey.shade400, width: 240,),
-                        if(stackobj.isNotEmpty)
-                        for(int i=0; i<stackobj.length; i++)
-                          stackobj[i],
-                       
-
-                    //!UDEV PUT IN SEP WIDGET?
-                    //#10123
-                    if(_tree)//!TODO Revisit
-                    _showTree(stackobj, 0),
-                    //cgen.codeTree(stackobj, 0),
-                    Visibility(visible: !_tree, child:
-                      StartObjectPanel(fmodelview: fmv, addobject: selFunc),
-                    ),
-
-                    //#10123
-                    //!PUT IN SEP WIDGET
-
-                     Align(alignment: Alignment(1, 0), child: 
-                       Column( mainAxisSize: MainAxisSize.max, children: 
-                            [
-                              fmv.makeSidePanel(),
-                              //GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
-                            ],
-                       ),
-                     ),
-                     
-                     /*Align(alignment: Alignment(0,0), child: //#599 TODO TODO TODO TODO
-                        done ? createComp() : const CircularProgressIndicator(),
-                     ),*/
-                 ],),
+      child: MaterialApp(home:
+        Scaffold( /*key: scaffoldKey,*/ floatingActionButton: FloatingActionButton(onPressed: _removeObj, child: Text('Del') ), appBar: 
+            AppBar( backgroundColor: 
+              Colors.lightBlue, leading: 
+              FloatingActionButton(onPressed: () => _viewTree(), child: Text('Tree')),
             ),
-          drawer: Container(width: 150, child: Drawer(child: Text('im a drawer'),)),
+        body:
+            SafeArea(child:
+                Stack(children: [
+                  Container(color: Colors.grey.shade400, width: 240,),
+                          if(stackobj.isNotEmpty)
+                          for(int i=0; i<stackobj.length; i++)
+                            stackobj[i],
+                          
+
+                      //!UDEV PUT IN SEP WIDGET?
+                      //#10123
+                      if(_tree)//!TODO Revisit
+                      _showTree(stackobj, 0),
+                      //cgen.codeTree(stackobj, 0),
+                      Visibility(visible: !_tree, child:
+                        StartObjectPanel(fmodelview: fmv, addobject: selFunc),
+                      ),
+
+                      //#10123
+                      //!PUT IN SEP WIDGET
+
+                       Align(alignment: Alignment(1, 0), child: 
+                         Column( mainAxisSize: MainAxisSize.max, children: 
+                              [
+                                fmv.makeSidePanel(),
+                                GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
+                                sztrgen.serializeTree(szvall, 0),//!1109
+                              ],
+                         ),
+                       ),
+                       
+                       /*Align(alignment: Alignment(0,0), child:
+                          done ? createComp() : const CircularProgressIndicator(),
+                       ),*/
+                   ],),
+              ),
+            drawer: Container(width: 150, child: Drawer(child: Text('im a drawer'),)),
+        ),
+        initialRoute: '/',
+        routes: {'/test' : (context) => StartObjectPanel(fmodelview: fmv, addobject: selFunc)},
       ),
     );
   }

@@ -1,6 +1,9 @@
 //Notes about codeviewpanel
 
 Type 1. Expansion - is a multiwidget with children. It is always at level 0. must have children else its a type 4
-Type 2. Tile - is a singlewidget on any level. If its a child of (type 1) its level is 1 else its > 1. If level is 0 then its a type 4
+Type 2. Tile - is a singlewidget on any level. If its a child of type 1, the level is min 1. If level is 0 then the type is 4
 Type 3. Expansion_inside - is a multiwidget with or without children always with level > 0. It always got a parent. Can never be a type 4
 Type 4. Every widget that is not the type above. Always level 0
+
+
+Draw.io integration
