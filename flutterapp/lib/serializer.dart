@@ -1,18 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutterapp/fobjrebuilder.dart';
 
 import 'fmodelview.dart';
 import 'package:dart_airtable/dart_airtable.dart';
 
 typedef void idCallback(int id);
+typedef void changepos(DraggableDetails d, FModelView dfmv);//#f0f
 
 class Serializer {
-      Serializer({required this.callback});
+      Serializer({required this.callback, required this.onChangePos});//#f0f
 
   final apikey = 'keyBNkvqtAmKUSvfy';
   final base = 'appfVzPdfG0Rt9OgN';
   final table = 'fairmodel';
 
   final idCallback callback;
+  final changepos onChangePos;//#f0f
+
   List<FModelView> fmlist = [];
   List<FModelView> rebuildlist = [];
   FObjRebuilder fobr = FObjRebuilder();
@@ -37,7 +41,7 @@ class Serializer {
     //var test = await airtable.createRecord(record, AirtableRecord(fields: [AirtableRecordField(fieldName: 'moid', value: 500)]));
 
     for(var rec in records){
-      FModelView tmpf = FModelView(mcallback: callback);
+      FModelView tmpf = FModelView(mcallback: callback, onChangePos: onChangePos,);//#f0f
       tmpf.setMoid = int.parse(rec.getField('moid')!.value.toString());
       tmpf.fmc.fbWidth.value = int.parse(rec.getField('width')!.value.toString());
       tmpf.parentId = int.parse(rec.getField('parent')!.value.toString());

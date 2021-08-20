@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:flutterapp/utils.dart';
 
-import 'fserialtreegen.dart';
+import 'flutterapp/lib/fserialtreegen.dart';
 
 //!NOTES
 //! 1109 = Serializer

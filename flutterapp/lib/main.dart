@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/fcodegen.dart';
 import 'package:flutterapp/fcomponent.dart';
 import 'package:flutterapp/fmodelview.dart';
+import 'package:flutterapp/fobjects.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:flutterapp/ftreeviewpanel.dart';
 import 'package:flutterapp/serializer.dart';
-import 'package:get/get.dart'
+import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:flutterapp/utils.dart';
 
 import '../../fserialtreegen.dart';
+import 'fcompserializergen.dart';
 
 //!NOTES
 //! 1109 = Serializer
@@ -44,6 +46,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   late FModelView fmv;
   late FComponent fc;
   late FSerializeTreeGen sztrgen;
+  late FCompSerializeGen compszgen;
 
   int gogo = 0;
   int gotest = 0;
@@ -61,9 +64,22 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   @override
   initState(){
     super.initState();
-    fmv = FModelView(mcallback: handleId);
-    fc = FComponent(callback: handleId,);
+    fmv = FModelView(mcallback: handleId, onChangePos: onChangeDraggPos);//#f0f
+    fc = FComponent(callback: handleId, onChangePos: onChangeDraggPos);//#f0f
     sztrgen = FSerializeTreeGen(addSerObjectmap);//#ff5
+    compszgen = FCompSerializeGen(addSerObjectmap);//#ff5
+  }
+
+  onChangeDraggPos(DraggableDetails details, FModelView dfmv){//!Position terminal error message resolved.
+  //!OBS! Check Serialize and Component beacuse we changed FModelView constructor there aswell
+    setState(() {
+
+      dfmv.fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
+      dfmv.fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
+      Offset of = Offset(dfmv.fmc.positionX.value, dfmv.fmc.positionY.value);
+      dfmv.fmc.setPosition(of);
+    });
+    
   }
 
   handleId(int pid){
@@ -79,120 +95,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       //_tree = false;//?Think its ok here. Go from codepanelview to startpanelview when click on obj  #ffbb
     });
   }
-
-  //#599//#599//#599//#599//#599//#599//#599//#599//#599//#599 TODO TODO TODO
-  handleComp(FModelView fobj){
-
-    setState(() {
-        //!TEST
-        if(stackobj.contains(fobj)) {
-          //addObject(fobj.catId);
-          addCloneObject(fobj);
-          //return topComp from addObject
-          /*
-          for(var child in fobj.childlist()){
-            child.parentId = topComp.getMoid;
-            addCloneChildObject(child);
-          }
-          }*/
-          return;
-        }//!TEST
-
-      if(fobj.type == 4 || fobj.type == 1){
-        addSerCompObject(fobj);
-      }
-    });
-  }
-//#599
-  addSerCompObject(FModelView cFmv){
-    setState(() {
-        _mid = cFmv.getMoid;//#Identifies the object
-
-        //stackobj.add(cFmv);//!?TEMP
-        addToStack(cFmv);
-        
-        if(cFmv.isMultiWidget()){
-          cFmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
-        }
-        cFmv.markSelObj(cFmv, objmap);
-    });
-  }
-
-//#599
-/*
-addCloneChildObject(FModelView cfchild){
-    setState(() {
-      
-      FModelView child = FModelView(mcallback: handleId,);
-      child.setCatId = cfchild.catId;//!TODO make cloner class/function! Props depends on category!
-      
-      _mid = child.getMoid;//#Identifies the object
-      objmap[_mid] = child;
-
-      FModelView topComp = getCurObj(child.parentId, objmap);
-      topComp.fmc.addChild(child);//! Add fobject to parent(fmv)children list! 
-      child.isMultiWidget() ? child.fmc.caddchildCol.value = true : child.fmc.caddchildCol.value = false;
-      
-    //child.markSelObj(fmv, objmap);
-    });
-  }
-*/
-//#599
-addCloneObject(FModelView fobj){//!Works only for the top compopnent 
-//!you could copy the childlist from fobj but the childs are not separeted. Need todo for the childs to be separeted. 
-    setState(() {
-      FModelView fmv = FModelView(mcallback: handleId,);
-      
-      fmv.setCatId = fobj.catId;//!TODO make cloner class/function! Props depends on category!
-      fmv.fmc.objectModel.value.spacing = fobj.fmc.objectModel.value.spacing;
-
-      _mid = fmv.getMoid;//#Identifies the object
-      addToStack(fmv);
-      addToObjmap(fmv);
-
-      if(fmv.isMultiWidget()){
-        fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
-      }
-      fmv.markSelObj(fmv, objmap);
-    });
-  }
-
-//#599
-  getCcache() {//!Set at startup
-    //FComponent fc = FComponent(callback: handleId,);//! its in initState now. Ok?
-    gotest++;
-    fc.readComponentData().then((val){
-      setState(() {
-        vall.addAll(val);
-        done = true;
-      });
-    });
-  }
-//#599
-  Widget createComp(){
-    for(var obj in vall){ 
-      if(obj.parentId == 0){//!get the components top object
-        for(int i=0; i<vall.length; i++){//!if it has child iterate and add them to the childlist
-          if(vall[i].parentId == obj.getMoid){
-            obj.fmc.addChild(vall[i]);
-            objmap[vall[i].getMoid] = vall[i];//!put the children in objmap
-          }
-        }
-        comp.add(obj);
-        //fc.addToCompList(comp);//!TEST//#ff2#ff2#ff2#ff2#ff2
-        objmap[obj.getMoid] = obj;//! put the component itself in objmap
-      }
-    }
-
-    if(vall.isNotEmpty) vall.removeRange(0, vall.length);
-
-  return//!TODO return TextButtons for multiple components
-    Column(children: [
-      TextButton(onPressed: () { handleComp(comp[0]); handleId(comp[0].getMoid);}, child: Text(comp[0].name)),
-    ],);
-  }
-
-//END //#599//#599//#599//#599//#599//#599//#599//#599//#599//#599 TODO TODO TODO
 
   addToStack(FModelView f){
     if(stackobj.isEmpty) stackobj.add(f);
@@ -213,7 +115,7 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
 //&All add...Object func = render the object to the screen
   addObject(int catId){
     setState(() {
-      fmv = FModelView(mcallback: handleId,);
+      fmv = FModelView(mcallback: handleId, onChangePos: onChangeDraggPos,);//#f0f
       print('in addobject');
       
       fmv.setCatId = catId;
@@ -237,7 +139,7 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
     setState(() {
       FModelView theParentFmv = getCurObj(_mid, objmap);
 
-      fmv = FModelView(mcallback: handleId,);
+      fmv = FModelView(mcallback: handleId, onChangePos: onChangeDraggPos,);//#f0f
       fmv.setCatId = catId;
       
       _mid = fmv.getMoid;//#Identifies the object
@@ -321,25 +223,12 @@ addCloneObject(FModelView fobj){//!Works only for the top compopnent
 
     });
   }
-  /*addSerChildObject(FModelView child){//#F00 TABORT
-
-    setState(() {
-
-      _mid = child.getMoid;//#Identifies the object
-      objmap[_mid] = child;
-
-      FModelView parent = getCurObj(child.parentId, objmap);// get the parent
-      parent.fmc.addChild(child);//!Look into this, maybe if we put it in addSerObject we dont need this func??
-      child.fmc.caddchildCol.value = false;//!Set color to false if column/Row is added
-
-    child.markSelObj(child, objmap);//! Do we need this??
-    });
-  }*/
 
 List<FModelView> prontlist = [];
+List<FModelView> prontcomplist = [];
 getcache() async {
   gogo++;//! To reviset
-  Serializer sz = Serializer(callback: handleId);
+  Serializer sz = Serializer(callback: handleId, onChangePos: onChangeDraggPos);//#f0f
   await sz.readData().then((value) {//!serializer reads in all objects
     
     setState(() {
@@ -352,6 +241,24 @@ getcache() async {
 
   });
 }
+
+//#ff5
+getcacheComp() async {
+  gogo++;//! To reviset
+  FComponent fcomp = FComponent(callback: handleId, onChangePos: onChangeDraggPos);//#f0f
+  await fcomp.readComponentData().then((value) {//!serializer reads in all objects
+    
+    setState(() {
+     prontcomplist = compszgen.serializeComponentTree(value, 0);
+     for(var obj in prontcomplist) {
+       addSerObject(obj);//! Use this?
+     }
+     //szvall.addAll(value);//!old
+    });
+
+  });
+}
+//#ff5
 
 
 //!TreeViewLevels//#123//#123//#123//#123/#123//#123//#123//#123//#123//#123
@@ -459,21 +366,31 @@ String getPrintOut(int t){//!TABORT
     });
   }
 
+  shuff(){//#3cc
+    setState(() {
+      /*stackobj.shuffle();
+      for(var c in fmv.childlist()){
+        print(c.getMoid);
+      }*/
+      
+      fmv.childlist().insert(0, fmv.childlist().removeAt(1));
+      //unselect(objmap);
+      fmv.markSelObj(fmv, objmap);
+    });
+  
+  }
+
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
   print('in build');
 
-
-  //#599 TODO TODO TODO
-//if(gotest<1) getCcache();
-
 //!1109
-if(gogo<1) getcache();
+//if(gogo<1) getcache();
+//if(gogo<1) getcacheComp();
 //sz.writeToAPI(objmap);
 //!1109
 
     return
-    //GestureDetector(onTap: () => unselect(objmap),
     GestureDetector(onTap: () {
       unselect(objmap);
       addObject(0);
@@ -490,7 +407,7 @@ if(gogo<1) getcache();
                 Container(color: Colors.grey.shade400, width: 240,),
                         if(stackobj.isNotEmpty)
                         for(int i=0; i<stackobj.length; i++)
-                          stackobj[i],
+                          Positioned(left: stackobj[i].fmc.positionX.value, top: stackobj[i].fmc.positionY.value, child: stackobj[i],),
                        
 
                     //!UDEV PUT IN SEP WIDGET?
@@ -509,7 +426,7 @@ if(gogo<1) getcache();
                        Column( mainAxisSize: MainAxisSize.max, children: 
                             [
                               fmv.makeSidePanel(),
-                              //GFButton(onPressed: () => _showTree(stackobj, 0)),//!TREETEST
+                              GFButton(onPressed: /*_showTree(stackobj, 0))*/shuff),//!TREETEST
                             ],
                        ),
                      ),

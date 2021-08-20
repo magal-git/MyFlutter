@@ -2,13 +2,16 @@ import 'package:dart_airtable/dart_airtable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'fmodelview.dart';
+import 'fobjrebuilder.dart';
 
 typedef void idCallback(int id);
+typedef void changepos(DraggableDetails d, FModelView dfmv);//#f0f
 
 class FComponent {//!Change name? FCompnentSerializer?
-      FComponent({required this.callback});
+      FComponent({required this.callback, required this.onChangePos});//#f0f
 
   final idCallback callback;
+  final changepos onChangePos;
   
   final apikey = 'keyBNkvqtAmKUSvfy';
   final base = 'appfVzPdfG0Rt9OgN';
@@ -18,19 +21,22 @@ class FComponent {//!Change name? FCompnentSerializer?
   List<FModelView> compList = [];
   List<FModelView> topCompList = [];
 
+  //#ff5
+  List<FModelView> rebuildlist = [];
+  FObjRebuilder fobr = FObjRebuilder();
+
 
   saveComponent(FModelView fmv){
   //sz.writeToAPI(objmap);
   }
 
-
   Future<List<FModelView>> readComponentData() async {
     
     var airtable = Airtable(apiKey: apikey, projectBase: base);
-    var records = await airtable.getAllRecords(table);//!records means all records, not only top components but also its children
+    var records = await airtable.getAllRecords(table);//!records means all component records, not only top components but also their children
 
     for(var rec in records){
-      FModelView tmpf = FModelView(mcallback: callback);
+      FModelView tmpf = FModelView(mcallback: callback, onChangePos: onChangePos,);//#f0f
       tmpf.setMoid = int.parse(rec.getField('moid')!.value.toString());
       tmpf.fmc.fbWidth.value = int.parse(rec.getField('width')!.value.toString());
       tmpf.parentId = int.parse(rec.getField('parent')!.value.toString());
@@ -40,27 +46,18 @@ class FComponent {//!Change name? FCompnentSerializer?
       //print(tmpf.name);
       fmComponentlist.add(tmpf);
     }
-    
-    return fmComponentlist;
+    rebuildlist = fobr.reBuildComponentWithChildren(fmComponentlist);
+    for(var item in rebuildlist){
+      FModelView newid = FModelView(mcallback: callback, onChangePos: onChangePos,);//#f0f
+      item.setMoid = newid.getMoid;
+      print(item.name);
+      for(var child in item.childlist()){
+        FModelView newchid = FModelView(mcallback: callback, onChangePos: onChangePos,);//#f0f  
+        child.parentId = item.getMoid;
+        child.setMoid = newchid.getMoid;
+      }       
+    }
+    return rebuildlist;
   }
-
-  /*addToCompList(List<FModelView> fl){
-    /*compList.addAll(fl);
-
-    for(var obj in compList){ 
-      if(obj.parentId == 0){//!get the components top object
-        for(int i=0; i<compList.length; i++){//!if it has child iterate and add them to the childlist
-          if(compList[i].parentId == obj.getMoid){
-            obj.fmc.addChild(compList[i]);
-          }
-        }*/
-        for(var comp in fl){
-          topCompList.add(comp);//!Only top components inkl. their children in here.
-        }
-      //}
-   // }
-
-
-  }*/
 
 }

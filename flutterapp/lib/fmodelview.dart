@@ -9,13 +9,14 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 typedef void midCallback(int id);
-
+typedef void changepos(DraggableDetails d, FModelView dfmv);
 
 class FModelView extends StatelessWidget{
-      FModelView({required this.mcallback});
+      FModelView({required this.mcallback, required this.onChangePos});//#f0f
 
 //*Constructer member
   final midCallback mcallback;
+  final changepos onChangePos;//#f0f
 
   //*Members
   FModelController fmc = FModelController();
@@ -81,6 +82,25 @@ class FModelView extends StatelessWidget{
         fmv.fmc.markTrue();//&Now mark the selected one
   }
 
+
+  //#734
+  bool down = false;
+  int tmpid = 0;
+  
+  letest(){
+    print('Listener: ' + this.getMoid.toString());
+    tmpid = this.getMoid;
+    down = true;
+  }
+  letest2(){
+    if(down){
+      print('MouseRegion: ' + this.getMoid.toString());
+      print('tmpid: ' + tmpid.toString());
+      down = false;
+    }
+  }
+  //#734
+
   @override
   Widget build(BuildContext context){
     print('8*8 instanceobject' + catId.toString());
@@ -89,28 +109,31 @@ class FModelView extends StatelessWidget{
     Obx(() {
       
       return 
-      //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginal
-      Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109
-        MouseRegion(onEnter: (e) => /*print(this.getMoid)*/{} ,//#734
-          child: Draggable(child:
-              instanceObject(catId, this),
-              //Container(color: Colors.yellow,),
-          feedback:
-              instanceObject(catId, this),
-          onDragEnd: (details){
-              //_position.value = details.offset - const Offset(0.0, 56.0);
-
-              //! 1109 ***********************************************************
-              fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
-              fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
-              Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
-              fmc.setPosition(of);
-              //! 1109 ***********************************************************
-          },
-          
+      //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginalprint('MouseRegion: ' + this.getMoid.toString())
+      //Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109print('Listener: ' + this.getMoid.toString())
+        Listener(onPointerDown: (e) => letest(),//#734
+          child: MouseRegion(onEnter: (e) => letest2() ,//#734
+            child: Draggable(child:
+                instanceObject(catId, this),
+                //Container(color: Colors.yellow,),
+            feedback:
+                instanceObject(catId, this),
+                //Container(color: Colors.yellow,),
+            onDragEnd: (details){
+                //_position.value = details.offset - const Offset(0.0, 56.0);
+                onChangePos(details, this);
+                //! 1109 ***********************************************************
+                /*fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
+                fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
+                Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
+                fmc.setPosition(of);*/
+                //! 1109 ***********************************************************
+            },
+            
+            ),
           ),
-        ),//#734
-      );
+        );//#734
+      //);
 
    });
   }

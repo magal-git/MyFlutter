@@ -32,7 +32,7 @@ abstract class FDummytest extends StatelessWidget{
 class FBuObject extends StatelessWidget implements FDummytest {
   FBuObject({required this.callback, required this.thisid,
              required this.bw, required this.bh, required this.colModel, /*this.col = Colors.green,*/
-             this.marked = false, required this.hlpb, this.borderradius = 0.0, required this.objectModel,
+             this.marked = false, required this.hlpb, this.borderradius = 0.0, required this.objectModel, 
             });
             
 
@@ -209,6 +209,7 @@ Widget codeit(FModelView fmv){
               ),
           ) :
               Wrap( direction: Axis.vertical, spacing: objectModel.spacing, children://!Column 
+              //Column(children:
                   [
                     Text(objectModel.catName + ' id: $thisid'),
                     for(int i=0; i<objectModel.childlist.length; i++)
@@ -243,8 +244,8 @@ Widget codeit(FModelView fmv){return SizedBox.shrink();}
     return
       GestureDetector(child: marked ?
           Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(240, 252, 3, 1), width: 3,),), child: 
-              //Row(mainAxisSize: MainAxisSize.max, children:
-              Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
+              Row(mainAxisSize: MainAxisSize.max, children:
+              //Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
                   [
                     Text(objectModel.catName + ' id: $thisid'),
                     for(int i=0; i<objectModel.childlist.length; i++)
@@ -252,8 +253,8 @@ Widget codeit(FModelView fmv){return SizedBox.shrink();}
                   ],
               ),
           ) :
-              //Row(children: 
-                Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
+              Row(children: 
+                //Wrap( direction: Axis.horizontal, spacing: objectModel.spacing, children://!Column 
                     [
                       Text(objectModel.catName + ' id: $thisid'),
                       for(int i=0; i<objectModel.childlist.length; i++)

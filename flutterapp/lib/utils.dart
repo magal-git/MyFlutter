@@ -29,7 +29,7 @@ Widget instanceObject(int cid, FModelView fmv){//!Refactor. Put in FModelView?
       case fBUTTON:
         return 
           FBuObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), colModel: fmv.fmc.colModel.value, 
-          marked: fmv.fmc.marked.value, hlpb: fmv.fmc.hpb.value, borderradius: fmv.fmc.bradius.toDouble(), objectModel: fmv.fmc.objectModel.value,);
+          marked: fmv.fmc.marked.value, hlpb: fmv.fmc.hpb.value, borderradius: fmv.fmc.bradius.toDouble(), objectModel: fmv.fmc.objectModel.value,); 
       case fICBUTTON:
         return
           FIcBuObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, bw: fmv.fmc.fbWidth.toDouble(), bh: fmv.fmc.fbHeight.toDouble(), col: Colors.amber,
