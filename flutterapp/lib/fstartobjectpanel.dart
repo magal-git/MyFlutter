@@ -22,7 +22,7 @@ FModelView fmodelview;
     Align(alignment: const Alignment(-1, 0), child: 
       Column(children: //!SingleChildScrollView here?
         [
-            CustomPaint(painter: OpenPainter(),),//#778
+            //CustomPaint(painter: OpenPainter(),),//#778
               Card(color: Colors.grey.shade100, child: 
                 // ignore: prefer_const_literals_to_create_immutables
                 Column(children: [

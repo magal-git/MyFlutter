@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fmodelcontroller.dart';
 import 'package:flutterapp/fobjects.dart';
+import 'package:flutterapp/fobjmover.dart';
 import 'package:flutterapp/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
@@ -111,28 +112,31 @@ class FModelView extends StatelessWidget{
       return 
       //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginalprint('MouseRegion: ' + this.getMoid.toString())
       //Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109print('Listener: ' + this.getMoid.toString())
-        Listener(onPointerDown: (e) => letest(),//#734
-          child: MouseRegion(onEnter: (e) => letest2() ,//#734
-            child: Draggable(child:
-                instanceObject(catId, this),
-                //Container(color: Colors.yellow,),
-            feedback:
-                instanceObject(catId, this),
-                //Container(color: Colors.yellow,),
-            onDragEnd: (details){
-                //_position.value = details.offset - const Offset(0.0, 56.0);
-                onChangePos(details, this);
-                //! 1109 ***********************************************************
-                /*fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
-                fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
-                Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
-                fmc.setPosition(of);*/
-                //! 1109 ***********************************************************
-            },
-            
-            ),
-          ),
-        );//#734
+        //Listener(onPointerDown: (e) => letest(),//#734
+          //child: MouseRegion(onEnter: (e) => letest2() ,//#734
+            //child:
+            FObjMover(fm: this,
+              child: Draggable(child:
+                  instanceObject(catId, this),
+                  //Container(color: Colors.yellow,),
+              feedback:
+                  instanceObject(catId, this),
+                  //Container(color: Colors.yellow,),
+              onDragEnd: (details){
+                  //_position.value = details.offset - const Offset(0.0, 56.0);
+                  onChangePos(details, this);
+                  //! 1109 ***********************************************************
+                  /*fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
+                  fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
+                  Offset of = Offset(fmc.positionX.value, fmc.positionY.value);
+                  fmc.setPosition(of);*/
+                  //! 1109 ***********************************************************
+              },
+              
+              ),
+            );
+          //),
+        //);//#734
       //);
 
    });

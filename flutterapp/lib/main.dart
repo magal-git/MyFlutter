@@ -154,6 +154,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       fmv.isMultiWidget() ? fmv.fmc.caddchildCol.value = true : fmv.fmc.caddchildCol.value = false;
       
     fmv.markSelObj(fmv, objmap);
+    fmv.fmc.setfmcObjmap = objmap;//#734
     });
   }
 
@@ -366,7 +367,7 @@ String getPrintOut(int t){//!TABORT
     });
   }
 
-  shuff(){//#3cc
+  shuff(){//#734
     setState(() {
       /*stackobj.shuffle();
       for(var c in fmv.childlist()){
@@ -374,9 +375,10 @@ String getPrintOut(int t){//!TABORT
       }*/
       
       fmv.childlist().insert(0, fmv.childlist().removeAt(1));
+      //fmv.childlist().insert(0, fmv.childlist().indexWhere((element) => false);
       //unselect(objmap);
       fmv.markSelObj(fmv, objmap);
-    });
+    });//#734
   
   }
 

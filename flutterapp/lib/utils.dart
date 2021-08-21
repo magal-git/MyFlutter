@@ -17,7 +17,7 @@ FModelView getCurObj(int curid, Map tmap){
     print('no oki');
   }
 
-  return null!;
+  return tmap[0];
 }
 //#region [ rgba(90, 150, 40, 0.2) ]//#endregion
 Widget instanceObject(int cid, FModelView fmv){//!Refactor. Put in FModelView?

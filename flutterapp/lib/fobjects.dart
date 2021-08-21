@@ -275,8 +275,8 @@ class OpenPainter extends CustomPainter {//!1200
       ..style = PaintingStyle.stroke;
       paint1.strokeWidth = 4;
     //a rectangle
-    //canvas.drawRect(Offset(0, -40) & Size(300, 100), paint1);
-    canvas.drawLine(Offset(120, 0), Offset(120,900), paint1);
+    canvas.drawRect(Offset(-90, -50) & Size(180, 50), paint1);
+    //canvas.drawLine(Offset(120, 0), Offset(120,900), paint1);
   }
  
   @override

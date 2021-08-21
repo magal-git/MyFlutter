@@ -29,6 +29,11 @@ class FModelController extends GetxController{
   //!1109
 
   Color prevcol = Colors.white;//!PRV
+  Map fmcObjmap = <int, FModelView>{}.obs;
+
+  set setfmcObjmap(Map<dynamic, dynamic> map){//#734
+    fmcObjmap = map;
+  }
 
   markTrue() => marked.value = true;
   markFalse() => marked.value = false;
