@@ -56,7 +56,7 @@ Widget codeit(FModelView fmv){//!1200
 
   @override
   Widget build(BuildContext context){
-    print('in fobjects');
+    //print('in fobjects');
     objectModel.catName = 'Button';
     
     return 
@@ -201,7 +201,7 @@ Widget codeit(FModelView fmv){
               //Column(mainAxisSize: MainAxisSize.max, children:
               Wrap( direction: Axis.vertical, spacing: objectModel.spacing, children://!Column 
                   [
-                    //Checkbox(value: checked, onChanged: (value) => print(!checked)),//!TODO
+                    //Checkbox(value: checked, onChanged: (value) => //print(!checked)),//!TODO
                     Text(objectModel.catName + ' id: $thisid'),
                     for(int i=0; i<objectModel.childlist.length; i++)
                       objectModel.childlist[i], 
@@ -275,13 +275,36 @@ class OpenPainter extends CustomPainter {//!1200
       ..style = PaintingStyle.stroke;
       paint1.strokeWidth = 4;
     //a rectangle
-    canvas.drawRect(Offset(-90, -50) & Size(180, 50), paint1);
+    //canvas.drawRect(Offset(-90, -50) & Size(180, 50), paint1);
     //canvas.drawLine(Offset(120, 0), Offset(120,900), paint1);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
+
+}//OpenPainter
+
+class SwapPainter extends CustomPainter {//!1200
+        SwapPainter(this.trect);
+
+//Offset offset;
+Rect trect;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint1 = Paint()
+      ..color = Color(0xff337575)
+      ..style = PaintingStyle.stroke;
+      paint1.strokeWidth = 1;
+    //a rectangle
+    canvas.drawRect(trect, paint1);
+    //canvas.drawRect( & Size(180, 50), paint1);
   }
  
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
-}
+
+}//SwapPainter
 
 class ObjectCodeProps{
       ObjectCodeProps.fbutton({required this.btnText, required this.btnTextColor, required this.borderradius}) : spacing = 0.0;

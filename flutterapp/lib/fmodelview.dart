@@ -89,14 +89,14 @@ class FModelView extends StatelessWidget{
   int tmpid = 0;
   
   letest(){
-    print('Listener: ' + this.getMoid.toString());
+    //print('Listener: ' + this.getMoid.toString());
     tmpid = this.getMoid;
     down = true;
   }
   letest2(){
     if(down){
-      print('MouseRegion: ' + this.getMoid.toString());
-      print('tmpid: ' + tmpid.toString());
+      //print('MouseRegion: ' + this.getMoid.toString());
+      //print('tmpid: ' + tmpid.toString());
       down = false;
     }
   }
@@ -104,14 +104,14 @@ class FModelView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    print('8*8 instanceobject' + catId.toString());
+    //print('8*8 instanceobject' + catId.toString());
 
     return
     Obx(() {
       
       return 
-      //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginalprint('MouseRegion: ' + this.getMoid.toString())
-      //Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109print('Listener: ' + this.getMoid.toString())
+      //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginal//print('MouseRegion: ' + this.getMoid.toString())
+      //Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109//print('Listener: ' + this.getMoid.toString())
         //Listener(onPointerDown: (e) => letest(),//#734
           //child: MouseRegion(onEnter: (e) => letest2() ,//#734
             //child:

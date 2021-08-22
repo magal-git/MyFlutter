@@ -17,7 +17,7 @@ class FCodeView extends StatelessWidget {
 
   Widget _tree(int a){
     for(int p=a; p<fmvlist.length; p++){
-print('in codeview');//// Tabort
+//print('in codeview');//// Tabort
         fmvlist[p].twList.removeRange(0, fmvlist[p].twList.length);//&Clean list every render to avoid duplicates
 
         if(fmvlist[p].type == 1 && !donelist.contains(fmvlist[p].getMoid)){
@@ -49,7 +49,7 @@ print('in codeview');//// Tabort
   funcCL(FModelView fv, List<FModelView> list){//! Enter this func only if multichild object in _tree func above
     for(var obj in list){
       if(obj.type == 2){
-        print('level: ' + obj.level.toString());//// Tabort
+        //print('level: ' + obj.level.toString());//// Tabort
         donelist.add(obj.getMoid);
         FDummytest fbo = instanceFObject(obj.catId, obj);//!1200//&#445588 //&FDummy #445588
         fv.twList.add(Column(children: [fbo.codeit(obj)],));

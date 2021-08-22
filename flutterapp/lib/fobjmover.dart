@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fobjects.dart';
 import 'package:flutterapp/utils.dart';
+import 'package:hive/hive.dart';
 
 class FObjMover extends StatefulWidget {
   const FObjMover({required this.child, required this.fm});
@@ -26,61 +27,74 @@ bool isMoving = false;
 int cur = 0;
 int r = 0;
 
+var box = Hive.box('myBox');
+
+/*var box = Hive.box('myBox');
+    box.put('name', 'David');
+    var name = box.get('name');
+    print('Name: $name');*/
 
 _onEnter(PointerEnterEvent e){
+  
   setState(() {
-
     if(widget.fm.parentId != 0){
-      swapobj = widget.fm.getMoid;
-      //print('startobj ' + startobj.toString());
-      //Rect rect = const Offset(100, 100) & const Size(10,10);
+      FModelView parent = getCurObj(widget.fm.parentId, widget.fm.fmc.fmcObjmap);
+
+      toinx = parent.childlist().indexWhere((element) => element.getMoid == widget.fm.getMoid);
+      //print('from: ' + toinx.toString() + ' to');
+      //print(parent.childlist().indexWhere((element) => element.getMoid == widget.fm.getMoid));
+      
+      box.put('toinx', toinx);
+
+      //print('saveit: ' + toinx.toString());
       
     }
-
+    
   });
 }
 
-
 _onthemove(PointerMoveEvent m){
-  Rect rect;
-  List<Rect> rectlist = [];
   if(widget.fm.parentId != 0){
-    FModelView parent = getCurObj(widget.fm.parentId, widget.fm.fmc.fmcObjmap);
-    for(var child in parent.childlist()){
-      rect = const Offset(-90, -50) & Size(child.fmc.fbWidth.value.toDouble(), 10);
-      rectlist.add(rect);
+      FModelView parent = getCurObj(widget.fm.parentId, widget.fm.fmc.fmcObjmap);
+
+      frominx = parent.childlist().indexWhere((element) => element.getMoid == widget.fm.getMoid);
+      //print('from: ' + frominx.toString() + ' to');
+      //print(parent.childlist().indexWhere((element) => element.getMoid == widget.fm.getMoid));
+      
     }
-    Map mr = rectlist.asMap();
-    //print(mr);
-    Rect r = rectlist[0];
-      //for(int i=1; i<3; i++){
-      Rect irect = r.intersect(rectlist[1]);
-        print(irect.width);
-      //}
-       return;
-    //}
-  }
 }
 
 _listener(PointerDownEvent p){
-  //setState(() {
 
-    if(widget.fm.parentId != 0){
-      startobj = widget.fm.getMoid;
-      //print(swapobj);
-      //FModelView parent = getCurObj(widget.fm.parentId, widget.fm.fmc.fmcObjmap);
-    }
-    
-  //});
+  if(widget.fm.parentId != 0){
+    FModelView parent = getCurObj(widget.fm.parentId, widget.fm.fmc.fmcObjmap);
+
+    frominx = parent.childlist().indexWhere((element) => element.getMoid == widget.fm.getMoid);
+  }
+  
 }
 
 _swapit(PointerUpEvent u){
   
   setState(() {
+   
     if(widget.fm.parentId != 0){
-      
-      //print('pointer up ' + swapobj.toString());
+       var inx = box.get('toinx');
+
+       /*print('from: ' + frominx.toString());
+       print('to: ' + inx.toString());*/
+       
+      //print('from: ' + frominx.toString() + ' to: ' + toinx.toString());
+
+      FModelView parent = getCurObj(widget.fm.parentId, widget.fm.fmc.fmcObjmap);
+      parent.childlist().insert(inx, parent.childlist().removeAt(frominx));
+      parent.markSelObj(parent, widget.fm.fmc.fmcObjmap);
     }
+
+    //if(widget.fm.parentId != 0){
+      
+      //print('pointer up ' + widget.fm.fmc.positionX.toString());
+    //}
 
     //print('start*: ' + startobj.toString());
     //print('swap: ' + swapobj.toString());
@@ -91,13 +105,13 @@ _swapit(PointerUpEvent u){
     }else{
       parent = getCurObj(widget.fm.parentId, widget.fm.fmc.fmcObjmap);
       frominx = parent.childlist().indexWhere((element) => element.getMoid == startobj);
-      print('FROMINX*****************' + frominx.toString());
+      //print('FROMINX*****************' + frominx.toString());
     }*/
     /*if(isMoving){
       frominx = parent.childlist().indexWhere((element) => element.getMoid == startobj);
       toinx = parent.childlist().indexWhere((element) => element.getMoid == swapobj);
       parent.childlist().insert(toinx, widget.fm.childlist().removeAt(frominx));
-      print(startobj.toString() + ' : ' + swapobj.toString());
+      //print(startobj.toString() + ' : ' + swapobj.toString());
     }*/
     
     //print(isMoving.toString());
@@ -106,8 +120,8 @@ _swapit(PointerUpEvent u){
 
   @override
   Widget build(BuildContext context) {
-    //print('in mover');
-    
+
+
     return 
     Column(
       children: [
@@ -117,7 +131,7 @@ _swapit(PointerUpEvent u){
             onPointerUp: _swapit,
             onPointerMove: _onthemove,
         ),
-        //CustomPaint(painter: OpenPainter(),)
+        //CustomPaint(painter: widget.fm.parentId != 0 ? SwapPainter(rect) : OpenPainter(),)
       ],
     );
       

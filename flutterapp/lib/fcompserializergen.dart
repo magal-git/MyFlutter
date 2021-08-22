@@ -29,10 +29,10 @@ List<FModelView> fmvList = [];
     }
     for(var items in fmvList){
       eltemp.add(items);
-      //print('gen type ' + items.getMoid.toString() + ' ' + items.type.toString());
+      ////print('gen type ' + items.getMoid.toString() + ' ' + items.type.toString());
     }
     fmvList.removeRange(0, fmvList.length);
-    print('in serialtree');
+    //print('in serialtree');
     
     return showComptree(eltemp);
   }

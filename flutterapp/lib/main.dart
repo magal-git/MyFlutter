@@ -9,6 +9,7 @@ import 'package:flutterapp/serializer.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:flutterapp/utils.dart';
+import 'package:hive/hive.dart';
 
 import '../../fserialtreegen.dart';
 import 'fcompserializergen.dart';
@@ -19,7 +20,11 @@ import 'fcompserializergen.dart';
 //! 734  = onEnter
 //! 778  = Painter 
 
-void main () => runApp(GetMaterialApp(home: RunApp()));
+void main () {
+  Hive.init('');
+  Hive.openBox('myBox');
+  runApp(GetMaterialApp(home: RunApp()));
+}
 
 //#region [Main]
 class RunApp extends StatelessWidget { @override Widget build(BuildContext context){ return HomePageWidget();}}
@@ -71,7 +76,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
 
   onChangeDraggPos(DraggableDetails details, FModelView dfmv){//!Position terminal error message resolved.
-  //!OBS! Check Serialize and Component beacuse we changed FModelView constructor there aswell
+  //!OBS! Check Serialize and Component beacuse we changed FModelView constructor there as well
     setState(() {
 
       dfmv.fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
@@ -116,7 +121,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   addObject(int catId){
     setState(() {
       fmv = FModelView(mcallback: handleId, onChangePos: onChangeDraggPos,);//#f0f
-      print('in addobject');
+      //print('in addobject');
       
       fmv.setCatId = catId;
       _mid = fmv.getMoid;//#Identifies the object
@@ -212,7 +217,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
       if(szFmv.type == 1){//#ff5
         for(var child in szFmv.childlist()){
-          //print('thechildt' + child.getMoid.toString());
+          ////print('thechildt' + child.getMoid.toString());
           addSerObjectmap(child);//!add type 2 and type 3 (d.v.s. the children)
         }
       }
@@ -268,7 +273,7 @@ getcacheComp() async {
         
      for(int i=0; i<alist.length; i++){
        if(!alist[i].haveChildren()){
-         //print('OBJECTO ' + alist[i].getMoid.toString());//!Tabort
+         ////print('OBJECTO ' + alist[i].getMoid.toString());//!Tabort
          if(alist[i].catId != 0){//!Dummy in FObject with catid 0. Its a dummy for when one unselect object 
            alist[i].type = 4;
            
@@ -285,7 +290,7 @@ getcacheComp() async {
      coalist.forEach((element) {
      if(element.haveChildren()){
        //element.isparent = true;
-       print(element.getMoid.toString() + ':(Expansion)' + element.level.toString());//!Tabort
+       //print(element.getMoid.toString() + ':(Expansion)' + element.level.toString());//!Tabort
        element.type = 1;
        fmvList.add(element);
        _runIt(element.childlist(), /*element.level*/0);
@@ -309,7 +314,7 @@ getcacheComp() async {
       if(element.haveChildren()){
         int plev = curlev + 1;
         String space = getPrintOut(plev);//!Tabort
-        print(space + element.getMoid.toString() + ':(Expansion_inside)' + plev.toString());//!Tabort
+        //print(space + element.getMoid.toString() + ':(Expansion_inside)' + plev.toString());//!Tabort
         element.type = 3;
         fmvList.add(element);
         _runIt(element.childlist(), plev);
@@ -317,11 +322,11 @@ getcacheComp() async {
         int chlev = curlev + 1;
         String space = getPrintOut(chlev);//!Tabort
         if(/*element.fmc.objectModel.value.isMultiWidget*/element.isMultiWidget()){//!Even if element has no children? Check it!
-          print(space + element.getMoid.toString() + ':(Expansion_inside)' + chlev.toString());//!Tabort
+          //print(space + element.getMoid.toString() + ':(Expansion_inside)' + chlev.toString());//!Tabort
           element.type = 3;
           fmvList.add(element);
         }else{
-          print(space + element.getMoid.toString() + ':(Tile)' + chlev.toString());//!Tabort
+          //print(space + element.getMoid.toString() + ':(Tile)' + chlev.toString());//!Tabort
           element.type = 2;
           fmvList.add(element);
         }
@@ -371,7 +376,7 @@ String getPrintOut(int t){//!TABORT
     setState(() {
       /*stackobj.shuffle();
       for(var c in fmv.childlist()){
-        print(c.getMoid);
+        //print(c.getMoid);
       }*/
       
       fmv.childlist().insert(0, fmv.childlist().removeAt(1));
@@ -384,7 +389,7 @@ String getPrintOut(int t){//!TABORT
 
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
-  print('in build');
+  //print('in build');
 
 //!1109
 //if(gogo<1) getcache();

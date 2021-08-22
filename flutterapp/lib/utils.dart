@@ -14,7 +14,7 @@ FModelView getCurObj(int curid, Map tmap){
   if(tmap.containsKey(curid)){
     return tmap[curid];
   }else{
-    print('no oki');
+    //print('no oki');
   }
 
   return tmap[0];
@@ -60,7 +60,7 @@ Widget createSidePanel(FModelView fmv, int catid){
       contr.value = TextEditingValue(text: newtext, selection: TextSelection.fromPosition(TextPosition(offset: offset)));
       //#End(€4)
 
-print('in createsidepanel');
+//print('in createsidepanel');
     switch(catid){
         case 0:
         return

@@ -43,14 +43,14 @@ class FComponent {//!Change name? FCompnentSerializer?
       tmpf.type = int.parse(rec.getField('type')!.value.toString());
       tmpf.catId = int.parse(rec.getField('catid')!.value.toString());
       tmpf.name = rec.getField('name')!.value.toString();
-      //print(tmpf.name);
+      ////print(tmpf.name);
       fmComponentlist.add(tmpf);
     }
     rebuildlist = fobr.reBuildComponentWithChildren(fmComponentlist);
     for(var item in rebuildlist){
       FModelView newid = FModelView(mcallback: callback, onChangePos: onChangePos,);//#f0f
       item.setMoid = newid.getMoid;
-      print(item.name);
+      //print(item.name);
       for(var child in item.childlist()){
         FModelView newchid = FModelView(mcallback: callback, onChangePos: onChangePos,);//#f0f  
         child.parentId = item.getMoid;

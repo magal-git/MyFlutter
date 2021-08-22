@@ -64,7 +64,7 @@ funcCL(FModelView fv, List<FModelView> list){//! Enter this func only if multich
         fv.twList.add(ListTile(title: Text('Tile: ' + obj.getMoid.toString())));
       }
       if(obj.type == 3){
-        //print('object type 3 ' + obj.getMoid.toString());
+        ////print('object type 3 ' + obj.getMoid.toString());
         donelist.add(obj.getMoid);
         fv.twList.add(ExpansionTile(backgroundColor: Colors.blueGrey.shade200, title: Text('Expansion_inside: ' + obj.getMoid.toString()),children: [
            funcCL(obj, obj.childlist()),

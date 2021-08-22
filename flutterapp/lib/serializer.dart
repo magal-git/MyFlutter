@@ -34,7 +34,7 @@ class Serializer {
   }*/
 
   Future<List<FModelView>> readData() async {
-    print('in readdata');
+    //print('in readdata');
     var airtable = Airtable(apiKey: apikey, projectBase: base);
     var records = await airtable.getAllRecords(table);
     //var rec = await airtable.getRecord(table, 'recVqX3XPTailZYmm');
