@@ -78,42 +78,22 @@ class FModelView extends StatelessWidget{
 
   markSelObj(FModelView fmv, Map tmap){
     tmap.forEach((key, value) {
+    
       value.fmc.markFalse();//&Unmark all objects
     });
         fmv.fmc.markTrue();//&Now mark the selected one
   }
 
 
-  //#734
-  bool down = false;
-  int tmpid = 0;
-  
-  letest(){
-    //print('Listener: ' + this.getMoid.toString());
-    tmpid = this.getMoid;
-    down = true;
-  }
-  letest2(){
-    if(down){
-      //print('MouseRegion: ' + this.getMoid.toString());
-      //print('tmpid: ' + tmpid.toString());
-      down = false;
-    }
-  }
-  //#734
-
   @override
   Widget build(BuildContext context){
-    //print('8*8 instanceobject' + catId.toString());
 
     return
     Obx(() {
       
       return 
-      //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginal//print('MouseRegion: ' + this.getMoid.toString())
-      //Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child://! 1109//print('Listener: ' + this.getMoid.toString())
-        //Listener(onPointerDown: (e) => letest(),//#734
-          //child: MouseRegion(onEnter: (e) => letest2() ,//#734
+      //Positioned(left: _position.value.dx, top: _position.value.dy, child://!Orginal
+      //Positioned(left: fmc.positionX.value, top: fmc.positionY.value, child:
             //child:
             FObjMover(fm: this,
               child: Draggable(child:
@@ -135,8 +115,6 @@ class FModelView extends StatelessWidget{
               
               ),
             );
-          //),
-        //);//#734
       //);
 
    });

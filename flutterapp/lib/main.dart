@@ -1,4 +1,8 @@
+import 'dart:html';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterapp/fcodegen.dart';
 import 'package:flutterapp/fcomponent.dart';
 import 'package:flutterapp/fmodelview.dart';
@@ -78,7 +82,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   onChangeDraggPos(DraggableDetails details, FModelView dfmv){//!Position terminal error message resolved.
   //!OBS! Check Serialize and Component beacuse we changed FModelView constructor there as well
     setState(() {
-
       dfmv.fmc.positionX.value = details.offset.dx;// - const Offset(0.0, 56.0);
       dfmv.fmc.positionY.value = details.offset.dy - Offset(0.0, 56.0).dy;
       Offset of = Offset(dfmv.fmc.positionX.value, dfmv.fmc.positionY.value);
@@ -89,7 +92,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   handleId(int pid){
     setState(() {
-      
       _mid = pid;
       fmv = getCurObj(_mid, objmap);
       
@@ -136,7 +138,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
       }
       fmv.markSelObj(fmv, objmap);
-      
+       fmv.fmc.setfmcObjmap = objmap;//#734
     });
   }
 
@@ -372,20 +374,20 @@ String getPrintOut(int t){//!TABORT
     });
   }
 
-  shuff(){//#734
-    setState(() {
-      /*stackobj.shuffle();
-      for(var c in fmv.childlist()){
-        //print(c.getMoid);
-      }*/
-      
-      fmv.childlist().insert(0, fmv.childlist().removeAt(1));
-      //fmv.childlist().insert(0, fmv.childlist().indexWhere((element) => false);
-      //unselect(objmap);
-      fmv.markSelObj(fmv, objmap);
-    });//#734
-  
-  }
+  _copySW(FModelView f1){//#848 Still testing! Seems to work actually.
+    FModelView newf = FModelView(mcallback: handleId, onChangePos: onChangeDraggPos);
+    int id = newf.getMoid;
+
+    print(f1.getMoid);
+
+    newf.catId = f1.catId;
+    newf.fmc.colModel.value.btncol = f1.fmc.colModel.value.btncol;
+    newf.setMoid = id;
+    addSerObject(newf);
+
+    print(f1.getMoid);
+  }//#848
+
 
   @override
   Widget build(BuildContext context) {//#region [ rgba(180, 120, 120, 0.2) ]//#endregion
@@ -399,8 +401,8 @@ String getPrintOut(int t){//!TABORT
 
     return
     GestureDetector(onTap: () {
+      addObject(0);//! Caused problem when click on empty stack. Resolved when changing FDummy to a copy of FBuObject! See FDummy2
       unselect(objmap);
-      addObject(0);
     },
 
       child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj, child: Text('Del') ), appBar: 
@@ -416,6 +418,7 @@ String getPrintOut(int t){//!TABORT
                         for(int i=0; i<stackobj.length; i++)
                           Positioned(left: stackobj[i].fmc.positionX.value, top: stackobj[i].fmc.positionY.value, child: stackobj[i],),
                        
+
 
                     //!UDEV PUT IN SEP WIDGET?
                     //#10123
@@ -433,7 +436,7 @@ String getPrintOut(int t){//!TABORT
                        Column( mainAxisSize: MainAxisSize.max, children: 
                             [
                               fmv.makeSidePanel(),
-                              GFButton(onPressed: /*_showTree(stackobj, 0))*/shuff),//!TREETEST
+                              GFButton(onPressed: () => _copySW(fmv)/*_showTree(stackobj, 0)*/),//!TREETEST
                             ],
                        ),
                      ),

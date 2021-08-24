@@ -7,7 +7,7 @@ import 'fmodelcontroller.dart';
 
 typedef void idCallback(int id);
 
-class FDummy extends StatelessWidget implements FDummytest{
+class FDummy extends StatelessWidget implements FDummytest{//!Deprected! See FDummy2 at the end!
     FDummy({required this.callback});
     final idCallback callback;
     Widget codeit(FModelView fmv){return SizedBox.shrink();}
@@ -64,7 +64,7 @@ Widget codeit(FModelView fmv){//!1200
       Material(child: marked ? 
         Container(decoration: BoxDecoration(border: Border.all(
           color: const Color.fromRGBO(50, 52, 50, 1),
-          width: 2,
+          width: 1,
         ),
         ), child: TextButton(child: Text(hlpb.btntext +': id ' + thisid.toString(), style: TextStyle(fontSize: 12, color: colModel.txtcol),),
           onPressed: () => callback(thisid),
@@ -197,7 +197,7 @@ Widget codeit(FModelView fmv){
     
     return
       GestureDetector(child: marked ?
-          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(50, 52, 50, 1), width: 3,),), child: 
+          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(50, 52, 50, 1), width: 0.2,),), child: 
               //Column(mainAxisSize: MainAxisSize.max, children:
               Wrap( direction: Axis.vertical, spacing: objectModel.spacing, children://!Column 
                   [
@@ -295,7 +295,7 @@ Rect trect;
     var paint1 = Paint()
       ..color = Color(0xff337575)
       ..style = PaintingStyle.stroke;
-      paint1.strokeWidth = 1;
+      paint1.strokeWidth = 4;
     //a rectangle
     canvas.drawRect(trect, paint1);
     //canvas.drawRect( & Size(180, 50), paint1);
@@ -315,4 +315,48 @@ class ObjectCodeProps{
   double borderradius;
 
   double spacing;
+}
+
+
+
+
+class FDummy2 extends StatelessWidget implements FDummytest {
+  FDummy2({required this.callback, required this.thisid,
+             required this.bw, required this.bh, required this.colModel, /*this.col = Colors.green,*/
+             this.marked = false, required this.hlpb, this.borderradius = 0.0, required this.objectModel, 
+            });
+            
+
+double bw, bh;
+double borderradius;
+final idCallback callback;
+//Color col;
+ColModel colModel;
+ObjectModel objectModel;
+
+HelperBtn hlpb;
+bool marked = true;
+final int thisid;
+
+@override
+Widget codeit(FModelView fmv){//!1200
+
+  return FCodeTextFormater(fmv: fmv, objcp: ObjectCodeProps.fbutton(btnText: hlpb.btntext, btnTextColor: colModel.txtcol, borderradius: borderradius),);
+}
+
+
+  @override
+  Widget build(BuildContext context){
+    //print('in fobjects');
+    objectModel.catName = 'Button';
+    
+    return 
+    SizedBox(width: bw, height: bh,   child: 
+      Material(child: marked ? 
+        SizedBox.shrink() :
+        SizedBox.shrink(), /*codeit(),*/
+        
+      ),
+    );
+  }
 }

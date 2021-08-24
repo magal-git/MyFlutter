@@ -106,6 +106,7 @@ class FModelController extends GetxController{
 
 class ColModel{
   Color btncol = Colors.amber;
+  Color selbtncol = Colors.grey.shade400;//#888 Just testing
   Color txtcol = Colors.white;
 }
 

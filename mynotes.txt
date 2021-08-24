@@ -6,4 +6,43 @@ Type 3. Expansion_inside - is a multiwidget with or without children always with
 Type 4. Every widget that is not the type above. Always level 0
 
 
-Draw.io integration
+****************************************************************************
+
+FocusNode _focusNode = FocusNode();  
+String? _message;
+  void _handleKeyEvent(RawKeyEvent event) {
+    setState(() {
+      if (event.logicalKey == LogicalKeyboardKey.keyQ) {
+        _message = 'Pressed the "Q" key!';
+        print('event');
+      }else {
+          // The debugName will only print useful information in debug mode.
+        _message = 'Not a Q: Pressed ${event.logicalKey.debugName}';
+        print('nokey');
+      }
+    });
+  }
+
+@override
+Widget build...
+
+RawKeyboardListener(
+   focusNode: _focusNode,
+   onKey: _handleKeyEvent,
+   child: AnimatedBuilder(
+   animation: _focusNode,
+   builder: (BuildContext context, Widget? child) {
+       /*if (!_focusNode.hasFocus) {
+       return GestureDetector(
+           onTap: () {
+           FocusScope.of(context).requestFocus(_focusNode);
+           },
+           child: const Text('Tap to focus'),
+       );
+       }*/
+       FocusScope.of(context).requestFocus(_focusNode);
+       return Text(_message ?? 'Press a key');
+   },
+   ),
+),
+****************************************************************************

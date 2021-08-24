@@ -43,7 +43,7 @@ class FComponent {//!Change name? FCompnentSerializer?
       tmpf.type = int.parse(rec.getField('type')!.value.toString());
       tmpf.catId = int.parse(rec.getField('catid')!.value.toString());
       tmpf.name = rec.getField('name')!.value.toString();
-      ////print(tmpf.name);
+      //print(tmpf.name);
       fmComponentlist.add(tmpf);
     }
     rebuildlist = fobr.reBuildComponentWithChildren(fmComponentlist);
