@@ -18,7 +18,7 @@ class FCodeTextFormater extends StatelessWidget {
       if(fmv.level == 0)fmv.level = 1;
 
       return Column(children: [
-       FTexter.formit('TextButton(', '\n  child:', ' Text("' + objcp.btnText + '"),', fmv.type == 4 ? 0 : fmv.level*15, Colors.black, Colors.green, Colors.black),
+       FTexter.formit('TextButton(', '\n  child:', ' Text("' + objcp.btnText + '"),', /*fmv.type == 4 ? 0 :*/ fmv.level*15, Colors.black, Colors.green, Colors.black),
        FTexter.formit('style: ', objcp.btnTextColor.toString(), ',', fmv.level*20, Colors.green, Colors.black, Colors.black),
        FTexter.formit('borderradius: ', objcp.borderradius.toString() , ',', fmv.level*20, Colors.green, Colors.black, Colors.black),
        FTexter.formit(')', ',', '', fmv.level*15, Colors.black, Colors.black, Colors.green),

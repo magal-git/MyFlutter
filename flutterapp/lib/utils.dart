@@ -9,7 +9,7 @@ import 'fobjects.dart';
 TextEditingController contr = TextEditingController();
 
 //#region [ rgba(30, 30, 40, 0.2) ]//#endregion
-FModelView getCurObj(int curid, Map tmap){
+/*FModelView getCurObj(int curid, Map tmap){
 
   if(tmap.containsKey(curid)){
     return tmap[curid];
@@ -18,7 +18,7 @@ FModelView getCurObj(int curid, Map tmap){
   }
 
   return tmap[0];
-}
+}*/
 //#region [ rgba(90, 150, 40, 0.2) ]//#endregion
 Widget instanceObject(int cid, FModelView fmv){//!Refactor. Put in FModelView?
   

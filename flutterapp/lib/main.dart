@@ -7,8 +7,11 @@ import 'package:flutterapp/fcodegen.dart';
 import 'package:flutterapp/fcomponent.dart';
 import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/fobjects.dart';
+import 'package:flutterapp/fobjrepo.dart';
 import 'package:flutterapp/fstartobjectpanel.dart';
 import 'package:flutterapp/ftreeviewpanel.dart';
+import 'package:flutterapp/myfiles/listviewtest.dart';
+import 'package:flutterapp/myfiles/mycard.dart';
 import 'package:flutterapp/serializer.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
@@ -31,7 +34,7 @@ void main () {
 }
 
 //#region [Main]
-class RunApp extends StatelessWidget { @override Widget build(BuildContext context){ return HomePageWidget();}}
+class RunApp extends StatelessWidget { @override Widget build(BuildContext context){ return HomePageWidget();/*MyApp();*/}}
 //#endregion
 
 class HomePageWidget extends StatefulWidget {//#region [ rgba(70, 70, 80, 0.1) ]
@@ -59,9 +62,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   int gogo = 0;
   int gotest = 0;
-  Map objmap = <int, FModelView>{};
+  //Map objmap = <int, FModelView>{};
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  List<FModelView> stackobj = [];
+  //List<FModelView> stackobj = [];
 
   List<FModelView> vall = [];//#599
   List<FModelView> szvall = [];//!1109
@@ -93,29 +96,29 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   handleId(int pid){
     setState(() {
       _mid = pid;
-      fmv = getCurObj(_mid, objmap);
+      fmv = FObjRepo.getCurObj(_mid, FObjRepo.objmap);//#f75
       
       if(fmv.isMultiWidget()){
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is selected
       }
-      fmv.markSelObj(fmv, objmap);//!Revisite
+      fmv.markSelObj(fmv, FObjRepo.objmap);//!Revisite
       //_tree = false;//?Think its ok here. Go from codepanelview to startpanelview when click on obj  #ffbb
     });
   }
 
   addToStack(FModelView f){
-    if(stackobj.isEmpty) stackobj.add(f);
+    if(FObjRepo.stackobj.isEmpty) FObjRepo.stackobj.add(f);//#f75
 
-    if(!stackobj.contains(f) && f.catId != 0){
-      stackobj.add(f);
+    if(!FObjRepo.stackobj.contains(f) && f.catId != 0){
+      FObjRepo.stackobj.add(f);//#f75
     }
   }
 
   addToObjmap(FModelView fv){
-    if(objmap.isEmpty) objmap[_mid] = fv;
+    if(FObjRepo.objmap.isEmpty) FObjRepo.objmap[_mid] = fv;
 
-    if(!objmap.containsValue(fv) && fv.catId != 0){
-      objmap[_mid] = fv;
+    if(!FObjRepo.objmap.containsValue(fv) && fv.catId != 0){
+      FObjRepo.objmap[_mid] = fv;
     }
   }
 
@@ -137,20 +140,20 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       if(fmv.isMultiWidget()){
         fmv.fmc.caddchildCol.value = true;//!Set color to object if column/Row is added
       }
-      fmv.markSelObj(fmv, objmap);
-       fmv.fmc.setfmcObjmap = objmap;//#734
+      fmv.markSelObj(fmv, FObjRepo.objmap);
+       fmv.fmc.setfmcObjmap = FObjRepo.objmap;//#734
     });
   }
 
   addChildObject(int catId){
     setState(() {
-      FModelView theParentFmv = getCurObj(_mid, objmap);
+      FModelView theParentFmv = FObjRepo.getCurObj(_mid, FObjRepo.objmap);//#f75
 
       fmv = FModelView(mcallback: handleId, onChangePos: onChangeDraggPos,);//#f0f
       fmv.setCatId = catId;
       
       _mid = fmv.getMoid;//#Identifies the object
-      objmap[_mid] = fmv;
+      FObjRepo.objmap[_mid] = fmv;
 
       //! 1109 *****************************************************************
       fmv.parentId = theParentFmv.getMoid;
@@ -160,48 +163,50 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       theParentFmv.fmc.addChild(fmv);//! Add fobject to parent(fmv)children list
       fmv.isMultiWidget() ? fmv.fmc.caddchildCol.value = true : fmv.fmc.caddchildCol.value = false;
       
-    fmv.markSelObj(fmv, objmap);
-    fmv.fmc.setfmcObjmap = objmap;//#734
+    fmv.markSelObj(fmv, FObjRepo.objmap);
+    fmv.fmc.setfmcObjmap = FObjRepo.objmap;//#734
     });
   }
 
-  void _removeObj(){
+  void _removeObj(){//!Deprecte! Erase!
     setState(() {
 
-      if(fmv.parentId > 0){
-        fmv = getCurObj(fmv.getMoid, objmap);
-        FModelView parent = getCurObj(fmv.parentId, objmap);
-        int pos = stackobj.indexOf(parent);
+      FObjRepo.removeObj(fmv);
+
+      /*if(fmv.parentId > 0){
+        fmv = getCurObj(fmv.getMoid, FObjRepo.objmap);
+        FModelView parent = getCurObj(fmv.parentId, FObjRepo.objmap);
+        int pos = FObjRepo.stackobj.indexOf(parent);//#f75
         if(pos > -1){//!is the parent in stackobj?
-          for(var child in stackobj[pos].childlist()){
+          for(var child in FObjRepo.stackobj[pos].childlist()){//#f75
             if(child.getMoid == fmv.getMoid){
-              objmap.remove(child.getMoid);
-              stackobj[pos].childlist().remove(child);
+              FObjRepo.objmap.remove(child.getMoid);
+              FObjRepo.stackobj[pos].childlist().remove(child);//#f75
               parent.fmc.removeChild(child);
             }
           }
         }else{
-          FModelView parent_in_objmap = getCurObj(parent.getMoid, objmap);
+          FModelView parent_in_objmap = getCurObj(parent.getMoid, FObjRepo.objmap);
           for(var child in parent_in_objmap.childlist()){
             if(child.getMoid == fmv.getMoid){
-              objmap.remove(child.getMoid);
+              FObjRepo.objmap.remove(child.getMoid);
               parent_in_objmap.fmc.removeChild(child);
             }
           }
         }
       }else{
-        stackobj.removeAt(stackobj.indexOf(fmv));
+        FObjRepo.stackobj.removeAt(FObjRepo.stackobj.indexOf(fmv));//#f75
       }
-    unselect(objmap);
+    unselect(FObjRepo.objmap);*/
     });
   }
 
   //#ff5
   addSerObjectmap(FModelView fv){
-    if(objmap.isEmpty) objmap[fv.getMoid] = fv;
+    if(FObjRepo.objmap.isEmpty) FObjRepo.objmap[fv.getMoid] = fv;
 
-    if(!objmap.containsValue(fv) && fv.catId != 0){
-      objmap[fv.getMoid] = fv;
+    if(!FObjRepo.objmap.containsValue(fv) && fv.catId != 0){
+      FObjRepo.objmap[fv.getMoid] = fv;
     }
   }
   //#ff5
@@ -374,18 +379,15 @@ String getPrintOut(int t){//!TABORT
     });
   }
 
-  _copySW(FModelView f1){//#848 Still testing! Seems to work actually.
+  _copySW(FModelView f1){//#848 Still testing! Seems to work.
     FModelView newf = FModelView(mcallback: handleId, onChangePos: onChangeDraggPos);
     int id = newf.getMoid;
-
-    print(f1.getMoid);
 
     newf.catId = f1.catId;
     newf.fmc.colModel.value.btncol = f1.fmc.colModel.value.btncol;
     newf.setMoid = id;
     addSerObject(newf);
 
-    print(f1.getMoid);
   }//#848
 
 
@@ -401,8 +403,8 @@ String getPrintOut(int t){//!TABORT
 
     return
     GestureDetector(onTap: () {
-      addObject(0);//! Caused problem when click on empty stack. Resolved when changing FDummy to a copy of FBuObject! See FDummy2
-      unselect(objmap);
+      addObject(0);//? Caused problem when click on empty stack. Resolved when changing FDummy to a copy of FBuObject! See FDummy2
+      unselect(FObjRepo.objmap);
     },
 
       child: Scaffold( key: scaffoldKey, floatingActionButton: FloatingActionButton(onPressed: _removeObj, child: Text('Del') ), appBar: 
@@ -414,17 +416,17 @@ String getPrintOut(int t){//!TABORT
           SafeArea(child:
               Stack(children: [
                 Container(color: Colors.grey.shade400, width: 240,),
-                        if(stackobj.isNotEmpty)
-                        for(int i=0; i<stackobj.length; i++)
-                          Positioned(left: stackobj[i].fmc.positionX.value, top: stackobj[i].fmc.positionY.value, child: stackobj[i],),
+                        if(FObjRepo.stackobj.isNotEmpty)
+                        for(int i=0; i<FObjRepo.stackobj.length; i++)//#f75
+                          Positioned(left: FObjRepo.stackobj[i].fmc.positionX.value, top: FObjRepo.stackobj[i].fmc.positionY.value, child: FObjRepo.stackobj[i],),//#f75
                        
 
 
                     //!UDEV PUT IN SEP WIDGET?
                     //#10123
                     if(_tree)//!TODO Revisit
-                    _showTree(stackobj, 0),
-                    //cgen.codeTree(stackobj, 0),
+                    //_showTree(FObjRepo.stackobj, 0),
+                    cgen.codeTree(FObjRepo.stackobj, 0),
                     Visibility(visible: !_tree, child:
                       StartObjectPanel(fmodelview: fmv, addobject: selFunc),
                     ),
