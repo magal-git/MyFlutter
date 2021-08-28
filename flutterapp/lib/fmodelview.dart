@@ -1,13 +1,7 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutterapp/constants.dart';
-import 'package:flutterapp/fmodelcontroller.dart';
-import 'package:flutterapp/fobjects.dart';
-import 'package:flutterapp/fobjmover.dart';
-import 'package:flutterapp/utils.dart';
-import 'package:get/get.dart';
+import 'package:flutterapp/imports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'dart:math';
+
+
 
 typedef void midCallback(int id);
 typedef void changepos(DraggableDetails d, FModelView dfmv);

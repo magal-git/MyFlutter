@@ -91,6 +91,12 @@ FModelView fmodelview;
                         onTap: () => addobject(fROW),
                       ),
                     ),
+                    SizedBox(width: 230, height: 30,
+                      child: ListTile(title: const Text('Text',style: TextStyle(fontSize: 14)),
+                        trailing: Icon(Icons.add_circle_outline, color: fmodelview.fmc.caddchildCol.value ? Colors.red : Colors.black, size: 18,), leading: Icon(Icons.text_format, size: 16, color: Colors.blue),
+                        onTap: () => addobject(fTEXT),
+                      ),
+                    ),
               //!UDEV
          ]
       ),

@@ -1,7 +1,5 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
+import 'package:flutterapp/imports.dart';
 import 'package:flutterapp/fmodelview.dart';
-import 'package:get/get.dart';
 
 
 class FModelController extends GetxController{
@@ -18,6 +16,7 @@ class FModelController extends GetxController{
   var marked = false.obs;
 
   final objectModel = ObjectModel().obs;
+  final textModel = TextModel().obs;
   //!1109
   var positionX = 300.0.obs;
   var positionY = 300.0.obs;
@@ -102,6 +101,28 @@ class FModelController extends GetxController{
   decW() => fbWidth -= 2;
   incH() => fbHeight += 2;
   decH() => fbHeight -= 2;
+
+//*TextModel
+  set textData(String data){
+    textModel.update((val) {
+      val!.txtdata = data;
+    });
+  }
+  incFontSize(){
+    textModel.update((val) {
+      val!.fontsize += 2;
+    });
+  }
+  //incFontSize() => textModel.value.fontsize += 2;
+//*
+
+}
+
+class TextModel{
+  String txtdata = 'Text here!';
+  double fontsize = 10;
+  bool changeobj = false;
+
 }
 
 class ColModel{

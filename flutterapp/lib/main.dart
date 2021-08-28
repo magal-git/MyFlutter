@@ -1,24 +1,7 @@
-import 'dart:html';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutterapp/fcodegen.dart';
-import 'package:flutterapp/fcomponent.dart';
-import 'package:flutterapp/fmodelview.dart';
-import 'package:flutterapp/fobjects.dart';
 import 'package:flutterapp/fobjrepo.dart';
-import 'package:flutterapp/fstartobjectpanel.dart';
-import 'package:flutterapp/ftreeviewpanel.dart';
-import 'package:flutterapp/myfiles/listviewtest.dart';
-import 'package:flutterapp/myfiles/mycard.dart';
+import 'package:flutterapp/imports.dart';
+import 'package:flutterapp/fmodelview.dart';
 import 'package:flutterapp/serializer.dart';
-import 'package:get/get.dart';
-import 'package:getwidget/components/button/gf_button.dart';
-import 'package:flutterapp/utils.dart';
-import 'package:hive/hive.dart';
-
-import '../../fserialtreegen.dart';
 import 'fcompserializergen.dart';
 
 //!NOTES
@@ -168,36 +151,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
-  void _removeObj(){//!Deprecte! Erase!
+  void _removeObj(){//!Deprecte!
     setState(() {
-
+      
       FObjRepo.removeObj(fmv);
-
-      /*if(fmv.parentId > 0){
-        fmv = getCurObj(fmv.getMoid, FObjRepo.objmap);
-        FModelView parent = getCurObj(fmv.parentId, FObjRepo.objmap);
-        int pos = FObjRepo.stackobj.indexOf(parent);//#f75
-        if(pos > -1){//!is the parent in stackobj?
-          for(var child in FObjRepo.stackobj[pos].childlist()){//#f75
-            if(child.getMoid == fmv.getMoid){
-              FObjRepo.objmap.remove(child.getMoid);
-              FObjRepo.stackobj[pos].childlist().remove(child);//#f75
-              parent.fmc.removeChild(child);
-            }
-          }
-        }else{
-          FModelView parent_in_objmap = getCurObj(parent.getMoid, FObjRepo.objmap);
-          for(var child in parent_in_objmap.childlist()){
-            if(child.getMoid == fmv.getMoid){
-              FObjRepo.objmap.remove(child.getMoid);
-              parent_in_objmap.fmc.removeChild(child);
-            }
-          }
-        }
-      }else{
-        FObjRepo.stackobj.removeAt(FObjRepo.stackobj.indexOf(fmv));//#f75
-      }
-    unselect(FObjRepo.objmap);*/
+      addObject(0);
     });
   }
 

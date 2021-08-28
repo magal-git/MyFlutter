@@ -1,12 +1,5 @@
-import 'package:flutterapp/constants.dart';
-import 'package:flutterapp/fmodelcontroller.dart';
-import 'package:flutterapp/fobjects.dart';
-import 'package:flutterapp/utils.dart';
-import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-
 import 'fcodeviewpanel.dart';
 import 'fmodelview.dart';
 

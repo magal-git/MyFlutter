@@ -47,7 +47,7 @@ class _MyCardState extends State<MyCard> {
         ),
         body:*/ Stack(children: [
           Align(alignment: Alignment(-1, -1), child: 
-            Card(color: Colors.grey, child: 
+            Card(color: Colors.grey, child:
               Container(width: 200, height: 100, child:
                 Stack(children: [
                   //Align(alignment: Alignment(x, y), child:

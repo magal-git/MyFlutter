@@ -45,6 +45,9 @@ Widget instanceObject(int cid, FModelView fmv){//!Refactor. Put in FModelView?
        case fROW://!ROW
        return
           FRowObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, marked: fmv.fmc.marked.value, objectModel: fmv.fmc.objectModel.value,);
+       case fTEXT:
+       return
+          FTextObject(callback: fmv.mcallback, thisid: fmv.fmc.moid, marked: fmv.fmc.marked.value, textModel:fmv.fmc.textModel.value);
     }
 
     return Container(child: Text('Empty'),);
@@ -120,6 +123,13 @@ Widget createSidePanel(FModelView fmv, int catid){
               Text('row spacing' + ':' + fmv.fmc.objectModel.value.spacing.toString()),
               IconButton(onPressed: fmv.fmc.incSpacing, icon: Icon(Icons.add, color: Colors.blue, size: 30,), iconSize: 30,),
               IconButton(onPressed: fmv.fmc.decSpacing, icon: Icon(Icons.minimize, color: Colors.blue, size: 30,), iconSize: 30,),
+          ]);
+          case fTEXT:
+          return
+          Column(children: [
+              Text(fmv.fmc.textModel.value.txtdata + ': Fontsize' + ':' + fmv.fmc.textModel.value.fontsize.toString(), style: TextStyle(fontSize: fmv.fmc.textModel.value.fontsize),),
+              IconButton(onPressed: fmv.fmc.incFontSize, icon: Icon(Icons.add, color: Colors.blue, size: 30,), iconSize: 30,),
+              //IconButton(onPressed: fmv.fmc.decSpacing, icon: Icon(Icons.minimize, color: Colors.blue, size: 30,), iconSize: 30,),
           ]);
       }
 

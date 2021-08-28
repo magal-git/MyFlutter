@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/constants.dart';
 import 'package:flutterapp/fcodetextformater.dart';
 import 'package:flutterapp/fmodelview.dart';
+import 'package:flutterapp/imports.dart';
 import 'package:get/get.dart';
 import 'fmodelcontroller.dart';
 
@@ -197,7 +198,7 @@ Widget codeit(FModelView fmv){
     
     return
       GestureDetector(child: marked ?
-          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(50, 52, 50, 1), width: 0.2,),), child: 
+          Container(/*width: 100, height: 100,*/ decoration: BoxDecoration(border: Border.all(color: const Color.fromRGBO(150, 152, 50, 2), width: 2,),), child: 
               //Column(mainAxisSize: MainAxisSize.max, children:
               Wrap( direction: Axis.vertical, spacing: objectModel.spacing, children://!Column 
                   [
@@ -266,6 +267,61 @@ Widget codeit(FModelView fmv){return SizedBox.shrink();}
   }
 }
 
+//#region [ rgba(90, 150, 40, 0.2) ]//#endregion
+class FTextObject extends StatelessWidget implements FDummytest {
+  FTextObject({
+    required this.callback, 
+    required this.thisid,
+    this.marked = false, 
+    required this.textModel, 
+  });
+            
+final idCallback callback;
+TextModel textModel;
+bool marked = true;
+final int thisid;
+
+
+@override
+Widget codeit(FModelView fmv){//!1200
+
+  return FCodeTextFormater(fmv: fmv, objcp: ObjectCodeProps.ftext(data: textModel.txtdata));
+}
+
+
+  @override
+  Widget build(BuildContext context){
+
+    TextEditingController contr = TextEditingController(text: textModel.txtdata);
+    contr.value = TextEditingValue(text: textModel.txtdata, selection: TextSelection.fromPosition(TextPosition(offset: textModel.txtdata.length)));
+    
+    return 
+    Material(child: marked ? 
+      Container(decoration: 
+          BoxDecoration(border: Border.all(
+              color: const Color.fromRGBO(50, 52, 50, 1),
+              width: 1,
+            ),
+          ), child: 
+          SizedBox(width: 150, height: 50, child: TextFormField(onChanged: (text) => textModel.txtdata = text, controller: contr,)), //Text(textModel.txtdata),  
+      )
+      :
+      GestureDetector( child:
+        Text(textModel.txtdata, style: TextStyle(fontSize: textModel.fontsize)), 
+        onTap: () => callback(thisid),
+      ),
+      //color: colModel.btncol, /*col,*/
+    );
+  }
+}
+//#region [ rgba(30, 30, 40, 0.2) ]//#endregion
+
+
+
+
+
+
+
 class OpenPainter extends CustomPainter {//!1200
 
   @override
@@ -309,7 +365,9 @@ Rect trect;
 class ObjectCodeProps{
       ObjectCodeProps.fbutton({required this.btnText, required this.btnTextColor, required this.borderradius}) : spacing = 0.0;
       ObjectCodeProps.fcolumn({required this.spacing}) : btnText = '', btnTextColor = Colors.transparent, borderradius = 0.0;
+      ObjectCodeProps.ftext({required String data}) : spacing = 0.0, btnText = '', btnTextColor = Colors.transparent, borderradius = 0.0;
 
+  
   String btnText;
   Color btnTextColor;
   double borderradius;

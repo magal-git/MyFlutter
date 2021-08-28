@@ -43,8 +43,7 @@ static void removeObj(FModelView fmv){
         }
       }else{
         FObjRepo.stackobj.removeAt(FObjRepo.stackobj.indexOf(fmv));//#f75
+        FObjRepo.objmap.remove(fmv.getMoid);
       }
-  
   }
-
 }
