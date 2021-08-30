@@ -303,7 +303,8 @@ Widget codeit(FModelView fmv){//!1200
               width: 1,
             ),
           ), child: 
-          SizedBox(width: 150, height: 50, child: TextFormField(onChanged: (text) => textModel.txtdata = text, controller: contr,)), //Text(textModel.txtdata),  
+          SizedBox(width: 150, height: 50, child: TextFormField(onChanged: (text) => textModel.txtdata = text, controller: contr,)),
+          //Text(textModel.txtdata, style: TextStyle(fontSize: textModel.fontsize)), 
       )
       :
       GestureDetector( child:

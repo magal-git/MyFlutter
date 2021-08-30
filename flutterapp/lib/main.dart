@@ -1,6 +1,7 @@
 import 'package:flutterapp/fobjrepo.dart';
 import 'package:flutterapp/imports.dart';
 import 'package:flutterapp/fmodelview.dart';
+import 'package:flutterapp/myfiles/json.dart';
 import 'package:flutterapp/serializer.dart';
 import 'fcompserializergen.dart';
 
@@ -13,7 +14,7 @@ import 'fcompserializergen.dart';
 void main () {
   Hive.init('');
   Hive.openBox('myBox');
-  runApp(GetMaterialApp(home: RunApp()));
+  runApp(/*GetMaterialApp(home: RunApp())*/MyRest());
 }
 
 //#region [Main]
